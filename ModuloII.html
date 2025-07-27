@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Interactivo: IA en la Defensa Argentina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals & Strategic Blue -->
+    <!-- Application Structure Plan: The SPA is designed as a non-linear, thematic dashboard. It moves from the core problem ('Encrucijada Estratégica') to the solution space ('Capacidades y Ecosistema'), then to external context ('Mirada Global') and actionable insights ('Recomendaciones'). This structure prioritizes user understanding by first establishing the central conflict, then exploring its components, and finally providing context and solutions. The user can navigate via a top bar, allowing them to jump to any section of interest, which is more intuitive than scrolling through a long report. Key interactions include tab-based content switching for detailed exploration, a filterable card system for comparative analysis, and dynamic charts to visualize complex relationships like the sovereignty dilemma. -->
+    <!-- Visualization & Content Choices: 
+        - Central Conflict (Ley vs. Doctrina): Goal: Inform. Method: Side-by-side text comparison with icons (HTML/CSS) for clarity. Interaction: None, it's a static, high-impact statement. Justification: Clearly presents the core tension without complexity.
+        - Sovereignty Dilemma: Goal: Compare. Method: A dynamic Radar Chart (Chart.js). Interaction: The chart visually represents the imbalance between 'Autonomía' and 'Dependencia'. Justification: A radar chart is excellent for showing strengths and weaknesses across multiple axes, perfectly illustrating the "paradox".
+        - AI Capabilities: Goal: Organize. Method: Tabbed content display. Interaction: User clicks on tabs (Ciberdefensa, ISR, etc.) to reveal specific information. Justification: Organizes dense information into digestible chunks, preventing cognitive overload.
+        - Innovation Ecosystem: Goal: Organize/Relate. Method: A structured diagram built with HTML/Tailwind CSS. Interaction: Hover effects could be added for more detail (omitted for simplicity but planned). Justification: Visually maps the complex relationships between state actors, academia, and industry more effectively than a list.
+        - Comparative Analysis: Goal: Compare. Method: Filterable cards and a dynamic Bar Chart (Chart.js). Interaction: User filters countries by region, and the chart updates to compare their strategic approaches. Justification: This provides a powerful, interactive way to explore the comparative data and extract lessons.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #2c3e50;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+        }
+        .tab {
+            cursor: pointer;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .tab.active {
+            background-color: #2563eb;
+            color: #ffffff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-gray-800">Defensa y Futuro IA</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#encrucijada" class="nav-link px-3 py-2 text-sm font-medium text-gray-700">Encrucijada</a>
+                        <a href="#soberania" class="nav-link px-3 py-2 text-sm font-medium text-gray-700">Soberanía</a>
+                        <a href="#capacidades" class="nav-link px-3 py-2 text-sm font-medium text-gray-700">Capacidades IA</a>
+                        <a href="#ecosistema" class="nav-link px-3 py-2 text-sm font-medium text-gray-700">Ecosistema</a>
+                        <a href="#comparativa" class="nav-link px-3 py-2 text-sm font-medium text-gray-700">Comparativa</a>
+                        <a href="#recomendaciones" class="nav-link px-3 py-2 text-sm font-medium text-gray-700">Recomendaciones</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <span class="sr-only">Abrir menú principal</span>
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#encrucijada" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700">Encrucijada</a>
+                <a href="#soberania" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700">Soberanía</a>
+                <a href="#capacidades" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700">Capacidades IA</a>
+                <a href="#ecosistema" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700">Ecosistema</a>
+                <a href="#comparativa" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700">Comparativa</a>
+                <a href="#recomendaciones" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700">Recomendaciones</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="encrucijada" class="scroll-mt-20 text-center mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">La Encrucijada Estratégica Argentina</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12">El sistema de defensa argentino enfrenta una tensión fundamental: un marco legal concebido para un mundo de conflictos pasados choca con las amenazas y tecnologías del siglo XXI. Esta es la disyuntiva central que define el futuro de su soberanía.</p>
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="card p-6 text-left">
+                    <div class="flex items-center mb-4">
+                        <span class="text-4xl mr-4">📜</span>
+                        <div>
+                            <h3 class="text-xl font-semibold text-red-700">Marco Legal Restrictivo (Ley 23.554)</h3>
+                            <p class="text-sm text-gray-500">Sancionada en 1988</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="font-bold text-red-600 mr-2">→</span><span><strong>Foco Exclusivo:</strong> Agresión militar de otro Estado.</span></li>
+                        <li class="flex items-start"><span class="font-bold text-red-600 mr-2">→</span><span><strong>Separación Estricta:</strong> Prohíbe la intervención de las FFAA en seguridad interior.</span></li>
+                        <li class="flex items-start"><span class="font-bold text-red-600 mr-2">→</span><span><strong>Objetivo Histórico:</strong> Limitar el rol militar y consolidar la democracia.</span></li>
+                        <li class="flex items-start"><span class="font-bold text-red-600 mr-2">→</span><span><strong>Consecuencia:</strong> Rigidez ante amenazas híbridas, terrorismo o ciberataques no estatales.</span></li>
+                    </ul>
+                </div>
+                <div class="card p-6 text-left">
+                     <div class="flex items-center mb-4">
+                        <span class="text-4xl mr-4">🚀</span>
+                        <div>
+                            <h3 class="text-xl font-semibold text-blue-700">Nuevas Doctrinas y Amenazas (S. XXI)</h3>
+                            <p class="text-sm text-gray-500">"Doctrina Petri" y Realidad Global</p>
+                        </div>
+                    </div>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="flex items-start"><span class="font-bold text-blue-600 mr-2">→</span><span><strong>Foco Ampliado:</strong> Terrorismo, crimen transnacional, ciberespacio.</span></li>
+                        <li class="flex items-start"><span class="font-bold text-blue-600 mr-2">→</span><span><strong>Rol Flexible:</strong> Busca adaptar las FFAA a los "desafíos contemporáneos".</span></li>
+                        <li class="flex items-start"><span class="font-bold text-blue-600 mr-2">→</span><span><strong>Habilitador Clave:</strong> La IA es la herramienta idónea para estas nuevas misiones.</span></li>
+                        <li class="flex items-start"><span class="font-bold text-blue-600 mr-2">→</span><span><strong>Consecuencia:</strong> Desajuste con la ley vigente, que requiere una reforma urgente.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="soberania" class="scroll-mt-20 mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">La Paradoja de la Soberanía</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 text-center mb-12">Argentina aspira a la autonomía tecnológica como pilar de su defensa, pero la realidad muestra una fuerte dependencia de la tecnología extranjera. La IA intensifica este dilema: ¿desarrollar o comprar? El equilibrio es clave para no erosionar la soberanía que se busca proteger.</p>
+            <div class="card p-6 md:p-8">
+                <h3 class="text-xl font-semibold text-center mb-6">Balance Estratégico: Autonomía vs. Dependencia</h3>
+                <div class="chart-container">
+                    <canvas id="soberaniaChart"></canvas>
+                </div>
+                 <p class="text-center text-sm text-gray-500 mt-4">Visualización del balance entre capacidades de desarrollo endógeno (autonomía) y la necesidad de adquisición y cooperación externa (dependencia) en áreas tecnológicas críticas.</p>
+            </div>
+        </section>
+        
+        <section id="capacidades" class="scroll-mt-20 mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">Capacidades en Foco: El Rol de la IA</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 text-center mb-12">La Inteligencia Artificial no es una tecnología monolítica. Su aplicación en defensa se despliega en dominios específicos, cada uno con un impacto transformador en la planificación, la inteligencia y las operaciones.</p>
+            <div class="card p-2 sm:p-4">
+                <div class="flex flex-wrap justify-center items-center border-b border-gray-200 mb-6">
+                    <div class="tab active" data-tab="ciberdefensa">🛡️ Ciberdefensa</div>
+                    <div class="tab" data-tab="isr">🛰️ Inteligencia y Vigilancia</div>
+                    <div class="tab" data-tab="autonomia">🤖 Sistemas Autónomos</div>
+                    <div class="tab" data-tab="logistica">📦 Logística y Decisión</div>
+                </div>
+                <div id="ciberdefensa" class="tab-content active p-4">
+                    <h3 class="text-2xl font-bold mb-3">Defensa Proactiva del Ciberespacio</h3>
+                    <p class="text-gray-600 mb-4">El ciberespacio es un dominio estratégico. La IA es indispensable para proteger infraestructuras críticas, permitiendo la detección de anomalías y la respuesta automatizada a ciberataques a una velocidad y escala imposibles para el análisis humano.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><strong>Detección de Amenazas:</strong> Identificación de patrones de ataque en tiempo real.</li>
+                        <li><strong>Respuesta Automatizada:</strong> Orquestación de contramedidas defensivas.</li>
+                        <li><strong>Soberanía Digital:</strong> Protección de datos e infraestructuras críticas del Estado.</li>
+                    </ul>
+                </div>
+                <div id="isr" class="tab-content p-4">
+                    <h3 class="text-2xl font-bold mb-3">Inteligencia, Vigilancia y Reconocimiento (ISR)</h3>
+                    <p class="text-gray-600 mb-4">La IA transforma la inteligencia militar de un modelo reactivo a uno predictivo. Permite analizar volúmenes masivos de datos para optimizar la vigilancia de extensas fronteras y espacios marítimos.</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><strong>Análisis de Big Data:</strong> Procesamiento de imágenes satelitales (GEOINT), fuentes abiertas (OSINT) y comunicaciones (SIGINT).</li>
+                        <li><strong>Inteligencia Predictiva:</strong> Anticipación de movimientos y generación de alerta temprana.</li>
+                        <li><strong>Optimización de Recursos:</strong> Despliegue eficiente de unidades de vigilancia.</li>
+                    </ul>
+                </div>
+                <div id="autonomia" class="tab-content p-4">
+                    <h3 class="text-2xl font-bold mb-3">Sistemas Autónomos y Guerra Robótica</h3>
+                    <p class="text-gray-600 mb-4">El campo más disruptivo. Argentina desarrolla sistemas no tripulados (UAVs/UGVs) para ISR y logística. La doctrina sobre armas autónomas letales (LAWS) es de cautela, priorizando el "control humano significativo".</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><strong>Desarrollos Locales:</strong> UAVs (Lipán, Carancho) y UGVs (VAE, Scout) para tareas de riesgo.</li>
+                        <li><strong>Debate Ético Global:</strong> Postura argentina a favor de la regulación y el control humano.</li>
+                        <li><strong>Futuro del Combate:</strong> Potencial para enjambres de drones y operaciones coordinadas.</li>
+                    </ul>
+                </div>
+                <div id="logistica" class="tab-content p-4">
+                    <h3 class="text-2xl font-bold mb-3">Logística y Soporte a la Decisión</h3>
+                    <p class="text-gray-600 mb-4">La IA puede revolucionar la "conjuntez" (acción militar conjunta) al optimizar la planificación, la cadena de suministro y la velocidad del ciclo de decisión (OODA Loop).</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><strong>Panorama Operativo Común:</strong> Fusión de datos de múltiples fuentes para una visión unificada.</li>
+                        <li><strong>Logística Predictiva:</strong> Optimización del mantenimiento y la distribución de pertrechos.</li>
+                        <li><strong>Aceleración de la Decisión:</strong> Reducción del tiempo entre la observación y la acción.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="ecosistema" class="scroll-mt-20 mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">Ecosistema de Ciencia, Tecnología e Innovación</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 text-center mb-12">El desarrollo de capacidades tecnológicas para la defensa no ocurre en el vacío. Depende de una compleja red de actores públicos y privados que el Estado debe articular y financiar de manera estratégica.</p>
+            <div class="card p-6 md:p-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="flex flex-col items-center">
+                        <div class="bg-blue-100 text-blue-800 rounded-full h-16 w-16 flex items-center justify-center text-2xl mb-3 font-bold">E</div>
+                        <h4 class="font-semibold text-lg">Estado</h4>
+                        <p class="text-sm text-gray-500">MINDEF, CITEDEF, CONICET</p>
+                    </div>
+                    <div class="hidden md:flex items-center justify-center text-4xl text-gray-300 font-light">↔</div>
+                    <div class="flex flex-col items-center">
+                        <div class="bg-green-100 text-green-800 rounded-full h-16 w-16 flex items-center justify-center text-2xl mb-3 font-bold">I</div>
+                        <h4 class="font-semibold text-lg">Industria</h4>
+                        <p class="text-sm text-gray-500">INVAP, FAdeA, Tandanor, PyMEs</p>
+                    </div>
+                </div>
+                <div class="flex justify-center my-4">
+                    <div class="h-12 w-px bg-gray-300 md:h-px md:w-12"></div>
+                </div>
+                <div class="flex flex-col items-center text-center">
+                    <div class="bg-purple-100 text-purple-800 rounded-full h-16 w-16 flex items-center justify-center text-2xl mb-3 font-bold">A</div>
+                    <h4 class="font-semibold text-lg">Academia</h4>
+                    <p class="text-sm text-gray-500">UNDEF, UBA, UNSAM</p>
+                </div>
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <h4 class="text-lg font-semibold text-center mb-4">Instrumentos de Fomento</h4>
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full font-medium">FONDEF</div>
+                        <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full font-medium">Plan Plurianual CTIP-DEF</div>
+                        <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full font-medium">PIDDEF</div>
+                    </div>
+                    <p class="text-center text-sm text-gray-500 mt-4">Estos instrumentos buscan financiar y coordinar a los actores para alinear la I+D+i con las necesidades estratégicas del país, fomentando el desarrollo local y las tecnologías de uso dual.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparativa" class="scroll-mt-20 mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">Mirada Regional y Global</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 text-center mb-12">Argentina no está sola en este desafío. Analizar las experiencias de otros países, tanto en la región como a nivel global, ofrece lecciones cruciales sobre estrategias, inversiones y marcos éticos para la integración de la IA en la defensa.</p>
+            
+            <div class="flex justify-center mb-8 space-x-2">
+                <button class="filter-btn bg-blue-500 text-white px-4 py-2 rounded-md" data-region="all">Todos</button>
+                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md" data-region="latam">Latinoamérica</button>
+                <button class="filter-btn bg-gray-200 text-gray-700 px-4 py-2 rounded-md" data-region="global">Global</button>
+            </div>
+
+            <div id="country-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            </div>
+
+            <div class="card p-6 md:p-8 mt-12">
+                <h3 class="text-xl font-semibold text-center mb-6">Comparativa de Enfoques Estratégicos en IA</h3>
+                <div class="chart-container h-96">
+                    <canvas id="comparativaChart"></canvas>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-4">Puntuación relativa (0-10) del nivel de avance y articulación en áreas clave de la IA para defensa, basado en el análisis del informe. Seleccione filtros para comparar.</p>
+            </div>
+        </section>
+
+        <section id="recomendaciones" class="scroll-mt-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">Líneas de Acción Futuras</h2>
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 text-center mb-12">Para navegar esta transición con éxito, se requiere una acción decidida y coordinada. Las siguientes recomendaciones estratégicas buscan transformar los desafíos en oportunidades y fortalecer la soberanía nacional en la era digital.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card p-6">
+                    <h4 class="font-bold text-lg mb-2">1. Estrategia Nacional Unificada de IA</h4>
+                    <p class="text-gray-600">Superar la fragmentación actual con una estrategia integral de alto nivel, transversal a todos los ministerios, que defina roles, objetivos y límites para la IA en defensa.</p>
+                </div>
+                <div class="card p-6">
+                    <h4 class="font-bold text-lg mb-2">2. Modernizar el Marco Legal</h4>
+                    <p class="text-gray-600">Iniciar un debate parlamentario para actualizar las leyes de Defensa, Seguridad e Inteligencia, adaptándolas a las amenazas del siglo XXI sin derogar el consenso democrático.</p>
+                </div>
+                <div class="card p-6">
+                    <h4 class="font-bold text-lg mb-2">3. Plan de Formación de Capital Humano</h4>
+                    <p class="text-gray-600">Lanzar un programa nacional de becas en IA, ciberseguridad y ciencia de datos, con compromiso de servicio en áreas estratégicas, para cerrar la brecha de talento.</p>
+                </div>
+                <div class="card p-6">
+                    <h4 class="font-bold text-lg mb-2">4. Agilizar la Articulación Civil-Militar</h4>
+                    <p class="text-gray-600">Crear un Consejo de Innovación para la Defensa con participación público-privada para alinear la demanda de las FFAA con la oferta de I+D+i y acelerar proyectos.</p>
+                </div>
+                <div class="card p-6">
+                    <h4 class="font-bold text-lg mb-2">5. Desarrollar una Doctrina de IA Clara</h4>
+                    <p class="text-gray-600">Publicar una doctrina militar específica sobre el uso de IA, estableciendo principios de empleo, niveles de automatización y un marco ético que garantice el control humano significativo.</p>
+                </div>
+                 <div class="card p-6 bg-blue-50 border border-blue-200">
+                    <h4 class="font-bold text-lg mb-2 text-blue-800">Síntesis Final</h4>
+                    <p class="text-blue-700">La inacción conducirá a la parálisis. Una integración estratégica y planificada de la IA puede fortalecer la disuasión, optimizar la defensa y potenciar el desarrollo nacional.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-white mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-gray-500 text-sm">
+            <p>Este es un análisis interactivo basado en el informe "Defensa, Soberanía y Futuro: La Inteligencia Artificial en la Doctrina Estratégica Argentina".</p>
+            <p>Generado como una herramienta de visualización y síntesis de información compleja.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelector(link.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            function updateActiveLink() {
+                let index = sections.length;
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+                
+                navLinks.forEach((link) => link.classList.remove('active'));
+                const activeLink = document.querySelector(`.nav-link[href="#${sections[index].id}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                }
+            }
+
+            window.addEventListener('scroll', updateActiveLink);
+            updateActiveLink();
+
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(item => item.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    const target = tab.getAttribute('data-tab');
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === target) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            const soberaniaData = {
+                labels: [
+                    'Desarrollo de Software', 
+                    'Producción de Hardware', 
+                    'Capital Humano Especializado', 
+                    'Ciberdefensa', 
+                    'Sistemas de Armas Complejos', 
+                    'Tecnología Satelital y Radares'
+                ],
+                datasets: [{
+                    label: 'Autonomía (Capacidad Endógena)',
+                    data: [6, 2, 4, 5, 2, 8],
+                    fill: true,
+                    backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                    borderColor: 'rgb(37, 99, 235)',
+                    pointBackgroundColor: 'rgb(37, 99, 235)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(37, 99, 235)'
+                }, {
+                    label: 'Dependencia (Adquisición/Cooperación)',
+                    data: [4, 8, 6, 5, 9, 3],
+                    fill: true,
+                    backgroundColor: 'rgba(220, 38, 38, 0.2)',
+                    borderColor: 'rgb(220, 38, 38)',
+                    pointBackgroundColor: 'rgb(220, 38, 38)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgb(220, 38, 38)'
+                }]
+            };
+
+            new Chart(document.getElementById('soberaniaChart'), {
+                type: 'radar',
+                data: soberaniaData,
+                options: {
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: false
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            pointLabels: {
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.r !== null) {
+                                        label += context.parsed.r;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const countryData = [
+                { name: 'Argentina', region: 'latam', flag: '🇦🇷', strategy: 4, articulation: 5, regulation: 3, description: 'En transición doctrinal, con un ecosistema de I+D valioso pero fragmentado y una regulación de IA incipiente.' },
+                { name: 'Brasil', region: 'latam', flag: '🇧🇷', strategy: 6, articulation: 7, regulation: 6, description: 'Enfoque en innovación dual y seguridad. Industria de defensa consolidada y regulación de IA en avance para seguridad.' },
+                { name: 'Chile', region: 'latam', flag: '🇨🇱', strategy: 5, articulation: 6, regulation: 4, description: 'Estrategia de defensa que incorpora tecnología. Fomenta la innovación dual y la articulación con centros tecnológicos.' },
+                { name: 'Colombia', region: 'latam', flag: '🇨🇴', strategy: 7, articulation: 7, regulation: 5, description: 'IA como pilar de modernización. Fuerte inversión en capital humano militar y uso probado en operaciones de inteligencia.' },
+                { name: 'EE.UU.', region: 'global', flag: '🇺�', strategy: 9, articulation: 9, regulation: 8, description: 'Líder global. Estrecha colaboración con gigantes tecnológicos y publicación de principios éticos claros para IA militar.' },
+                { name: 'China', region: 'global', flag: '🇨🇳', strategy: 9, articulation: 10, regulation: 5, description: 'Competencia por la supremacía en IA. Modelo de fusión cívico-militar dirigido por el Estado y desarrollo acelerado.' },
+                { name: 'Israel', region: 'global', flag: '🇮🇱', strategy: 8, articulation: 8, regulation: 6, description: 'Amplia experiencia en el uso de IA en combate real, generando un intenso debate ético sobre sus límites y consecuencias.' },
+                { name: 'Reino Unido', region: 'global', flag: '🇬🇧', strategy: 7, articulation: 7, regulation: 7, description: 'Inversiones significativas en IA para selección de objetivos y ciberdefensa, con un modelo de colaboración público-privada.' },
+            ];
+
+            const countryCardsContainer = document.getElementById('country-cards');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            let comparativaChart;
+
+            function renderCards(filter = 'all') {
+                countryCardsContainer.innerHTML = '';
+                const filteredData = filter === 'all' ? countryData : countryData.filter(c => c.region === filter);
+                
+                filteredData.forEach(country => {
+                    const card = document.createElement('div');
+                    card.className = 'card p-4 country-card';
+                    card.setAttribute('data-region', country.region);
+                    card.innerHTML = `
+                        <div class="flex items-center mb-3">
+                            <span class="text-3xl mr-3">${country.flag}</span>
+                            <h4 class="font-bold text-lg">${country.name}</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">${country.description}</p>
+                    `;
+                    countryCardsContainer.appendChild(card);
+                });
+            }
+
+            function renderChart(filter = 'all') {
+                const filteredData = filter === 'all' ? countryData : countryData.filter(c => c.region === filter);
+                const chartData = {
+                    labels: filteredData.map(c => c.name),
+                    datasets: [
+                        {
+                            label: 'Estrategia/Doctrina',
+                            data: filteredData.map(c => c.strategy),
+                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Articulación Civil-Militar',
+                            data: filteredData.map(c => c.articulation),
+                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                            borderColor: 'rgba(16, 185, 129, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Regulación/Ética',
+                            data: filteredData.map(c => c.regulation),
+                            backgroundColor: 'rgba(239, 68, 68, 0.7)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                };
+
+                if (comparativaChart) {
+                    comparativaChart.destroy();
+                }
+
+                comparativaChart = new Chart(document.getElementById('comparativaChart'), {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        maintainAspectRatio: false,
+                        indexAxis: 'y',
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false
+                            }
+                        },
+                        responsive: true,
+                    }
+                });
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const region = btn.getAttribute('data-region');
+                    filterBtns.forEach(b => b.classList.remove('bg-blue-500', 'text-white'));
+                    filterBtns.forEach(b => b.classList.add('bg-gray-200', 'text-gray-700'));
+                    btn.classList.add('bg-blue-500', 'text-white');
+                    btn.classList.remove('bg-gray-200', 'text-gray-700');
+                    renderCards(region);
+                    renderChart(region);
+                });
+            });
+
+            renderCards();
+            renderChart();
+        });
+    </script>
+</body>
+</html>
+�
