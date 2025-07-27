@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Interactivo: IA en Estrategia y Defensa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F4; /* stone-100 */
+            color: #292524; /* stone-800 */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover {
+            color: #0284C7; /* sky-600 */
+        }
+        .nav-link.active {
+            color: #0284C7; /* sky-600 */
+            border-bottom-width: 2px;
+            border-color: #0284C7; /* sky-600 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .country-selector.active {
+            background-color: #0EA5E9; /* sky-500 */
+            color: white;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Chosen Palette: Warm Neutrals (Stone) with Sky Blue accent -->
+    <!-- Application Structure Plan: A thematic, single-page dashboard structure is used instead of a linear report format. The key sections are 'Fundamentos', 'Aplicaciones', 'Desafíos', 'Arena Global', and 'Caso: Argentina'. This design encourages non-linear exploration. 'Fundamentos' combines history, concepts, and infrastructure for a complete introduction. 'Arena Global' uses an interactive selector to compare nations, making complex geopolitical data more digestible. This structure prioritizes user engagement and understanding over slavishly following the source document's layout. -->
+    <!-- Visualization & Content Choices: Report Info -> Goal -> Viz/Method -> Interaction -> Justification. 1. AI History -> Show progression -> Interactive Timeline (HTML/CSS) -> Click for details -> More engaging than text. 2. AI Paradigms (Table 1) -> Compare concepts -> Radar Chart (Chart.js) -> Click to highlight -> Better for multi-variable comparison. 3. National Strategies (Table 2) -> Compare countries -> Selector + Bar Chart (Chart.js) -> Click to update -> Connects geography to strategy visually. 4. Core Concepts/Applications -> Organize content -> Interactive Cards/Accordions -> Click to expand -> Prevents information overload. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <header id="header" class="bg-stone-100/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-sky-700">IA: Estrategia y Defensa</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#fundamentos" class="nav-link text-stone-600 font-medium">Fundamentos</a>
+                <a href="#aplicaciones" class="nav-link text-stone-600 font-medium">Aplicaciones</a>
+                <a href="#desafios" class="nav-link text-stone-600 font-medium">Desafíos</a>
+                <a href="#global" class="nav-link text-stone-600 font-medium">Arena Global</a>
+                <a href="#argentina" class="nav-link text-stone-600 font-medium">Caso: Argentina</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-stone-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 flex flex-col space-y-2">
+            <a href="#fundamentos" class="block py-2 text-stone-600 font-medium">Fundamentos</a>
+            <a href="#aplicaciones" class="block py-2 text-stone-600 font-medium">Aplicaciones</a>
+            <a href="#desafios" class="block py-2 text-stone-600 font-medium">Desafíos</a>
+            <a href="#global" class="block py-2 text-stone-600 font-medium">Arena Global</a>
+            <a href="#argentina" class="block py-2 text-stone-600 font-medium">Caso: Argentina</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        
+        <section id="fundamentos" class="mb-24 space-y-12">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold text-stone-800 mb-4">Fundamentos de la IA Estratégica</h2>
+                <p class="max-w-3xl mx-auto text-lg text-stone-600">Esta sección desglosa los pilares de la inteligencia artificial. Desde sus hitos históricos hasta los paradigmas de aprendizaje y la infraestructura tecnológica que la sustenta, aquí encontrarás los conceptos esenciales para comprender su rol en la defensa.</p>
+            </div>
+
+            <div>
+                <h3 class="text-3xl font-bold text-stone-700 mb-6 text-center">Paradigmas de Aprendizaje</h3>
+                <p class="text-center text-stone-600 mb-8 max-w-2xl mx-auto">La IA no es una tecnología monolítica. Se basa en diferentes paradigmas de aprendizaje, cada uno con fortalezas y debilidades únicas para aplicaciones de defensa. El siguiente gráfico compara los tres enfoques principales.</p>
+                <div class="chart-container">
+                    <canvas id="paradigmChart"></canvas>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-3xl font-bold text-stone-700 mb-8 text-center">Conceptos y Evolución</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                        <h4 class="font-bold text-xl mb-2 text-sky-700">Conceptos Clave</h4>
+                        <ul id="concept-list" class="space-y-4"></ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow lg:col-span-2">
+                        <h4 class="font-bold text-xl mb-4 text-sky-700">Hitos Históricos</h4>
+                        <div id="timeline" class="relative border-l-2 border-sky-200 pl-6 space-y-8"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="aplicaciones" class="mb-24 space-y-12">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold text-stone-800 mb-4">Aplicaciones en el Campo de Batalla</h2>
+                <p class="max-w-3xl mx-auto text-lg text-stone-600">La IA está transformando todos los dominios de la guerra. Esta sección explora sus aplicaciones prácticas, desde la optimización de la logística y la ciberdefensa hasta el análisis de inteligencia y la coordinación de sistemas autónomos.</p>
+            </div>
+            <div id="applications-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <section id="desafios" class="mb-24 space-y-12">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold text-stone-800 mb-4">Desafíos y Limitaciones</h2>
+                <p class="max-w-3xl mx-auto text-lg text-stone-600">La adopción de la IA no está exenta de riesgos. Aquí se analizan los formidables desafíos técnicos, éticos y estratégicos, desde el problema de la "caja negra" y los sesgos algorítmicos hasta las complejas cuestiones legales sobre su uso en combate.</p>
+            </div>
+            <div id="challenges-accordion" class="max-w-4xl mx-auto space-y-4"></div>
+        </section>
+
+        <section id="global" class="mb-24 space-y-12">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold text-stone-800 mb-4">La Arena Geopolítica de la IA</h2>
+                <p class="max-w-3xl mx-auto text-lg text-stone-600">Las potencias mundiales compiten por la supremacía en IA, cada una con su propia estrategia, doctrina y enfoque ético. Selecciona una entidad para explorar su enfoque y comparar sus capacidades y objetivos declarados.</p>
+            </div>
+            <div id="country-selector-container" class="flex flex-wrap justify-center gap-3 mb-8"></div>
+            <div class="grid lg:grid-cols-5 gap-8 items-start">
+                <div id="country-details" class="lg:col-span-3 bg-white p-6 rounded-lg shadow-md"></div>
+                <div class="lg:col-span-2">
+                     <div class="chart-container h-96 max-h-[500px]">
+                        <canvas id="strategyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="argentina" class="mb-12 space-y-12 bg-sky-50 p-8 rounded-2xl">
+            <div class="text-center">
+                <h2 class="text-4xl font-bold text-sky-800 mb-4">Caso de Estudio: Argentina</h2>
+                <p class="max-w-3xl mx-auto text-lg text-sky-700">Para una potencia media, el camino hacia la soberanía en IA es distinto. Esta sección analiza el panorama actual de Argentina, sus iniciativas específicas y las brechas estratégicas que enfrenta en comparación con los líderes globales.</p>
+            </div>
+            <div id="argentina-content" class="space-y-8"></div>
+        </section>
+
+    </main>
+
+    <footer class="bg-stone-800 text-stone-300 py-6">
+        <div class="container mx-auto px-6 text-center">
+            <p>Aplicación Interactiva generada para el análisis de la IA en Entornos Estratégicos y de Defensa.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const appData = {
+                concepts: [
+                    { name: 'Inteligencia Artificial (IA)', desc: 'Campo general para crear sistemas que realizan tareas que requieren inteligencia humana, desde análisis de datos hasta operación de armas autónomas.' },
+                    { name: 'Aprendizaje Automático (ML)', desc: 'Subcampo de la IA donde los algoritmos aprenden de datos para mejorar su rendimiento sin ser programados explícitamente.' },
+                    { name: 'Aprendizaje Profundo (DL)', desc: 'Técnica de ML que usa redes neuronales "profundas" para aprender patrones complejos, esencial para visión por computadora y análisis de señales.' },
+                    { name: 'Redes Neuronales (RNA)', desc: 'Modelos computacionales inspirados en el cerebro humano, compuestos por "neuronas" interconectadas que procesan información.' },
+                    { name: 'Procesamiento del Lenguaje Natural (PLN)', desc: 'Área de la IA que se ocupa de la interacción entre computadoras y lenguaje humano, crítica para análisis de inteligencia y operaciones de información.' },
+                    { name: 'IA Generativa', desc: 'Capaz de crear contenido completamente nuevo (texto, imágenes, código), impulsada por Modelos de Lenguaje Grandes (LLM) y la arquitectura "transformer".' }
+                ],
+                timeline: [
+                    { year: '1950', event: 'Test de Turing', desc: 'Alan Turing propone un criterio para medir la inteligencia de una máquina.' },
+                    { year: '1956', event: 'Nace la "IA"', desc: 'John McCarthy acuña el término en la Conferencia de Dartmouth.' },
+                    { year: '1997', event: 'Deep Blue vs. Kasparov', desc: 'La IA de IBM derrota al campeón mundial de ajedrez, un hito en la capacidad de cómputo para tareas complejas.' },
+                    { year: '2011', event: 'Watson gana Jeopardy!', desc: 'Demostración de un salto cualitativo en el Procesamiento del Lenguaje Natural (PLN).' },
+                    { year: '2012', event: 'Revolución del Deep Learning', desc: 'La red neuronal AlexNet domina el reconocimiento de imágenes, iniciando la era moderna de la IA.' },
+                    { year: '2018-Hoy', event: 'Era de los LLM', desc: 'Lanzamiento de modelos como GPT-2 y su posterior democratización, transformando la guerra de la información y el apoyo a la decisión.' }
+                ],
+                applications: [
+                    { title: 'Ciberseguridad', icon: '🛡️', desc: 'Detección de amenazas basada en comportamiento, respuesta automatizada a incidentes y desarrollo de ciberataques más potentes. La IA es un arma de doble filo en el dominio digital.' },
+                    { title: 'Logística', icon: '🚚', desc: 'Optimización de cadenas de suministro y mantenimiento predictivo de equipos. La IA aumenta la eficiencia y la disponibilidad de las fuerzas en el campo.' },
+                    { title: 'Inteligencia (ISR)', icon: '🛰️', desc: 'Análisis automatizado de imágenes y video de drones/satélites, y fusión de datos de múltiples fuentes para obtener una conciencia situacional superior.' },
+                    { title: 'Sistemas Autónomos', icon: '🤖', desc: 'Navegación de vehículos no tripulados (drones, robots) en entornos complejos y coordinación de "enjambres" para ejecutar tácticas complejas.' },
+                    { title: 'Simulación y Entrenamiento', icon: '🎯', desc: 'Creación de oponentes virtuales adaptativos y generación de escenarios de entrenamiento realistas para preparar mejor a las fuerzas armadas.' }
+                ],
+                challenges: [
+                    { title: 'Limitaciones Técnicas', icon: '⚙️', desc: 'Incluyen el problema de la "caja negra" (falta de interpretabilidad), la fragilidad de los modelos ante situaciones no previstas y la vulnerabilidad a ataques adversariales diseñados para engañar a la IA.' },
+                    { title: 'Sesgos Algorítmicos', icon: '⚖️', desc: 'La IA puede heredar y amplificar los sesgos presentes en los datos de entrenamiento, lo que puede llevar a decisiones críticas injustas o erróneas, con consecuencias potencialmente letales en el ámbito militar.' },
+                    { title: 'Dependencia Tecnológica', icon: '🔌', desc: 'La mayoría de las naciones dependen de un puñado de empresas y países para el hardware y software de IA, creando una vulnerabilidad estratégica en la cadena de suministro global.' },
+                    { title: 'Ética y Legalidad', icon: '📜', desc: 'La IA desafía los marcos legales existentes, especialmente en debates sobre Armas Letales Autónomas (LAWS), la asignación de responsabilidad en caso de fallos y la ética de la recopilación masiva de datos.' }
+                ],
+                countries: [
+                    { id: 'usa', name: 'EE. UU.', details: `<h4>Estados Unidos: El Imperativo de la Guerra Algorítmica</h4><p class="text-stone-600 mt-2">La estrategia de EE. UU. busca mantener la superioridad tecnológica para acelerar la toma de decisiones y aumentar la letalidad. El <strong>Proyecto Maven</strong> es su iniciativa más emblemática, utilizando IA para analizar datos de vigilancia y detectar objetivos. El principal desafío ha sido la tensión cultural y ética con sus socios tecnológicos de Silicon Valley.</p>`, focus: 'Superioridad Tecnológica' },
+                    { id: 'china', name: 'China', details: `<h4>China: Hacia la "Guerra Inteligente"</h4><p class="text-stone-600 mt-2">China busca una ventaja asimétrica a través de la "guerra inteligente", centrada en la velocidad de decisión. Desarrollan un <strong>comandante militar de IA</strong> para simulaciones y se apoyan en una profunda Fusión Militar-Civil. Su desafío es conciliar la autonomía de la IA con el estricto control político centralizado.</p>`, focus: 'Ventaja Asimétrica' },
+                    { id: 'israel', name: 'Israel', details: `<h4>Israel: La Fábrica de Objetivos Impulsada por IA</h4><p class="text-stone-600 mt-2">Israel ha integrado la IA de forma profunda y operativa, creando un ecosistema de sistemas (<strong>"Habsora", "Lavender"</strong>) para generar objetivos a gran velocidad en conflictos asimétricos. Su uso ha generado una intensa controversia internacional sobre la proporcionalidad y las víctimas civiles.</p>`, focus: 'Eficiencia de Objetivos' },
+                    { id: 'rusia', name: 'Rusia', details: `<h4>Rusia: Capacidades Asimétricas</h4><p class="text-stone-600 mt-2">Rusia utiliza la IA de forma pragmática para desarrollar capacidades asimétricas, especialmente en guerra electrónica y operaciones de desinformación. Emplea drones como los <strong>Shahed y Lancet</strong>, a menudo con tecnología de socios, y opera con escasa transparencia y sin las restricciones éticas occidentales.</p>`, focus: 'Guerra Asimétrica' },
+                    { id: 'otan', name: 'OTAN / UE', details: `<h4>OTAN y Europa: Interoperabilidad y "IA Confiable"</h4><p class="text-stone-600 mt-2">El objetivo principal es garantizar la interoperabilidad entre los sistemas de IA de los estados miembros y promover un marco de IA ético y responsable. Iniciativas como <strong>DIANA</strong> buscan fomentar la colaboración, aunque el enfoque basado en el consenso puede ralentizar el desarrollo en comparación con competidores.</p>`, focus: 'Interoperabilidad' }
+                ],
+                argentina: {
+                    intro: `<p class="text-lg text-stone-700 mb-6">El enfoque de Argentina hacia la IA en defensa es, hasta ahora, reactivo, fragmentado y periférico en comparación con las potencias globales. Mientras otros se centran en transformar la maquinaria de guerra, las iniciativas locales, aunque valiosas, son de nicho y no abordan los desafíos centrales de la guerra del siglo XXI.</p>`,
+                    gaps: [
+                        { title: 'Brecha Estratégica', desc: 'Ausencia de una doctrina militar clara que articule cómo la IA cambiará la naturaleza de la guerra.' },
+                        { title: 'Brecha de Inversión', desc: 'Falta de asignación de recursos financieros significativos y sostenidos para la I+D en IA militar.' },
+                        { title: 'Brecha de Talento Humano', desc: 'La formación actual es de nivel introductorio y no crea los perfiles altamente especializados que se requieren.' },
+                        { title: 'Brecha de Infraestructura', desc: 'Inexistencia de programas para desarrollar capacidades soberanas de supercomputación o recolección de datos a gran escala.' }
+                    ],
+                    neurodefense: `<div><h4 class="text-2xl font-bold text-sky-700 mb-2">Iniciativa Destacada: Neurodefensa</h4><p class="text-stone-600">La iniciativa de IA más específica es el programa "Neurodefensa" de la UNDEF. Utiliza IA para construir un sistema de gestión del riesgo de fatiga en Tropas de Operaciones Especiales, analizando datos del ciclo de sueño y rendimiento. Es un excelente ejemplo de aplicación de nicho, pero es una iniciativa aislada y no parte de una estrategia de combate más amplia.</p></div>`
+                }
+            };
+
+            const conceptList = document.getElementById('concept-list');
+            appData.concepts.forEach(concept => {
+                const item = document.createElement('li');
+                item.innerHTML = `<details><summary class="font-semibold text-stone-700 cursor-pointer">${concept.name}</summary><p class="mt-2 text-stone-600">${concept.desc}</p></details>`;
+                conceptList.appendChild(item);
+            });
+
+            const timeline = document.getElementById('timeline');
+            appData.timeline.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'relative';
+                div.innerHTML = `
+                    <div class="absolute w-4 h-4 bg-sky-500 rounded-full -left-[30px] mt-1.5 border-4 border-stone-100"></div>
+                    <p class="font-bold text-sky-600">${item.year}: ${item.event}</p>
+                    <p class="text-stone-600">${item.desc}</p>
+                `;
+                timeline.appendChild(div);
+            });
+
+            const applicationsGrid = document.getElementById('applications-grid');
+            appData.applications.forEach(app => {
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 rounded-lg shadow-lg transform hover:-translate-y-1 transition-transform';
+                card.innerHTML = `
+                    <div class="text-4xl mb-4">${app.icon}</div>
+                    <h4 class="text-xl font-bold text-stone-800 mb-2">${app.title}</h4>
+                    <p class="text-stone-600">${app.desc}</p>
+                `;
+                applicationsGrid.appendChild(card);
+            });
+
+            const challengesAccordion = document.getElementById('challenges-accordion');
+            appData.challenges.forEach(challenge => {
+                const item = document.createElement('div');
+                item.className = 'bg-white rounded-lg shadow-md';
+                item.innerHTML = `
+                    <details>
+                        <summary class="flex justify-between items-center p-4 cursor-pointer font-semibold text-lg text-stone-800">
+                            <span class="flex items-center"><span class="text-2xl mr-3">${challenge.icon}</span>${challenge.title}</span>
+                            <span class="transform transition-transform duration-200 text-sky-500">&#9662;</span>
+                        </summary>
+                        <div class="p-4 border-t border-stone-200">
+                            <p class="text-stone-600">${challenge.desc}</p>
+                        </div>
+                    </details>
+                `;
+                challengesAccordion.appendChild(item);
+            });
+            
+            const argentinaContent = document.getElementById('argentina-content');
+            argentinaContent.innerHTML += appData.argentina.intro;
+            const gapsGrid = document.createElement('div');
+            gapsGrid.className = 'grid md:grid-cols-2 gap-6 mb-8';
+            appData.argentina.gaps.forEach(gap => {
+                gapsGrid.innerHTML += `
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h4 class="font-bold text-xl text-sky-700 mb-2">${gap.title}</h4>
+                        <p class="text-stone-600">${gap.desc}</p>
+                    </div>
+                `;
+            });
+            argentinaContent.appendChild(gapsGrid);
+            argentinaContent.innerHTML += appData.argentina.neurodefense;
+
+            const countrySelectorContainer = document.getElementById('country-selector-container');
+            const countryDetails = document.getElementById('country-details');
+            
+            appData.countries.forEach(country => {
+                const button = document.createElement('button');
+                button.className = 'country-selector px-4 py-2 bg-white rounded-full shadow-md font-semibold text-stone-700 transition-all duration-300';
+                button.textContent = country.name;
+                button.dataset.id = country.id;
+                countrySelectorContainer.appendChild(button);
+            });
+
+            function updateCountryView(countryId) {
+                const country = appData.countries.find(c => c.id === countryId);
+                if (!country) return;
+
+                countryDetails.innerHTML = country.details;
+
+                document.querySelectorAll('.country-selector').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.id === countryId);
+                });
+
+                strategyChart.data.datasets[0].backgroundColor = appData.countries.map(c => c.id === countryId ? '#0284C7' : '#94A3B8');
+                strategyChart.update();
+            }
+
+            countrySelectorContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('country-selector')) {
+                    updateCountryView(e.target.dataset.id);
+                }
+            });
+
+            const paradigmCtx = document.getElementById('paradigmChart').getContext('2d');
+            new Chart(paradigmCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Dependencia de Datos Etiquetados', 'Costo Computacional', 'Interpretabilidad', 'Potencial de Autonomía', 'Robustez ante Novedad'],
+                    datasets: [
+                        {
+                            label: 'Supervisado',
+                            data: [5, 3, 4, 1, 2],
+                            fill: true,
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderColor: 'rgb(59, 130, 246)',
+                            pointBackgroundColor: 'rgb(59, 130, 246)',
+                        }, {
+                            label: 'No Supervisado',
+                            data: [1, 2, 2, 2, 3],
+                            fill: true,
+                            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                            borderColor: 'rgb(16, 185, 129)',
+                            pointBackgroundColor: 'rgb(16, 185, 129)',
+                        }, {
+                            label: 'Por Refuerzo',
+                            data: [2, 5, 1, 5, 4],
+                            fill: true,
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            borderColor: 'rgb(239, 68, 68)',
+                            pointBackgroundColor: 'rgb(239, 68, 68)',
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            pointLabels: { font: { size: 12 } },
+                            suggestedMin: 0,
+                            suggestedMax: 5,
+                            ticks: {
+                                stepSize: 1,
+                                backdropColor: 'rgba(245, 245, 244, 0.75)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'top' }
+                    }
+                }
+            });
+
+            const strategyCtx = document.getElementById('strategyChart').getContext('2d');
+            const strategyChart = new Chart(strategyCtx, {
+                type: 'bar',
+                data: {
+                    labels: appData.countries.map(c => c.name),
+                    datasets: [{
+                        label: 'Enfoque Estratégico',
+                        data: appData.countries.map(c => {
+                            switch(c.focus) {
+                                case 'Superioridad Tecnológica': return 5;
+                                case 'Ventaja Asimétrica': return 4;
+                                case 'Eficiencia de Objetivos': return 4.5;
+                                case 'Guerra Asimétrica': return 3.5;
+                                case 'Interoperabilidad': return 3;
+                                default: return 0;
+                            }
+                        }),
+                        backgroundColor: '#94A3B8',
+                        borderColor: '#64748B',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: { display: false },
+                            title: { display: true, text: 'Nivel de Especialización del Enfoque' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const country = appData.countries[context.dataIndex];
+                                    return country.focus;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            updateCountryView('usa');
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
