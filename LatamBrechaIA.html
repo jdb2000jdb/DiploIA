@@ -1,0 +1,1468 @@
+<!DOCTYPE html><html lang="es"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>América Latina y la Brecha de Inteligencia Artificial: Un Análisis Crítico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e40af;
+            --secondary: #64748b;
+            --accent: #f59e0b;
+            --neutral: #f8fafc;
+            --base-100: #ffffff;
+        }
+        
+        .font-serif { font-family: 'Crimson Text', serif; }
+        .font-sans { font-family: 'Inter', sans-serif; }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.9) 0%, rgba(100, 116, 139, 0.8) 100%);
+        }
+        
+        .toc-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--base-100);
+            border-right: 1px solid #e2e8f0;
+            z-index: 40;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        .citation {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dotted var(--primary);
+        }
+        
+        .citation:hover {
+            background-color: rgba(30, 64, 175, 0.1);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+            margin: 4rem 0;
+        }
+        
+        .quote-highlight {
+            border-left: 4px solid var(--accent);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(245, 158, 11, 0.02));
+            font-style: italic;
+        }
+        
+        /* Mermaid Chart Styles */
+        .mermaid-container {
+            display: flex;
+            justify-content: center;
+            min-height: 300px;
+            max-height: 800px;
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mermaid-container .mermaid {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .mermaid-container .mermaid svg {
+            max-width: 100%;
+            height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .mermaid-container .mermaid:active {
+            cursor: grabbing;
+        }
+
+        .mermaid-container.zoomed .mermaid {
+            height: 100%;
+            width: 100%;
+            cursor: grab;
+        }
+
+        .mermaid-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mermaid-control-btn {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #374151;
+            font-size: 14px;
+            min-width: 36px;
+            height: 36px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mermaid-control-btn:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        .mermaid-control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Enhanced mermaid theme for better contrast and unified styling */
+        .mermaid .node rect,
+        .mermaid .node circle,
+        .mermaid .node ellipse,
+        .mermaid .node polygon {
+            stroke-width: 2px !important;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+        
+        .mermaid .node .label {
+            color: #1f2937 !important;
+            font-weight: 600 !important;
+            font-size: 13px !important;
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+        }
+        
+        .mermaid .edgePath .path {
+            stroke: #64748b !important;
+            stroke-width: 2.5px !important;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+        }
+        
+        .mermaid .edgeLabel {
+            background-color: rgba(255, 255, 255, 0.98) !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 6px !important;
+            padding: 6px 10px !important;
+            font-weight: 500 !important;
+            color: #374151 !important;
+            font-size: 12px !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+            backdrop-filter: blur(4px);
+        }
+        
+        /* Enhanced node colors with better contrast */
+        .mermaid .node.default rect,
+        .mermaid .node.default circle,
+        .mermaid .node.default ellipse,
+        .mermaid .node.default polygon {
+            fill: #f8fafc !important;
+            stroke: #475569 !important;
+        }
+        
+        .mermaid .node.primary rect,
+        .mermaid .node.primary circle,
+        .mermaid .node.primary ellipse,
+        .mermaid .node.primary polygon {
+            fill: #dbeafe !important;
+            stroke: #2563eb !important;
+        }
+        
+        .mermaid .node.secondary rect,
+        .mermaid .node.secondary circle,
+        .mermaid .node.secondary ellipse,
+        .mermaid .node.secondary polygon {
+            fill: #f1f5f9 !important;
+            stroke: #475569 !important;
+        }
+        
+        .mermaid .node.success rect,
+        .mermaid .node.success circle,
+        .mermaid .node.success ellipse,
+        .mermaid .node.success polygon {
+            fill: #d1fae5 !important;
+            stroke: #059669 !important;
+        }
+        
+        .mermaid .node.warning rect,
+        .mermaid .node.warning circle,
+        .mermaid .node.warning ellipse,
+        .mermaid .node.warning polygon {
+            fill: #fef3c7 !important;
+            stroke: #d97706 !important;
+        }
+        
+        .mermaid .node.danger rect,
+        .mermaid .node.danger circle,
+        .mermaid .node.danger ellipse,
+        .mermaid .node.danger polygon {
+            fill: #fee2e2 !important;
+            stroke: #dc2626 !important;
+        }
+        
+        /* Arrow styling */
+        .mermaid .arrowheadPath {
+            fill: #64748b !important;
+            stroke: #64748b !important;
+        }
+        
+        @media (max-width: 1024px) {
+            .toc-fixed {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 40;
+            }
+            
+            .toc-fixed.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+
+            /* Responsive mermaid controls */
+            .mermaid-control-btn:not(.reset-zoom) {
+                display: none;
+            }
+            .mermaid-controls {
+                top: auto;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+  </head>
+
+  <body class="bg-neutral font-sans text-gray-800">
+    <!-- Table of Contents -->
+    <nav class="toc-fixed" id="toc">
+      <div class="mb-8">
+        <h2 class="font-serif text-xl font-semibold text-gray-900 mb-4">Índice</h2>
+        <ul class="space-y-3 text-sm">
+          <li>
+            <a href="#hero" class="block text-gray-600 hover:text-blue-600 transition-colors">Introducción</a>
+          </li>
+          <li>
+            <a href="#executive-summary" class="block text-gray-600 hover:text-blue-600 transition-colors">Resumen Ejecutivo</a>
+          </li>
+          <li>
+            <a href="#investment-analysis" class="block text-gray-600 hover:text-blue-600 transition-colors">Análisis de Inversión</a>
+          </li>
+          <li>
+            <a href="#sector-comparison" class="block text-gray-600 hover:text-blue-600 transition-colors">Comparación Sectorial</a>
+          </li>
+          <li>
+            <a href="#regional-comparison" class="block text-gray-600 hover:text-blue-600 transition-colors">Panorama Regional</a>
+          </li>
+          <li>
+            <a href="#impact-analysis" class="block text-gray-600 hover:text-blue-600 transition-colors">Impacto Económico</a>
+          </li>
+          <li>
+            <a href="#strategic-recommendations" class="block text-gray-600 hover:text-blue-600 transition-colors">Recomendaciones</a>
+          </li>
+          <li>
+            <a href="#conclusions" class="block text-gray-600 hover:text-blue-600 transition-colors">Conclusiones</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="border-t pt-6">
+        <h3 class="font-medium text-gray-900 mb-3">Datos Clave</h3>
+        <div class="space-y-2 text-xs text-gray-600">
+          <div class="bg-blue-50 p-2 rounded">
+            <strong>Inversión LATAM:</strong> $2.6B (1.6% global)
+          </div>
+          <div class="bg-amber-50 p-2 rounded">
+            <strong>PIB LATAM:</strong> 6.3% mundial
+          </div>
+          <div class="bg-red-50 p-2 rounded">
+            <strong>Graduados universitarios:</strong> 22% (Brasil/México)
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mobile TOC Toggle -->
+    <button class="lg:hidden fixed top-4 left-4 z-50 bg-white p-2 rounded shadow-lg" onclick="toggleTOC()">
+      <i class="fas fa-bars text-gray-600"></i>
+    </button>
+
+    <!-- Overlay for mobile TOC -->
+    <div id="toc-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden" onclick="closeTOC()"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section id="hero" class="relative min-h-screen flex items-center">
+        <div class="absolute inset-0">
+          <img src="https://kimi-web-img.moonshot.cn/img/iupana.com/33e28da17bdc70f677357466157415522766ff68.jpg" alt="Red de conexiones digitales sobre mapa de América Latina" class="w-full h-full object-cover" size="wallpaper" aspect="wide" color="blue" style="photo" query="América Latina tecnología digital" referrerpolicy="no-referrer" data-modified="1" data-score="11582.00"/>
+          <div class="hero-gradient absolute inset-0"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+          <div class="grid grid-cols-1 gap-8 items-center">
+            <!-- Hero Content -->
+            <div class="text-white">
+              <h1 class="font-serif text-4xl sm:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 leading-tight">
+                <span class="italic">América Latina</span>
+                <br/>
+                <span class="text-amber-300">y la Brecha</span>
+                <br/>
+                de Inteligencia Artificial
+              </h1>
+              <p class="text-base sm:text-xl lg:text-2xl mb-6 md:mb-8 font-light leading-relaxed max-w-2xl">
+                Un análisis crítico del alarmante rezago tecnológico que amenaza el futuro económico de la región
+              </p>
+              <div class="flex items-center space-x-4 text-sm">
+                <span class="bg-white/20 px-3 py-1 rounded-full">CEPAL Data Analysis</span>
+                <span class="text-white/70">2023-2024</span>
+              </div>
+            </div>
+
+            <!-- Key Stats Grid -->
+            <div class="grid grid-cols-2 gap-4 max-w-md">
+              <div class="bg-white/10 backdrop-blur-sm p-4 sm:p-6 rounded-lg border border-white/20">
+                <div class="text-3xl font-bold text-amber-300">$2.6B</div>
+                <div class="text-sm text-white/80">Inversión anual en IA</div>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm p-4 sm:p-6 rounded-lg border border-white/20">
+                <div class="text-3xl font-bold text-red-300">1.6%</div>
+                <div class="text-sm text-white/80">Participación global</div>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm p-4 sm:p-6 rounded-lg border border-white/20">
+                <div class="text-3xl font-bold text-blue-300">6.3%</div>
+                <div class="text-sm text-white/80">PIB mundial</div>
+              </div>
+              <div class="bg-white/10 backdrop-blur-sm p-4 sm:p-6 rounded-lg border border-white/20">
+                <div class="text-3xl font-bold text-green-300">95%</div>
+                <div class="text-sm text-white/80">Empresas son PyMES</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Executive Summary -->
+      <section id="executive-summary" class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+          <h2 class="font-serif text-4xl font-bold text-gray-900 mb-8">Resumen Ejecutivo</h2>
+
+          <div class="prose prose-lg max-w-none">
+            <p class="text-xl text-gray-700 leading-relaxed mb-6">
+              América Latina enfrenta una <strong>brecha crítica de inversión en inteligencia artificial</strong> que amenaza su posición competitiva en la economía global. Con una inversión anual de apenas <span class="citation">$2,600 millones</span>, la región representa solo el <span class="citation">1.6% del gasto global en IA</span>, a pesar de contribuir con el <span class="citation">6.3% al PIB mundial</span>.
+            </p>
+
+            <div class="quote-highlight p-6 my-8 rounded-lg">
+              <p class="text-lg mb-4">
+                &#34;Si las empresas latinoamericanas no usan más IA en sus procesos de facturación, logística, distribución y cadenas de suministro, se van a quedar aún más atrás, y lo mismo va a pasar con las economías de sus países.&#34;
+              </p>
+              <cite class="text-sm text-gray-600">— Raúl Katz, Director de Investigación de Estrategia Empresarial, Universidad de Columbia</cite>
+            </div>
+
+            <p class="text-gray-700 leading-relaxed mb-6">
+              El análisis revela una tendencia preocupante: las inversiones en IA <strong>disminuyeron en Brasil, Argentina, Colombia y Perú entre 2019 y 2023</strong>, incluso cuando el resto del mundo aceleraba su adopción tecnológica. Esta subinversión se ve agravada por la falta de talento calificado, con solo el <span class="citation">22% de los brasileños y mexicanos mayores de 25 años siendo graduados universitarios</span>.
+            </p>
+
+            <p class="text-gray-700 leading-relaxed">
+              La situación es particularmente crítica para las pequeñas y medianas empresas (PyMES), que representan más del <span class="citation">95% del tejido empresarial de la región</span> y carecen de los recursos necesarios para adoptar tecnologías de IA. Este rezago tecnológico limita la capacidad de la región para innovar, aumentar la productividad y competir en sectores tradicionales como la agricultura, el turismo y la manufactura.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Investment Analysis -->
+      <section id="investment-analysis" class="py-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+          <h2 class="font-serif text-4xl font-bold text-gray-900 mb-12">Análisis de Inversión en IA</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+            <div>
+              <h3 class="font-serif text-2xl font-semibold mb-6">Inversión Global Comparada</h3>
+              <div class="bg-white p-6 rounded-lg shadow-sm">
+                <div class="space-y-4">
+                  <div class="flex justify-between items-center p-3 bg-blue-50 rounded">
+                    <span class="font-medium">Estados Unidos</span>
+                    <span class="text-blue-700 font-bold">$78,000M</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-green-50 rounded">
+                    <span class="font-medium">Asia</span>
+                    <span class="text-green-700 font-bold">$61,000M</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-purple-50 rounded">
+                    <span class="font-medium">Europa</span>
+                    <span class="text-purple-700 font-bold">$22,000M</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-amber-50 rounded">
+                    <span class="font-medium">Oriente Medio + África</span>
+                    <span class="text-amber-700 font-bold">$3,600M</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-red-50 rounded border-2 border-red-300">
+                    <span class="font-medium">América Latina</span>
+                    <span class="text-red-700 font-bold">$2,600M</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="font-serif text-2xl font-semibold mb-6">Inversión por País (2023)</h3>
+              <div class="space-y-4">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-lg">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">Brasil</span>
+                    <span class="text-xl font-bold">$1,100M</span>
+                  </div>
+                  <div class="text-sm opacity-90">42.3% del total regional</div>
+                </div>
+                <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">México</span>
+                    <span class="text-xl font-bold">$660M</span>
+                  </div>
+                  <div class="text-sm opacity-90">25.4% del total regional</div>
+                </div>
+                <div class="bg-gradient-to-r from-purple-400 to-purple-500 text-white p-4 rounded-lg">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">Chile</span>
+                    <span class="text-xl font-bold">$163M</span>
+                  </div>
+                  <div class="text-sm opacity-90">6.3% del total regional</div>
+                </div>
+                <div class="bg-gradient-to-r from-orange-400 to-orange-500 text-white p-4 rounded-lg">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">Argentina</span>
+                    <span class="text-xl font-bold">$146M</span>
+                  </div>
+                  <div class="text-sm opacity-90">5.6% del total regional</div>
+                </div>
+                <div class="bg-gradient-to-r from-teal-400 to-teal-500 text-white p-4 rounded-lg">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">Colombia</span>
+                    <span class="text-xl font-bold">$136M</span>
+                  </div>
+                  <div class="text-sm opacity-90">5.2% del total regional</div>
+                </div>
+                <div class="bg-gradient-to-r from-indigo-400 to-indigo-500 text-white p-4 rounded-lg">
+                  <div class="flex justify-between items-center">
+                    <span class="font-semibold">Perú</span>
+                    <span class="text-xl font-bold">$77M</span>
+                  </div>
+                  <div class="text-sm opacity-90">3.0% del total regional</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded-lg shadow-sm">
+            <h3 class="font-serif text-2xl font-semibold mb-6">Tendencias de Inversión 2019-2023</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div class="text-center p-4 bg-red-50 rounded-lg border border-red-200">
+                <div class="text-2xl font-bold text-red-600 mb-2">↓ Brasil</div>
+                <div class="text-sm text-gray-600">Disminución en inversión</div>
+              </div>
+              <div class="text-center p-4 bg-red-50 rounded-lg border border-red-200">
+                <div class="text-2xl font-bold text-red-600 mb-2">↓ Argentina</div>
+                <div class="text-sm text-gray-600">Disminución en inversión</div>
+              </div>
+              <div class="text-center p-4 bg-red-50 rounded-lg border border-red-200">
+                <div class="text-2xl font-bold text-red-600 mb-2">↓ Colombia</div>
+                <div class="text-sm text-gray-600">Disminución en inversión</div>
+              </div>
+              <div class="text-center p-4 bg-red-50 rounded-lg border border-red-200">
+                <div class="text-2xl font-bold text-red-600 mb-2">↓ Perú</div>
+                <div class="text-sm text-gray-600">Disminución en inversión</div>
+              </div>
+            </div>
+            <p class="text-sm text-gray-600 mt-4">
+              <i class="fas fa-exclamation-triangle text-amber-500 mr-2"></i>
+              Fuente: <a href="https://boliviaemprende.com/publicaciones/informe-cepal-america-latina-enfrenta-una-transformacion-tecnologica-pero-con-rezagos-en-inversion-y-capacidades" class="citation">CEPAL 2023</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Sector Comparison -->
+      <section id="sector-comparison" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+          <h2 class="font-serif text-4xl font-bold text-gray-900 mb-12">Comparación Sectorial: IA vs. Educación y Defensa</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+            <div>
+              <h3 class="font-serif text-2xl font-semibold mb-6">Inversión en IA vs. Educación</h3>
+              <div class="bg-gray-50 p-6 rounded-lg">
+                <div class="mb-6">
+                  <h4 class="font-semibold text-gray-900 mb-3">Gasto Público en Educación</h4>
+                  <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                      <span>2015 (% PIB)</span>
+                      <span class="font-bold text-blue-600">4.5%</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span>2019 (% PIB)</span>
+                      <span class="font-bold text-red-600">4.3%</span>
+                    </div>
+                  </div>
+                  <p class="text-sm text-gray-600 mt-3">
+                    Fuente: <a href="https://www.unicef.org/lac/en/press-releases/unesco-unicef-and-eclac-warn-that-at-a-current-rate-latin-america-and-caribbean-will-not-not-achieve-the-education-goals-set-by-the-2030-agenda" class="citation">UNICEF/CEPAL 2019</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="font-serif text-2xl font-semibold mb-6">Inversión en IA vs. Defensa</h3>
+              <div class="bg-gray-50 p-6 rounded-lg">
+                <div class="mb-6">
+                  <h4 class="font-semibold text-gray-900 mb-3">Brasil: Comparación 2023</h4>
+                  <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                      <span>Presupuesto Defensa</span>
+                      <span class="font-bold text-red-600">$20,000M</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span>Inversión en IA</span>
+                      <span class="font-bold text-blue-600">$1,100M</span>
+                    </div>
+                    <div class="border-t pt-3">
+                      <div class="flex justify-between items-center">
+                        <span class="font-semibold">Relación</span>
+                        <span class="font-bold text-amber-600">18:1</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-lg border border-blue-200">
+            <h3 class="font-serif text-xl font-semibold mb-4">Llamado a la Acción Educativa</h3>
+            <p class="text-gray-700 mb-4">
+              En septiembre de 2024, los gobiernos de República Dominicana y Chile, junto con la UNESCO, UNICEF y el Banco Mundial, hicieron un llamado urgente para aumentar la financiación de la educación en la región.
+            </p>
+            <div class="bg-white p-4 rounded border-l-4 border-amber-500">
+              <p class="text-sm text-gray-600">
+                <strong>Datos alarmantes:</strong> El 75% de los estudiantes no alcanzan las habilidades básicas en matemáticas y el 50% en lectura.
+              </p>
+              <p class="text-xs text-gray-500 mt-2">
+                Fuente: <a href="https://www.unicef.org/lac/en/press-releases/latin-american-and-caribbean-governments-urge-more-investment-in-education" class="citation">UNICEF 2024</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Regional Comparison -->
+      <section id="regional-comparison" class="py-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+          <h2 class="font-serif text-4xl font-bold text-gray-900 mb-12">Panorama Regional e Internacional</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg border border-green-200">
+              <div class="flex items-center mb-4">
+                <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                <h3 class="font-semibold text-green-800">Pioneros</h3>
+              </div>
+              <div class="space-y-2">
+                <div class="font-medium text-green-900">Chile</div>
+                <div class="font-medium text-green-900">Colombia</div>
+              </div>
+              <p class="text-sm text-green-700 mt-3">Estrategias proactivas y ecosistemas de innovación en crecimiento</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-blue-50 to-sky-50 p-6 rounded-lg border border-blue-200">
+              <div class="flex items-center mb-4">
+                <div class="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                <h3 class="font-semibold text-blue-800">Adoptantes</h3>
+              </div>
+              <div class="space-y-2">
+                <div class="font-medium text-blue-900">Brasil</div>
+                <div class="font-medium text-blue-900">México</div>
+              </div>
+              <p class="text-sm text-blue-700 mt-3">Líderes en inversión, pero con potencial de crecimiento significativo</p>
+            </div>
+
+            <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-lg border border-amber-200">
+              <div class="flex items-center mb-4">
+                <div class="w-3 h-3 bg-amber-500 rounded-full mr-3"></div>
+                <h3 class="font-semibold text-amber-800">Rezagados</h3>
+              </div>
+              <div class="space-y-2">
+                <div class="font-medium text-amber-900">Argentina</div>
+                <div class="font-medium text-amber-900">Perú</div>
+              </div>
+              <p class="text-sm text-amber-700 mt-3">Menor desarrollo de capacidades en IA y estrategias limitadas</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded-lg shadow-sm">
+            <h3 class="font-serif text-2xl font-semibold mb-6">Factores Clave de Éxito y Desafíos</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div>
+                <h4 class="font-semibold text-green-800 mb-4">Factores de Éxito (Chile)</h4>
+                <ul class="space-y-2 text-sm text-gray-700">
+                  <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    Estrategia nacional de IA clara y proactiva
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    Inversión en ecosistema de innovación
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    Colaboración público-privada-academia
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                    Estabilidad política y económica
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold text-red-800 mb-4">Desafíos Comunes (Colombia/Perú)</h4>
+                <ul class="space-y-2 text-sm text-gray-700">
+                  <li class="flex items-start">
+                    <i class="fas fa-times text-red-500 mr-2 mt-1"></i>
+                    Falta de estrategia nacional clara de IA
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times text-red-500 mr-2 mt-1"></i>
+                    Escasez de talento especializado
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times text-red-500 mr-2 mt-1"></i>
+                    Baja inversión en I+D
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fas fa-times text-red-500 mr-2 mt-1"></i>
+                    Infraestructura tecnológica limitada
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Impact Analysis -->
+      <section id="impact-analysis" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+          <h2 class="font-serif text-4xl font-bold text-gray-900 mb-12">Impacto Demográfico y Económico</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-lg border border-green-200">
+              <div class="flex items-center mb-4">
+                <i class="fas fa-seedling text-green-600 text-xl mr-3"></i>
+                <h3 class="font-serif text-xl font-semibold text-green-800">Agricultura</h3>
+              </div>
+              <img src="https://kimi-web-img.moonshot.cn/img/www.lineadatascan.com/70cd49248b1f3d4bfe3e1e5b974688dc073fa4fb.png" alt="Tecnología agrícola de precisión en Latinoamérica" class="w-full h-32 object-cover rounded mb-4" size="medium" aspect="wide" color="green" style="photo" query="agricultura precisión Latinoamérica" referrerpolicy="no-referrer" data-modified="1" data-score="11595.00"/>
+              <div class="space-y-3 text-sm">
+                <div class="flex items-center text-green-700">
+                  <i class="fas fa-arrow-up mr-2"></i>
+                  <span>Aumento de productividad y optimización de recursos</span>
+                </div>
+                <div class="flex items-center text-amber-700">
+                  <i class="fas fa-exclamation-triangle mr-2"></i>
+                  <span>Riesgo de desplazamiento de trabajo manual</span>
+                </div>
+                <div class="flex items-center text-red-700">
+                  <i class="fas fa-wifi mr-2"></i>
+                  <span>Brecha digital en zonas rurales</span>
+                </div>
+              </div>
+              <p class="text-xs text-gray-600 mt-4">
+                Fuente: <a href="https://latamfdi.com/ai-in-latin-america/" class="citation">LatamFDI 2024</a>
+              </p>
+            </div>
+
+            <div class="bg-gradient-to-br from-blue-50 to-sky-50 p-6 rounded-lg border border-blue-200">
+              <div class="flex items-center mb-4">
+                <i class="fas fa-plane text-blue-600 text-xl mr-3"></i>
+                <h3 class="font-serif text-xl font-semibold text-blue-800">Turismo</h3>
+              </div>
+              <img src="https://kimi-web-img.moonshot.cn/img/www.hollycrm.com/308820e828c04feb4d0afa659953ca15a9d180d3.jpg" alt="Sistema de reservas con IA en hotel latinoamericano" class="w-full h-32 object-cover rounded mb-4" size="medium" aspect="wide" style="photo" query="hotel tecnología inteligencia artificial Latinoamérica" referrerpolicy="no-referrer" data-modified="1" data-score="11485.00"/>
+              <div class="space-y-3 text-sm">
+                <div class="flex items-center text-blue-700">
+                  <i class="fas fa-robot mr-2"></i>
+                  <span>IA en reservas y atención al cliente</span>
+                </div>
+                <div class="flex items-center text-green-700">
+                  <i class="fas fa-handshake mr-2"></i>
+                  <span>Potencial de aumentación del trabajo</span>
+                </div>
+                <div class="flex items-center text-purple-700">
+                  <i class="fas fa-user-check mr-2"></i>
+                  <span>Adaptación a nuevas demandas</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-lg border border-purple-200">
+              <div class="flex items-center mb-4">
+                <i class="fas fa-industry text-purple-600 text-xl mr-3"></i>
+                <h3 class="font-serif text-xl font-semibold text-purple-800">Energía y Alimentos</h3>
+              </div>
+              <img src="https://kimi-web-img.moonshot.cn/img/placeholder-0620/%E5%9B%BE%E7%89%8712.png" alt="Cadena de suministro de alimentos con IA en Latinoamérica" class="w-full h-32 object-cover rounded mb-4" size="small" aspect="wide" style="photo" query="cadena de suministro alimentos IA Latinoamérica" referrerpolicy="no-referrer" data-modified="1" data-score="10000.00"/>
+              <div class="space-y-3 text-sm">
+                <div class="flex items-center text-purple-700">
+                  <i class="fas fa-chart-line mr-2"></i>
+                  <span>Optimización de cadenas de suministro</span>
+                </div>
+                <div class="flex items-center text-red-700">
+                  <i class="fas fa-building mr-2"></i>
+                  <span>Desafíos de adopción para PyMES</span>
+                </div>
+                <div class="flex items-center text-amber-700">
+                  <i class="fas fa-graduation-cap mr-2"></i>
+                  <span>Necesidad de capacitación y reskilling</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mermaid Diagram: IA Impact Flow -->
+          <div class="bg-white p-8 rounded-lg shadow-sm border">
+            <h3 class="font-serif text-2xl font-semibold mb-6 text-center">Flujo de Impacto de la IA en América Latina</h3>
+            <div class="mermaid-container" id="mermaid-container-1">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid" id="mermaid-1">
+                graph TD
+                A[&#34;Baja Inversión en IA
+                <br/>$2.6B vs $78B EEUU&#34;] --&gt; B[&#34;Falta de Talento Calificado
+                <br/>22% graduados universitarios&#34;]
+                A --&gt; C[&#34;Escasa Adopción en PyMES
+                <br/>95% del tejido empresarial&#34;]
+                B --&gt; D[&#34;Baja Productividad
+                <br/>en Sectores Clave&#34;]
+                C --&gt; D
+                D --&gt; E[&#34;Pérdida de Competitividad
+                <br/>Global&#34;]
+                E --&gt; F[&#34;Dependencia Tecnológica
+                <br/>y Brecha Digital&#34;]
+                F --&gt; G[&#34;Riesgo de Marginalización
+                <br/>Económica&#34;]
+
+                style A fill:#fee2e2,stroke:#dc2626,stroke-width:3px,color:#1f2937
+                style B fill:#fef3c7,stroke:#d97706,stroke-width:3px,color:#1f2937
+                style C fill:#fef3c7,stroke:#d97706,stroke-width:3px,color:#1f2937
+                style D fill:#fecaca,stroke:#ef4444,stroke-width:3px,color:#1f2937
+                style E fill:#fca5a5,stroke:#dc2626,stroke-width:3px,color:#1f2937
+                style F fill:#f87171,stroke:#b91c1c,stroke-width:3px,color:#ffffff
+                style G fill:#dc2626,stroke:#7f1d1d,stroke-width:4px,color:#ffffff
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-red-50 p-6 rounded-lg border border-red-200 mt-8">
+            <h4 class="font-semibold text-red-800 mb-3">
+              <i class="fas fa-exclamation-triangle mr-2"></i>
+              Riesgo de Desplazamiento Laboral
+            </h4>
+            <p class="text-sm text-red-700 mb-3">
+              Un estudio en seis países del sudeste asiático pronosticó que para 2028, unos <strong>28 millones de trabajadores menos serán necesarios</strong> debido a la automatización, con gran parte proveniente de la agricultura.
+            </p>
+            <p class="text-xs text-gray-600">
+              Fuente: <a href="https://www.linkedin.com/pulse/global-impact-ai-agriculture-lakay-business-ltda-zum7f" class="citation">LinkedIn Analysis 2024</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Strategic Recommendations -->
+      <section id="strategic-recommendations" class="py-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+          <h2 class="font-serif text-4xl font-bold text-gray-900 mb-12">Recomendaciones Estratégicas</h2>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-lg border border-blue-200">
+              <h3 class="font-serif text-xl font-semibold text-blue-800 mb-6">
+                <i class="fas fa-landmark mr-3"></i>
+                Para los Gobiernos
+              </h3>
+              <ul class="space-y-4 text-sm">
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-blue-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Desarrollar estrategias nacionales de IA</strong> coherentes y a largo plazo, con metas claras y planes de acción detallados
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-blue-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Establecer marcos regulatorios</strong> que fomenten la innovación, protejan derechos ciudadanos y generen confianza
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-blue-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Aumentar inversión pública en I+D</strong> y crear programas de incentivos para la inversión privada
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-blue-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Invertir en infraestructura digital</strong>, especialmente en zonas rurales, para cerrar la brecha digital
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 p-8 rounded-lg border border-green-200">
+              <h3 class="font-serif text-xl font-semibold text-green-800 mb-6">
+                <i class="fas fa-building mr-3"></i>
+                Para el Sector Privado
+              </h3>
+              <ul class="space-y-4 text-sm">
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-green-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Aumentar inversión en I+D en IA</strong> y adoptar la tecnología en operaciones para mejorar eficiencia
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-green-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Liderar la adopción de IA</strong> y ayudar a PyMES mediante programas de mentoría y colaboración
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-green-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Invertir en desarrollo de talento</strong> mediante programas de capacitación y becas para estudiantes
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-green-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Colaborar con gobierno y academia</strong> para crear un ecosistema de IA vibrante y sostenible
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-gradient-to-br from-purple-50 to-indigo-50 p-8 rounded-lg border border-purple-200">
+              <h3 class="font-serif text-xl font-semibold text-purple-800 mb-6">
+                <i class="fas fa-graduation-cap mr-3"></i>
+                Para la Academia
+              </h3>
+              <ul class="space-y-4 text-sm">
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-purple-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Actualizar programas de estudio</strong> para incluir habilidades en IA y ciencia de datos
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-purple-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Fomentar investigación interdisciplinaria</strong> en IA y colaboración con el sector privado
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-purple-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Desarrollar programas de capacitación</strong> para trabajadores afectados por la automatización
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-purple-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Alinear formación con necesidades</strong> del mercado laboral y tendencias tecnológicas
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-8 rounded-lg border border-amber-200">
+              <h3 class="font-serif text-xl font-semibold text-amber-800 mb-6">
+                <i class="fas fa-globe mr-3"></i>
+                Cooperación Internacional
+              </h3>
+              <ul class="space-y-4 text-sm">
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-amber-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Proporcionar apoyo técnico y financiero</strong> para cerrar la brecha de inversión en IA
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-amber-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Asistir en creación de marcos regulatorios</strong> y programas de capacitación
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-amber-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Fomentar colaboración entre investigadores</strong> y empresas de América Latina y otras regiones
+                  </div>
+                </li>
+                <li class="flex items-start">
+                  <i class="fas fa-arrow-right text-amber-600 mr-3 mt-1"></i>
+                  <div>
+                    <strong>Financiar proyectos de I+D</strong> que aborden desafíos específicos de la región
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Mermaid Chart: Strategic Roadmap -->
+          <div class="bg-white p-8 rounded-lg shadow-sm border mt-12">
+            <h3 class="font-serif text-2xl font-semibold mb-6 text-center">Hoja de Ruta Estratégica para América Latina</h3>
+            <div class="mermaid-container" id="mermaid-container-2">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid" id="mermaid-2">
+                graph LR
+                A[&#34;Corto Plazo
+                <br/>2024-2026&#34;] --&gt; B[&#34;Mediano Plazo
+                <br/>2026-2030&#34;]
+                B --&gt; C[&#34;Largo Plazo
+                <br/>2030+&#34;]
+
+                A1[&#34;Estrategias Nacionales de IA&#34;] --&gt; A
+                A2[&#34;Inversión en Infraestructura&#34;] --&gt; A
+                A3[&#34;Formación de Talento Básico&#34;] --&gt; A
+
+                B1[&#34;Adopción Masiva en PyMES&#34;] --&gt; B
+                B2[&#34;Desarrollo de Ecosistemas&#34;] --&gt; B
+                B3[&#34;Colaboración Regional&#34;] --&gt; B
+
+                C1[&#34;Liderazgo Global en Sectores Clave&#34;] --&gt; C
+                C2[&#34;Innovación Disruptiva&#34;] --&gt; C
+                C3[&#34;Sostenibilidad Tecnológica&#34;] --&gt; C
+
+                style A fill:#dbeafe,stroke:#2563eb,stroke-width:3px,color:#1f2937
+                style B fill:#fef3c7,stroke:#d97706,stroke-width:3px,color:#1f2937
+                style C fill:#d1fae5,stroke:#059669,stroke-width:3px,color:#1f2937
+                style A1 fill:#f8fafc,stroke:#475569,stroke-width:2px,color:#1f2937
+                style A2 fill:#f8fafc,stroke:#475569,stroke-width:2px,color:#1f2937
+                style A3 fill:#f8fafc,stroke:#475569,stroke-width:2px,color:#1f2937
+                style B1 fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#1f2937
+                style B2 fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#1f2937
+                style B3 fill:#f1f5f9,stroke:#64748b,stroke-width:2px,color:#1f2937
+                style C1 fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#1f2937
+                style C2 fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#1f2937
+                style C3 fill:#f0fdf4,stroke:#16a34a,stroke-width:2px,color:#1f2937
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-8 rounded-lg mt-8">
+            <h3 class="font-serif text-2xl font-semibold mb-4">Visión 2030: Un Futuro con IA en América Latina</h3>
+            <p class="text-lg leading-relaxed">
+              Para 2030, América Latina podría transformar su rezago tecnológico en una ventaja competitiva mediante la implementación de estas recomendaciones estratégicas. La región tiene el potencial de desarrollar ecosistemas de IA vibrantes que no solo aumenten la productividad y la competitividad, sino que también aborden desafíos sociales y ambientales críticos, asegurando un futuro más próspero y sostenible para todos sus ciudadanos.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Conclusions -->
+      <section id="conclusions" class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+          <h2 class="font-serif text-4xl font-bold text-gray-900 mb-12">Conclusiones</h2>
+
+          <div class="prose prose-lg max-w-none">
+            <div class="bg-gradient-to-r from-red-50 to-amber-50 p-8 rounded-lg border border-red-200 mb-8">
+              <h3 class="font-serif text-2xl font-semibold text-red-800 mb-4">La Brecha de Inversión: Un Riesgo Existencial</h3>
+              <p class="text-gray-700 leading-relaxed">
+                El análisis revela que la brecha de inversión en IA en América Latina no es simplemente un desafío económico, sino un <strong>riesgo existencial para la competitividad futura de la región</strong>. Con una inversión 30 veces menor que la de Estados Unidos y una tendencia a la baja en países clave, la región se arriesga a una marginalización tecnológica que podría perpetuar décadas de subdesarrollo.
+              </p>
+            </div>
+
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-lg border border-blue-200 mb-8">
+              <h3 class="font-serif text-2xl font-semibold text-blue-800 mb-4">La Paradoja de las Prioridades</h3>
+              <p class="text-gray-700 leading-relaxed">
+                La comparación con otros sectores revela una <strong>paradoja preocupante</strong>: mientras los presupuestos de defensa superan en 18 veces la inversión en IA, y el gasto educativo tradicional continúa siendo prioritario, la región descuida la tecnología que está redefiniendo la seguridad nacional, la educación y la competitividad económica en el siglo XXI.
+              </p>
+            </div>
+
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-8 rounded-lg border border-green-200 mb-8">
+              <h3 class="font-serif text-2xl font-semibold text-green-800 mb-4">El Imperativo del Talento</h3>
+              <p class="text-gray-700 leading-relaxed">
+                La escasez de talento calificado, con solo el <strong>22% de graduados universitarios</strong> en Brasil y México, representa un cuello de botella crítico. Sin una fuerza laboral capacitada en IA, ciencia de datos y tecnologías emergentes, incluso las inversiones más significativas fallarán en generar el impacto transformador necesario.
+              </p>
+            </div>
+
+            <div class="bg-gradient-to-r from-purple-50 to-indigo-50 p-8 rounded-lg border border-purple-200">
+              <h3 class="font-serif text-2xl font-semibold text-purple-800 mb-4">La Oportunidad de las PyMES</h3>
+              <p class="text-gray-700 leading-relaxed">
+                Las pequeñas y medianas empresas, que representan el <strong>95% del tejido empresarial</strong>, son tanto la mayor vulnerabilidad como la mayor oportunidad. Su baja adopción de IA limita la productividad regional, pero su potencial transformación podría generar un impacto económico exponencial si se abordan las barreras de acceso, costo y conocimiento.
+              </p>
+            </div>
+
+            <div class="mt-12 p-8 bg-gray-900 text-white rounded-lg">
+              <h3 class="font-serif text-2xl font-semibold mb-4">El Camino a Seguir</h3>
+              <p class="text-lg leading-relaxed mb-4">
+                América Latina se encuentra en un momento crítico. La revolución de la IA no esperará a que la región supere sus desafíos estructurales. La ventana de oportunidad para cerrar la brecha tecnológica se está cerrando rápidamente.
+              </p>
+              <p class="text-lg leading-relaxed">
+                Sin embargo, la región cuenta con ventajas significativas: mercados dinámicos, recursos naturales estratégicos, y una creciente comunidad de emprendedores tecnológicos. El desafío no es técnico, sino político, educativo y estratégico. La pregunta no es si América Latina puede adoptar la IA, sino si tendrá la voluntad política y la visión estratégica para hacerlo antes de que sea demasiado tarde.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+          <div class="border-t border-gray-700 pt-8">
+            <h3 class="font-semibold mb-4">Fuentes Principales</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-300">
+              <div>
+                <p class="mb-2">
+                  <a href="https://boliviaemprende.com/publicaciones/informe-cepal-america-latina-enfrenta-una-transformacion-tecnologica-pero-con-rezagos-en-inversion-y-capacidades" class="citation">CEPAL (2023). Informe sobre transformación tecnológica en América Latina</a>
+                </p>
+                <p class="mb-2">
+                  <a href="https://www.unicef.org/lac/en/press-releases/unesco-unicef-and-eclac-warn-that-at-a-current-rate-latin-america-and-caribbean-will-not-not-achieve-the-education-goals-set-by-the-2030-agenda" class="citation">UNICEF/CEPAL (2019). Educación en América Latina y el Caribe</a>
+                </p>
+              </div>
+              <div>
+                <p class="mb-2">
+                  <a href="https://latamfdi.com/ai-in-latin-america/" class="citation">LatamFDI (2024). AI in Latin America: Adoption and Impact</a>
+                </p>
+                <p class="mb-2">
+                  <a href="https://www.unicef.org/lac/en/press-releases/latin-american-and-caribbean-governments-urge-more-investment-in-education" class="citation">UNICEF (2024). Llamado a la acción para inversión educativa</a>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-8 text-center text-sm text-gray-400">
+            <p>© 2024 Análisis de Inteligencia Artificial en América Latina. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+        // Initialize Mermaid with custom theme and configuration
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#f8fafc',
+                primaryTextColor: '#1f2937',
+                primaryBorderColor: '#475569',
+                lineColor: '#64748b',
+                secondaryColor: '#e2e8f0',
+                tertiaryColor: '#f1f5f9',
+                background: '#ffffff',
+                mainBkg: '#f8fafc',
+                secondBkg: '#e2e8f0',
+                tertiaryBkg: '#f1f5f9',
+                // Enhanced contrast colors for different node types
+                primaryTextColor: '#1f2937',
+                secondaryTextColor: '#1f2937',
+                tertiaryTextColor: '#1f2937',
+                // Node colors with better contrast
+                primaryBorderColor: '#475569',
+                primaryTextColor: '#1f2937',
+                // Edge styling
+                edgeLabelBackground: '#ffffff',
+                clusterBkg: '#f8fafc',
+                clusterBorder: '#e2e8f0'
+            },
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 20
+            },
+            fontSize: 14,
+            fontFamily: 'Inter, sans-serif'
+        });
+
+        // Initialize Mermaid Controls for zoom and pan
+        function initializeMermaidControls() {
+            const containers = document.querySelectorAll('.mermaid-container');
+
+            containers.forEach(container => {
+            const mermaidElement = container.querySelector('.mermaid');
+            let scale = 1;
+            let isDragging = false;
+            let startX, startY, translateX = 0, translateY = 0;
+
+            // 触摸相关状态
+            let isTouch = false;
+            let touchStartTime = 0;
+            let initialDistance = 0;
+            let initialScale = 1;
+            let isPinching = false;
+
+            // Zoom controls
+            const zoomInBtn = container.querySelector('.zoom-in');
+            const zoomOutBtn = container.querySelector('.zoom-out');
+            const resetBtn = container.querySelector('.reset-zoom');
+            const fullscreenBtn = container.querySelector('.fullscreen');
+
+            function updateTransform() {
+                mermaidElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+                if (scale > 1) {
+                container.classList.add('zoomed');
+                } else {
+                container.classList.remove('zoomed');
+                }
+
+                mermaidElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+            }
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                scale = Math.min(scale * 1.25, 4);
+                updateTransform();
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                scale = Math.max(scale / 1.25, 0.3);
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+                updateTransform();
+                });
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+                });
+            }
+
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', () => {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                });
+            }
+
+            // Mouse Events
+            mermaidElement.addEventListener('mousedown', (e) => {
+                if (isTouch) return; // 如果是触摸设备，忽略鼠标事件
+
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                mermaidElement.style.cursor = 'grabbing';
+                updateTransform();
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && !isTouch) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            // 获取两点之间的距离
+            function getTouchDistance(touch1, touch2) {
+                return Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+                );
+            }
+
+            // Touch Events - 触摸事件处理
+            mermaidElement.addEventListener('touchstart', (e) => {
+                isTouch = true;
+                touchStartTime = Date.now();
+
+                if (e.touches.length === 1) {
+                // 单指拖动
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+
+                } else if (e.touches.length === 2) {
+                // 双指缩放
+                isPinching = true;
+                isDragging = false;
+
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                initialDistance = getTouchDistance(touch1, touch2);
+                initialScale = scale;
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && isDragging && !isPinching) {
+                // 单指拖动
+                const touch = e.touches[0];
+                translateX = touch.clientX - startX;
+                translateY = touch.clientY - startY;
+                updateTransform();
+
+                } else if (e.touches.length === 2 && isPinching) {
+                // 双指缩放
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = getTouchDistance(touch1, touch2);
+
+                if (initialDistance > 0) {
+                    const newScale = Math.min(Math.max(
+                    initialScale * (currentDistance / initialDistance),
+                    0.3
+                    ), 4);
+                    scale = newScale;
+                    updateTransform();
+                }
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchend', (e) => {
+                // 重置状态
+                if (e.touches.length === 0) {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                // 延迟重置isTouch，避免鼠标事件立即触发
+                setTimeout(() => {
+                    isTouch = false;
+                }, 100);
+                } else if (e.touches.length === 1 && isPinching) {
+                // 从双指变为单指，切换为拖动模式
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+                }
+
+                updateTransform();
+            });
+
+            mermaidElement.addEventListener('touchcancel', (e) => {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                setTimeout(() => {
+                isTouch = false;
+                }, 100);
+
+                updateTransform();
+            });
+
+            // Enhanced wheel zoom with better center point handling
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.min(Math.max(scale * delta, 0.3), 4);
+
+                // Adjust translation to zoom towards center
+                if (newScale !== scale) {
+                const scaleDiff = newScale / scale;
+                translateX = translateX * scaleDiff;
+                translateY = translateY * scaleDiff;
+                scale = newScale;
+
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+
+                updateTransform();
+                }
+            });
+
+            // Initialize display
+            updateTransform();
+            });
+        }
+
+        // Initialize controls after mermaid renders
+        setTimeout(initializeMermaidControls, 1000);
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mobile TOC Toggle (for responsive design)
+        function toggleTOC() {
+            const toc = document.getElementById('toc');
+            const overlay = document.getElementById('toc-overlay');
+            toc.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+        }
+
+        // Close TOC function
+        function closeTOC() {
+            const toc = document.getElementById('toc');
+            const overlay = document.getElementById('toc-overlay');
+            toc.classList.remove('open');
+            overlay.classList.add('hidden');
+        }
+
+        // Close TOC when window is resized to desktop size
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                closeTOC();
+            }
+        });
+
+        // Highlight active section in TOC
+        const observerOptions = {
+            rootMargin: '-20% 0px -70% 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute('id');
+                const tocLink = document.querySelector(`#toc a[href="#${id}"]`);
+                
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('#toc a').forEach(link => {
+                        link.classList.remove('text-blue-600', 'font-semibold');
+                        link.classList.add('text-gray-600');
+                    });
+                    if (tocLink) {
+                        tocLink.classList.remove('text-gray-600');
+                        tocLink.classList.add('text-blue-600', 'font-semibold');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section[id]').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+  
+
+</body></html>

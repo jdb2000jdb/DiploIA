@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Capítulo 1 - TEC1000 2023/2024</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f7f7f8;
+            color: #1c1e21;
+            display: flex;
+            line-height: 1.6;
+        }
+        .sidebar {
+            width: 240px;
+            background: #fff;
+            border-right: 1px solid #e5e7eb;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 24px 0;
+        }
+        .sidebar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .sidebar a {
+            display: block;
+            padding: 8px 24px;
+            text-decoration: none;
+            font-size: 14px;
+            color: #4b5563;
+            transition: background .2s, color .2s;
+        }
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #f3f4f6;
+            color: #1d4ed8;
+            font-weight: 600;
+        }
+        .main {
+            margin-left: 240px;
+            padding: 32px 48px;
+            max-width: 840px;
+        }
+        .main h1, .main h2, .main h3, .main h4 {
+            color: #111827;
+            margin-top: 2em;
+            margin-bottom: .5em;
+        }
+        .main h1 { font-size: 2em; }
+        .main h2 { font-size: 1.6em; }
+        .main h3 { font-size: 1.4em; }
+        .main p, .main li, .main td, .main th {
+            font-size: 15px;
+            margin-bottom: .8em;
+        }
+        .main img {
+            max-width: 100%;
+            height: auto;
+            margin: 1em 0;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+        }
+        .main table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+            font-size: 14px;
+        }
+        .main th, .main td {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+        }
+        .main th {
+            background: #f9fafb;
+        }
+        pre {
+            background: #f3f4f6;
+            padding: 12px 16px;
+            overflow-x: auto;
+            font-size: 13px;
+        }
+        .section {
+            margin-bottom: 3em;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Menú lateral -->
+<nav class="sidebar">
+    <ul>
+        <li><a href="#1.1">1.1 Modelos probabilísticos…</a></li>
+        <li><a href="#1.2">1.2 IA en C2</a></li>
+        <li><a href="#1.3">1.3 IA y LAWS</a></li>
+        <li><a href="#1.4">1.4 IA y Armas Nucleares</a></li>
+        <li><a href="#1.5">1.5 Defensa Aérea: Iron Dome</a></li>
+        <li><a href="#1.6">1.6 Epistemología militar</a></li>
+        <li><a href="#1.7">1.7 Epistemología. La Ciencia Militar</a></li>
+    </ul>
+</nav>
+
+<main class="main">
+
+<!-- 1.1 -->
+<section id="1.1" class="section">
+  <h1>1.1 Uso de modelos probabilísticos para la toma de decisiones en tiempo real: de la programación algorítmica a la inteligencia artificial</h1>
+  <p><em>Por Axel Emanuel Sacca (*)</em></p>
+
+  <h2>Introducción Contexto y Relevancia</h2>
+  <p>La evolución de los Grandes Modelos de Lenguaje (LLMs, del inglés Large Language Models) ha sido un hito significativo en el campo de la inteligencia artificial. Desde sus inicios, los LLMs han demostrado una capacidad notable para procesar y generar texto de manera coherente y contextualmente relevante. Estos modelos, entrenados con vastas cantidades de datos textuales, han alcanzado un nivel de comprensión del lenguaje natural que les permite realizar tareas complejas como la traducción automática, la generación de texto, y la síntesis de información. La aparición de modelos como GPT-4 y Llama 3.1 ha ampliado aún más el potencial de los LLMs, permitiendo aplicaciones en áreas tan diversas como la educación, la medicina, la seguridad y la defensa.</p>
+  <p>Uno de los aspectos más innovadores de los LLMs es su capacidad para tomar decisiones de manera "no algorítmica". A diferencia de los sistemas basados en reglas tradicionales, que dependen de estructuras de control explícitas y predefinidas, los LLMs pueden generar respuestas y tomar decisiones basadas en patrones estadísticos y asociaciones aprendidas de los datos. Esto les permite manejar una gama más amplia de situaciones y adaptarse a nuevas condiciones sin necesidad de reprogramación específica. Esta flexibilidad es particularmente valiosa en contextos donde la incertidumbre y la variabilidad son altas, como en la gestión de crisis, la seguridad cibernética y la simulación de entornos virtuales.</p>
+
+  <h2>Objetivo del Estudio</h2>
+  <p>El objetivo de este estudio es explorar cómo los LLMs pueden ser integrados con sistemas tradicionales para ofrecer soluciones más flexibles y adaptativas en diversas aplicaciones. Nos centraremos en cómo estos modelos pueden mejorar la toma de decisiones en áreas críticas como la defensa, la seguridad, la simulación de entornos virtuales y la asistencia legal. La hipótesis central es que los LLMs pueden proporcionar una capa adicional de inteligencia y adaptabilidad, permitiendo a los sistemas responder de manera más eficiente y efectiva a una amplia gama de situaciones. Este enfoque puede revolucionar la manera en que se abordan los problemas complejos, ofreciendo una alternativa viable a los métodos tradicionales basados en reglas.</p>
+
+  <h2>Fundamentos Teóricos y Tecnológicos</h2>
+  <h3>Tipos de Inteligencia Artificial</h3>
+  <ul>
+    <li><strong>IA Estrecha (ANI - Artificial Narrow Intelligence):</strong> También conocida como IA débil, se especializa en realizar tareas específicas utilizando datos y algoritmos predefinidos. Ejemplos incluyen sistemas de reconocimiento facial y asistentes virtuales como Siri o Alexa.</li>
+    <li><strong>IA General (AGI - Artificial General Intelligence):</strong> A menudo denominada IA fuerte, esta categoría aspira a alcanzar un nivel de inteligencia comparable al humano, capaz de realizar cualquier tarea cognitiva que un ser humano pueda. Sin embargo, AGI sigue siendo un concepto teórico y no ha sido alcanzado.</li>
+    <li><strong>IA Superinteligente (ASI - Artificial Superintelligence):</strong> Este es un nivel hipotético de inteligencia que supera con creces la capacidad cognitiva de los humanos. ASI aún no existe y es objeto de especulación y debate en la comunidad científica.</li>
+  </ul>
+
+  <h3>Aprendizaje Automático y Redes Neuronales</h3>
+  <p>El aprendizaje automático (ML, del inglés Machine Learning) es un subcampo de la IA que se centra en el desarrollo de algoritmos que permiten a las máquinas aprender y mejorar a partir de la experiencia sin ser programadas explícitamente. Los tres tipos principales de aprendizaje automático son:</p>
+  <ul>
+    <li><strong>Aprendizaje Supervisado:</strong> En este enfoque, el modelo es entrenado con datos etiquetados. El objetivo es aprender una función que mapee las entradas a las salidas correctas, basándose en ejemplos de entrenamiento. Un uso común es la clasificación de correos electrónicos como spam o no spam.</li>
+    <li><strong>Aprendizaje No Supervisado:</strong> Aquí, el modelo es entrenado con datos no etiquetados y debe identificar patrones y estructuras ocultas en los datos. Un ejemplo es el análisis de clusters para segmentar clientes según comportamientos similares.</li>
+    <li><strong>Aprendizaje por Refuerzo:</strong> Este tipo de aprendizaje implica un agente que aprende a tomar decisiones mediante la ejecución de acciones y la observación de los resultados. El agente es recompensado o castigado según el resultado de sus acciones, con el objetivo de maximizar una recompensa.</li>
+  </ul>
+
+  <h3>Redes Neuronales</h3>
+  <p>Las redes neuronales son una arquitectura clave en el aprendizaje automático, inspiradas en la estructura y el funcionamiento del cerebro humano. Estas redes están formadas por capas de neuronas artificiales, que actúan como unidades de procesamiento interconectadas. Cada neurona recibe entradas, las procesa mediante una función de activación, y genera una salida. Las conexiones entre neuronas tienen pesos (relevancia) que se ajustan durante el entrenamiento del modelo, con el objetivo de minimizar el error en las predicciones y mejorar la precisión.</p>
+
+  <h2>Conclusiones</h2>
+  <p>La investigación sobre la integración de Grandes Modelos de Lenguaje (LLMs) en sistemas tradicionales demuestra un potencial significativo para transformar una amplia gama de sectores, incluyendo la defensa, la seguridad, la asistencia legal y la gestión de información. Los LLMs, con su capacidad para procesar grandes volúmenes de datos textuales y generar respuestas adaptativas y precisas, ofrecen una flexibilidad sin precedentes en la toma de decisiones no algorítmica. Esta capacidad les permite ajustarse a nuevas condiciones y manejar situaciones complejas y dinámicas de manera más eficaz que los sistemas basados en reglas.</p>
+</section>
+
+
+<!-- 1.2 -->
+<section id="1.2" class="section">
+  <h1>1.2 La Inteligencia Artificial en los Sistemas de Comando y Control</h1>
+  <p><em>Por el CR Com (R)OIM Rafael Olivieri (*)<br>Co-autor: Ignacio Pita (**)</em></p>
+
+  <h2>Resumen</h2>
+  <p>Los sistemas de Comando y Control adquieren un papel relevante en los ejércitos modernos, teniendo en cuenta la ventaja que estas tecnologías otorgan al que las posee y la desventaja para quien carece de ellas. Tal es así que estas tecnologías lograron evolucionar la misma doctrina militar, achatando las cadenas de comando y hasta surge un nuevo concepto, el de “Network Centric Warfare”.</p>
+  <p>Desde el ciclo ODA (Observar – Decidir – Actuar) elemental, estos sistemas son relevantes por cuanto apoyan el proceso de toma de decisiones y el comando, el control de la fuerza y el empleo óptimo de sus capacidades militares. Actuar cada vez más rápido y con mayor precisión es clave, tanto en el ataque como en la defensa. La “conciencia situacional” (situational awareness) se construye mediante múltiples comunicaciones con las tropas desplegadas y la información de múltiples sensores. Pero la cantidad de información a analizar cada vez es mayor y al comandante ya le cuesta procesarla y tomar decisiones con ella. Así surge entonces la figura del “oficial de conocimiento” (knowledge officer) que limita la información que ve el comandante a solo lo más importante. Hace una simplificación de la realidad, similar a cuando en la resolución de un problema de física “despreciamos” ciertos datos, ciertas fuerzas que actúan sobre un cuerpo como el rozamiento para obtener una solución rápida, pero que sin embargo nos describe en forma muy aproximada el experimento.</p>
+  <p>Así y todo, esto es una carga importante para las personas y recortar mucho la información puede resultar en un error, tanto como contar con gran cantidad de información no procesada.</p>
+  <p>La inteligencia artificial, entonces se presenta como una solución al problema de procesar grandes volúmenes de información, y desarrollar la tarea de un experto humano sin cansancio, conforme a la metodología y a la doctrina, para brindar al comandante la información que necesita para la toma de decisiones en un tiempo más corto.</p>
+
+  <h2>Introducción</h2>
+  <p>En los sistemas de Comando y Control, usualmente C4ISR (Command, Control, Communications, Computers, Intelligence, Surveillance and Reconnaissance), el aprendizaje automático y la IA pueden proporcionar al comandante y a los operadores ventajas tácticas al aumentar la conciencia de la situación, reducir las cargas cognitivas y mejorar el proceso de toma de decisiones.</p>
+  <p>Por ejemplo, el aprendizaje automático y la inteligencia artificial podrían ayudar a procesar, explotar y difundir datos de inteligencia, vigilancia y reconocimiento. Esa ventaja podría venir en forma de nuevas pantallas disponibles para los operadores en el campo de combate. Esa tecnología también podría mejorar la automatización en los centros de operaciones tácticas, proporcionando a su vez a las unidades de combate predicciones específicas para la misión.</p>
+  <p>Si bien no conocemos aún ejemplos concretos de sistemas de comando y control que incluyan la IA, sí sabemos que se está trabajando para explotar el aprendizaje automático y las tecnologías de inteligencia artificial en un entorno operativo cada vez más desafiante.</p>
+  <p>Hay que tener en cuenta que un sesgo o un mal funcionamiento de la IA en los sistemas de Comando y Control puede inducir al Comandante a adoptar decisiones erróneas, con la consecuente pérdida de vidas humanas, armamento y la propia misión.</p>
+  <p>Según el Comando de Operaciones Especiales de los Estados Unidos (SOCOM), se busca generar grupos de desarrollo que puedan concretar estos avances tecnológicos.</p>
+
+  <h2>Desarrollo</h2>
+  <p>Los términos Comando y Control hacen referencia a la habilidad del comandante militar para comandar sus tropas. Siempre existió, aunque sin los medios tecnológicos actuales. La suma de Comunicaciones al grupo de términos supone que se requieren comunicaciones para permitir que el comandante ejerza efectivamente esas funciones. En la guerra moderna, la Computación también es un componente clave. Así al primitivo acrónimo "CC o C2" se le van agregando términos, hasta el C4ISR mencionado, pero hay otros:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Acronimo</th>
+        <th>Incluye</th>
+        <th>Significado en español</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>C2/C&C</td><td>Command, Control</td><td>Mando, Control</td></tr>
+      <tr><td>C2IS</td><td>Command, Control, Information Systems</td><td>Mando, Control, Sistemas de Información</td></tr>
+      <tr><td>C3</td><td>Command, Control, Communications</td><td>Mando, Control, Comunicaciones</td></tr>
+      <tr><td>C3I</td><td>Command, Control, Communications, Intelligence</td><td>Mando, Control, Comunicaciones, Inteligencia</td></tr>
+      <tr><td>C4</td><td>Command, Control, Communications, Computers</td><td>Mando, Control, Comunicaciones, Computación</td></tr>
+      <tr><td>C4I</td><td>Command, Control, Communications, Computers Intelligence</td><td>Mando, Control, Comunicaciones, Computación, Inteligencia</td></tr>
+      <tr><td>C4ISR</td><td>Command, Control, Communications, Computers Intelligence, Surveillance, Reconnaissance</td><td>Mando, Control, Comunicaciones, Computación, Inteligencia, Vigilancia, Reconocimiento</td></tr>
+      <tr><td>C5I</td><td>Command, Control, Communications, Computers, Combat Systems, Intelligence</td><td>Mando, Control, Comunicaciones, Computación, Sistemas de Combate, Inteligencia</td></tr>
+    </tbody>
+  </table>
+
+  <p>Como sea, los sistemas se basan en el ciclo ODA (Observar – Decidir – Actuar), e integran tecnologías, con el objeto de poder ver con claridad y precisión la situación, adoptar rápidamente resoluciones y visualizar el resultado de las acciones.</p>
+  <p>El tiempo es importante: cuanto más rápida sea la decisión y la ejecución, mayor es la probabilidad de éxito. Actuar con rapidez y precisión otorga una ventaja, tanto que la misma doctrina evolucionó para adoptar el concepto de <strong>Network Centric Warfare</strong>. Esto se basa en conceptos encaminados a aprovechar los principios y tecnologías de la Era de las TICs (Tecnologías de la Información y las Comunicaciones) para el desarrollo de operaciones militares y para hacer frente a los nuevos escenarios de la guerra moderna. Fue dada a conocer por primera vez por el Vicealmirante Arthur Cebrowski del US DoD, el año 1998 y posteriormente por Thomas Bernett del U.S. Naval War College, dando inicio a una de las transformaciones más revolucionarias del aparato de defensa de EE.UU.</p>
+
+  <h2>Conclusión</h2>
+  <p>Teniendo en cuenta que estamos lejos de pensar en el reemplazo del Comandante de una fuerza por la IA, en primer término por la enorme responsabilidad que tiene frente al cumplimiento de la misión y de las vidas que dependen de sus decisiones, las herramientas basadas en IA que se pueden introducir en los sistemas de Comando y Control presentan un enorme potencial si lo vemos en la perspectiva del alivio de tareas repetitivas y tediosas, resolviéndolas en menos tiempo, y de esta forma le da al Comandante la ventaja de tiempo mencionada.</p>
+  <p>Sin duda, la IA se irá incorporando a los sistemas de Comando y Control por la simple razón de la ventaja que aportan en el proceso de toma de decisiones, pero no tan rápido por la prudencia requerida por la criticidad de las actividades, activos y vidas que el Comandante maneja con estos sistemas.</p>
+  <p>Actualmente, vimos un lanzamiento abrumador a nivel global; podemos probar herramientas como ChatGPT y observar sus capacidades, pero aún no están convenientemente estandarizadas y definidas como para depender de ellas. Debe prevalecer la prudencia, por lo menos en este tipo de aplicaciones.</p>
+</section>
+
+<!-- 1.3 -->
+<section id="1.3" class="section">
+  <h1>1.3 Inteligencia Artificial y sistemas de armas autónomas letales</h1>
+  <p><em>Por el CR I (R)OIM “VGM” Juan Carlos Villanueva (*)</em></p>
+
+  <h2>Resumen</h2>
+  <p>Los Sistemas de Armas Autónomas Letales (LAWS) y la fusión de ellas con la Inteligencia Artificial (IA) suelen ser descriptas como la “Tercera Revolución en la guerra”, luego de las generadas por “la Pólvora” y las “Armas Nucleares”. Las aplicaciones militares de la IA en LAWS están generando grandes estímulos para la I+D en IA, por sus características, las áreas de aplicación y el efecto multiplicador del poder de combate que aportan a las fuerzas militares. Muchos países avanzan en programas del área y las empresas comienzan a competir en un mercado potencial creciente y promisorio. No obstante, se empieza a cuestionar el grado de autonomía que será finalmente otorgado a estas armas debido a su letalidad. Muchas naciones se esfuerzan por acordar globalmente la implementación de un marco regulatorio y adecuados mecanismos de control que contribuyan a minimizar los efectos no deseados de su empleo generalizado en el ámbito militar, así como los riesgos de proliferación de estos disruptivos sistemas.</p>
+
+  <h2>Introducción – Antecedentes</h2>
+  <p>Los avances en I+D de Nuevas Tecnologías Digitales (NTD) han repercutido de manera extraordinaria en todas las áreas del conocimiento a nivel global, obviamente con mayor incidencia en los países más desarrollados. Algunas de las NTD que podemos destacar son: Internet de las Cosas (IoT), Big Data, Banda Ancha móvil, Computación en la nube, Blockchain, dispositivos biométricos para identificación y reconocimiento de personas, etc. Pero tal vez la que más impacto y difusión está teniendo actualmente es el desarrollo y el empleo masivo de Inteligencia Artificial.</p>
+  <p>Respecto de esta última, el término “Inteligencia Artificial” (IA) está cada vez más presente en los medios de comunicación, especialmente en la última década. Desde los trabajos pioneros de Alan Turing y su equipo durante la Segunda Guerra Mundial hasta la actualidad, las aplicaciones de la IA han crecido de manera exponencial, pasando de ser un concepto futurista a convertirse en una realidad palpable que impacta todos los aspectos de la vida cotidiana, incluido el ámbito de la defensa y la seguridad.</p>
+
+  <h2>Objetivo y alcance del trabajo</h2>
+  <p>El objetivo del trabajo es introducir los conceptos básicos relacionados con Inteligencia Artificial (IA) y su fusión con los Sistemas de Armas Autónomas Letales (Lethal Autonomous Weapons Systems – LAWS). A través de trabajos de divulgación sobre tecnologías emergentes, potencialmente disruptivas, tratamos de aportar información y conocimiento sobre diferentes Áreas de Interés de la Defensa que puedan resultar de utilidad para futuros planes de recomposición de capacidades de nuestras Fuerzas Armadas.</p>
+  <p>El alcance se limita a los Sistemas de Armas Autónomas con Capacidad Letal (LAWS) del tipo terrestre, aéreo y naval, excluyendo por ahora el ámbito nuclear.</p>
+
+  <h2>Sistemas de armas autónomas letales e inteligencia artificial</h2>
+  <p>Los Sistemas de Armas Autónomas Letales (LAWS) son ingenios desarrollados para identificar, seleccionar, adquirir y neutralizar objetivos considerados “blancos de interés”, sin la intervención del componente humano. Existen diferentes tipos y grados de autonomía, siendo el más extremo aquel en el cual el componente humano queda fuera del ciclo de decisión para “detectar – identificar – seleccionar – adquirir – neutralizar” un blanco de interés.</p>
+  <p>El conocido ciclo OODA (Observe – Orient – Decide – Act) se aplica a estos sistemas: aquella parte que más rápidamente complete el ciclo OODA será la que normalmente obtenga la victoria. Sin embargo, la incorporación de IA y la demanda de “cada vez más velocidad” puede llevar a que el operador/decisor humano quede inexorablemente fuera del ciclo, con decisiones que afectan la vida o la muerte de seres humanos.</p>
+
+  <h2>Aplicaciones de inteligencia artificial en sistemas de armas autónomas letales</h2>
+  <p>Las aplicaciones actuales y en desarrollo incluyen:</p>
+  <ul>
+    <li><strong>Sistemas de adquisición de blancos y “targeting”</strong> – uso de IA para identificar y priorizar objetivos en tiempo real.</li>
+    <li><strong>Plataformas autónomas</strong> – drones y vehículos terrestres/navales con capacidades letales, operando individualmente o en enjambres (swarms).</li>
+    <li><strong>Sistemas operacionales con grados de autonomía</strong> – desde asistencia a la puntería hasta decisiones completamente autónomas de disparo.</li>
+  </ul>
+  <p>Ejemplos recientes como el conflicto de Nagorno-Karabaj 2020, la guerra Ucrania-Rusia y las operaciones Israel-Hamas muestran el uso de LAWS con capacidades de IA para reconocimiento de blancos, guiado y ataque autónomo de drones FPV y municiones loitering.</p>
+
+  <h2>Beneficios y riesgos asociados al empleo de IA en LAWS</h2>
+  <h3>Beneficios</h3>
+  <ul>
+    <li>Velocidad, sorpresa y supervivencia en el ciclo OODA.</li>
+    <li>Incremento de precisión y reducción de daño colateral.</li>
+    <li>Persistencia operacional 24/7 sin fatiga humana.</li>
+    <li>Ampliación del alcance en ambientes A2/AD (anti-acceso y negación de área).</li>
+    <li>Coordinación estructurada y escalable de sistemas de armas.</li>
+    <li>Posibilidad de programar reglas de enfrentamiento (ROE) con mayor exactitud.</li>
+  </ul>
+
+  <h3>Riesgos</h3>
+  <ul>
+    <li>Proliferación global a actores no estatales y grupos terroristas.</li>
+    <li>Autonomía total que excluye al operador humano del ciclo decisorio (“Human-out-of-the-loop”).</li>
+    <li>Fallas o sesgos del algoritmo que provoquen errores letales.</li>
+    <li>Escalada involuntaria de conflictos por decisiones algorítmicas aceleradas.</li>
+    <li>Dificultad para atribuir responsabilidad legal y ética tras incidentes.</li>
+  </ul>
+
+  <h2>Consideraciones finales</h2>
+  <p>El empleo de LAWS muestra una tendencia creciente y estará cada vez más presente en futuros conflictos. Las potencias nucleares y países con capacidades avanzadas están invirtiendo fuertemente en I+D de IA militar, pero al mismo tiempo surgen iniciativas internacionales para regular su uso. El desafío es equilibrar la ventaja estratégica con la necesidad de salvaguardas éticas y legales que protejan a la humanidad de sus riesgos potenciales.</p>
+</section>
+
+<!-- 1.4 -->
+<section id="1.4" class="section">
+  <h1>1.4 Inteligencia Artificial y Armas Nucleares</h1>
+  <p><em>Por el CR(R)Dr OIM Osvaldo Azpitarte (*)</em></p>
+
+  <h2>Resumen</h2>
+  <p>La Inteligencia Artificial (IA) tiene un uso cada vez más generalizado y su aplicación se ha extendido a casi todos los ámbitos del quehacer humano. En el ámbito militar, el uso de la IA posee un enorme potencial para hacer más rápido, eficiente y preciso el empleo de sistemas de armas, de inteligencia, vigilancia y reconocimiento, de comando, control y comunicaciones, y de los procesos de toma de decisiones. El ámbito específico de las armas nucleares es particularmente influenciable por la aplicación creciente de IA. Desde la irrupción de los misiles intercontinentales (ICBM) en la década de 1960, los sistemas nucleares y sus subsistemas se han caracterizado por su complejidad técnica, automatismo y autonomía limitada, pero la IA puede mejorar exponencialmente estas capacidades. Sin embargo, sus ventajas deben sopesarse con desventajas y riesgos que, de ignorarse, pueden tener consecuencias devastadoras.</p>
+
+  <h2>Introducción</h2>
+  <p>La Inteligencia Artificial (IA) se refiere a la capacidad de sistemas informáticos avanzados (software + hardware) para realizar tareas que normalmente requieren inteligencia humana: reconocer patrones, aprender de la experiencia, obtener conclusiones y tomar decisiones. Al combinar algoritmos de aprendizaje automático con redes neuronales profundas, los sistemas de IA procesan billones de datos de forma simultánea, libres de sesgos emocionales humanos como el temor o la ira.</p>
+  <p>En el ámbito nuclear, la IA puede utilizarse para:</p>
+  <ul>
+    <li>Mejorar la alerta temprana, inteligencia, vigilancia y reconocimiento.</li>
+    <li>Acelerar los procesos de toma de decisiones.</li>
+    <li>Optimizar la integración de sistemas de comando, control y comunicaciones (NC3).</li>
+    <li>Incrementar la maniobrabilidad, detección de obstáculos e identificación automática de blancos en armas nucleares.</li>
+  </ul>
+  <p>El debate se centra en tres áreas: autonomía de las armas nucleares, estabilidad de los sistemas militares de IA y estabilidad estratégica.</p>
+
+  <h2>El debate sobre la IA en las armas nucleares</h2>
+
+  <h3>El potencial de la IA militar</h3>
+  <p>Las potencias nucleares consideran la IA esencial y buscan integrarla en sus sistemas antes que sus adversarios. La IA puede ahorrar tiempo y costo en investigación, optimización de diseño, fabricación, prueba, mantenimiento y vigilancia de misiles. También mejora la alerta temprana y la inteligencia, coordinando sensores, adquisición, procesamiento y diseminación de información relevante para decisiones oportunas.</p>
+
+  <h3>Autonomía de los sistemas de armas nucleares</h3>
+  <p>Clasificación ampliamente aceptada:</p>
+  <ul>
+    <li><strong>Human in the loop:</strong> el humano decide atacar; el arma ejecuta.</li>
+    <li><strong>Human on the loop:</strong> el arma actúa autónomamente, pero un operador puede intervenir o detener.</li>
+    <li><strong>Human out of the loop:</strong> el arma actúa sin posibilidad de intervención humana.</li>
+  </ul>
+  <p>Las potencias nucleares optan mayoritariamente por mantener “Human in or on the loop”.</p>
+
+  <h3>La estabilidad de la IA militar</h3>
+  <p>Sistemas autónomos pueden mejorar reconocimiento y acelerar decisiones, pero también pueden desestabilizar misiones al:</p>
+  <ul>
+    <li>Atacar blancos que revelen operaciones secretas.</li>
+    <li>Retirarse de posiciones con valor simbólico estratégico.</li>
+    <li>Realizar ataques apresurados sin preparación adecuada.</li>
+  </ul>
+  <p>Los modelos de IA tienden a comportamientos agresivos, incluyendo uso nuclear, en simulaciones de juegos de guerra.</p>
+
+  <h3>Vulnerabilidades o fallas de los sistemas de IA</h3>
+  <ul>
+    <li><strong>Envenenamiento de datos:</strong> manipulación de entradas que genera decisiones erróneas.</li>
+    <li><strong>Manipulación de imágenes:</strong> falsas señales que inducen a respuestas inapropiadas.</li>
+    <li><strong>Sesgo automático:</strong> juicios no equitativos por patrones de entrenamiento sesgados.</li>
+    <li><strong>Escalada artificial:</strong> ciclos de retroalimentación entre sistemas que incrementan tensiones.</li>
+    <li><strong>Ciberataques:</strong> malware, ransomware, interferencia del adversario.</li>
+  </ul>
+
+  <h3>La IA y la estabilidad estratégica</h3>
+  <p>La estabilidad estratégica busca evitar un primer ataque nuclear. La IA puede socavar la disuasión:</p>
+  <ul>
+    <li>Presentando un conflicto nuclear como “ganable” al reducir tiempos de decisión.</li>
+    <li>Incrementando la incertidumbre sobre capacidades enemigas, favoreciendo un “first strike”.</li>
+    <li>Acelerando la escalada ante misiles hipersónicos o ataques cibernéticos.</li>
+  </ul>
+
+  <h2>Recomendaciones para la aplicación de IA a las armas nucleares</h2>
+  <ul>
+    <li>Aumentar salvaguardas y evaluar riesgos de ciberataques.</li>
+    <li>Implementar códigos de autenticación robustos en protocolos de comando y control.</li>
+    <li>Establecer límites y parámetros seguros que eviten lanzamientos accidentales.</li>
+    <li>Promover acuerdos bilaterales y multilaterales para fortalecer la confianza y el diálogo sobre uso de IA en control nuclear.</li>
+  </ul>
+
+  <h2>Conclusiones</h2>
+  <p>En el ámbito nuclear, la IA es vista positivamente para comunicaciones, diseño y pruebas, pero hay fuerte recelo en incluirla en procesos de toma de decisiones y lanzamientos autónomos. Su inmadurez y vulnerabilidad a ciberataques impiden, por ahora, su empleo en escenarios estratégicos de alto riesgo. En mayo de 2024, el Departamento de Estado de EE.UU. solicitó a China y Rusia que declarasen oficialmente no ceder el control de sus armas nucleares a sistemas de IA, siguiendo el compromiso ya adquirido con Reino Unido y Francia.</p>
+</section>
+
+<!-- 1.5 -->
+<section id="1.5" class="section">
+  <h1>1.5 La Inteligencia Artificial aplicada a la Defensa Aérea: el caso del Sistema “Iron Dome”</h1>
+  <p><em>Por el CR A (R)OIM José Alberto Guglielmone (*)</em></p>
+
+  <h2>Introducción</h2>
+  <p>La Inteligencia Artificial (IA) está transformando profundamente la vida de las personas y la manera en que se desarrollan los sistemas, los negocios y las industrias. Sus aplicaciones abarcan desde asistentes de voz, conducción autónoma y diagnóstico médico automatizado, hasta reconocimiento visual, videojuegos, detección de oportunidades de negocio y prevención de riesgos y ataques. Estas tecnologías no se limitan a sectores tecnológicos, sino que se extienden a todas las industrias y servicios, creando un impacto transversal en la sociedad. Además, la IA impulsa la creación de nuevas empresas y abre puertas a oportunidades de negocio.</p>
+  <p>Actualmente las organizaciones operan en un entorno caracterizado por las siglas VUCA+H (volatilidad, incertidumbre, complejidad, ambigüedad, hiperconectividad); en este contexto, la implementación de herramientas de IA se convierte en un aliado estratégico, permitiendo a las organizaciones comprender mejor su entorno, optimizar su funcionamiento y adaptarse a los desafíos.</p>
+
+  <h2>El sistema de armas “Iron Dome”</h2>
+  <p>El sistema de armas “Iron Dome” es un claro ejemplo de cómo la IA puede integrarse en sistemas de armas para maximizar su eficacia y minimizar riesgos. Este Sistema de Defensa Aérea ha cobrado relevancia mundial debido a su capacidad para interceptar y neutralizar amenazas aéreas, especialmente a la luz de los recientes conflictos entre Israel y el grupo terrorista Hamas en la región de la Franja de Gaza.</p>
+  <p>El contexto que dio origen al desarrollo del Iron Dome es crucial para entender su importancia. Entre los años 2000 y 2008, se lanzaron aproximadamente 8.000 proyectiles desde Gaza hacia Israel, la mayoría por parte de Hamas. Estos ataques representaban un riesgo constante para la población civil, obligando al gobierno israelí a buscar una solución eficaz para proteger a sus ciudadanos. En febrero de 2007, el Ministerio de Defensa israelí decidió desarrollar un sistema de defensa aérea móvil como respuesta a esta creciente amenaza.</p>
+
+  <h2>Arquitectura del Sistema “Iron Dome”</h2>
+  <p>El Iron Dome fue desarrollado por Rafael Advanced Defense Systems e Israel Aerospace Industries, bajo supervisión del IMDO (Israel Missile Defense Organization), con apoyo financiero y técnico de Estados Unidos. Tras varios años de investigación y desarrollo, se declaró operativo en marzo de 2011. Está diseñado para actuar en la capa más baja del complejo Sistema de Defensa Aérea israelí, sirviendo como sistema VSHORAD (Very Short Range Air Defence) y C-RAM (Counter Rocket, Artillery & Mortar).</p>
+  <p>Desde su instalación en 2011, el Iron Dome ha evolucionado significativamente gracias al avance tecnológico y a la retroalimentación obtenida en escenarios reales de combate, convirtiéndose en un sistema “probado en combate”.</p>
+
+  <h2>Lógica operativa del Sistema Iron Dome</h2>
+  <p>El sistema opera mediante un proceso rápido de detección, evaluación y interceptación que se ejecuta en cuestión de segundos:</p>
+  <ol>
+    <li><strong>Detección</strong>: radares de vigilancia detectan el lanzamiento de cohetes o proyectiles.</li>
+    <li><strong>Evaluación</strong>: un sistema de gestión de batalla calcula la trayectoria y determina si el proyectil representa una amenaza para zonas protegidas.</li>
+    <li><strong>Interceptación</strong>: si se confirma la amenaza, se lanza un misil interceptador Tamir que neutraliza el proyectil en vuelo.</li>
+  </ol>
+  <p>La IA participa en la predicción de trayectorias y en la toma de decisiones sobre qué amenazas interceptar, optimizando el uso de recursos y minimizando costos operativos.</p>
+
+  <h2>Funciones y aportes de la IA al SDA “Iron Dome”</h2>
+  <p>La IA desempeña un papel crucial en el funcionamiento del Iron Dome, especialmente en:</p>
+  <ul>
+    <li><strong>Identificación y clasificación de amenazas</strong>: algoritmos de IA analizan datos de radar para distinguir entre proyectiles peligrosos y aquellos que caerán en zonas deshabitadas.</li>
+    <li><strong>Predicción de trayectorias</strong>: modelos de aprendizaje automático mejoran la precisión de cálculos de impacto en tiempo real.</li>
+    <li><strong>Optimización de disparos</strong>: la IA selecciona el momento y ángulo óptimo para interceptar, reduciendo el número de misiles interceptadores utilizados.</li>
+  </ul>
+
+  <h2>Conclusiones</h2>
+  <p>El sistema “Iron Dome” demuestra cómo la integración de IA en sistemas de defensa puede proporcionar una respuesta efectiva y eficiente a amenazas modernas. Su capacidad para aprender y adaptarse a nuevas situaciones lo convierte en un componente esencial de la defensa aérea de Israel. El éxito del Iron Dome ilustra cómo la tecnología, respaldada por IA, puede ser utilizada estratégicamente para abordar desafíos complejos en el ámbito de la defensa, protegiendo vidas civiles y minimizando riesgos.</p>
+</section>
+
+<!-- 1.6 -->
+<section id="1.6" class="section">
+  <h1>1.6 Epistemología militar: valores, experiencia y ciencia. El saber militar</h1>
+
+  <p>
+    La epistemología militar estudia cómo se produce, valida y aplica el conocimiento en el ámbito castrense. Para ello articula tres fuentes estrechamente vinculadas: <strong>valores</strong>, <strong>experiencia</strong> y <strong>ciencia</strong>.
+  </p>
+
+  <p>
+    • <strong>Valores</strong>: actúan como filtros éticos que orientan la toma de decisiones en situaciones de alta incertidumbre. El honor, la lealtad y el sentido del deber configuran un marco normativo que permite distinguir entre lo permisible y lo inaceptable en el empleo de la fuerza.
+  </p>
+
+  <p>
+    • <strong>Experiencia</strong>: constituye la base empírica e intuitiva que se acumula a través de operaciones reales, ejercicios y lecciones aprendidas. Esta experiencia situacional es indispensable para adaptar principios generales a contextos concretos y cambiantes.
+  </p>
+
+  <p>
+    • <strong>Ciencia</strong>: introduce métodos sistemáticos (observación, hipótesis, experimentación y revisión) que permiten contrastar la experiencia con teorías verificables, generando conocimiento objetivo y transferible.
+  </p>
+
+  <p>
+    La interacción dinámica entre estos tres pilares produce un saber militar híbrido: los valores condicionan qué experiencias se consideran relevantes, la experiencia alimenta las hipótesis científicas, y la ciencia devuelve modelos y tecnologías que amplían la capacidad operativa sin diluir la dimensión moral. En la era de la inteligencia artificial, la tarea epistemológica es integrar capacidades algorítmicas y velocidad de procesamiento sin sacrificar el juicio crítico y la responsabilidad humana.
+  </p>
+</section>
+
+<!-- 1.7 -->
+<section id="1.7" class="section">
+  <h1>1.7 Epistemología. La Ciencia Militar</h1>
+
+  <p>
+    La <strong>Ciencia Militar</strong> es el cuerpo sistemático de conocimientos que estudia la planificación, dirección y empleo de la fuerza armada para la defensa y la seguridad nacionales. Su ámbito abarca la estrategia, la doctrina, la tecnología y la logística, integrando saberes de ingeniería, psicología, sociología, cibernética y otras disciplinas en un marco coherente orientado a resolver problemas bélicos.
+  </p>
+
+  <p>
+    Desde una perspectiva epistemológica, se caracteriza por:
+  </p>
+  <ol>
+    <li><strong>Objetividad y rigor metodológico:</strong> utiliza el método científico para validar hipótesis sobre sistemas complejos, reconociendo la dificultad de experimentar en condiciones reales de combate.</li>
+    <li><strong>Carácter aplicativo:</strong> sus hallazgos deben ser transferibles al planeamiento y la ejecución operativa, manteniendo una estrecha relación con la práctica castrense.</li>
+    <li><strong>Dimensión ética:</strong> investigación y desarrollo están sujetos a principios humanitarios y jurídicos, especialmente al Derecho Internacional Humanitario.</li>
+    <li><strong>Adaptabilidad continua:</strong> la incorporación de tecnologías emergentes —como la inteligencia artificial y los sistemas autónomos— exige revisar y actualizar paradigmas y métodos.</li>
+  </ol>
+
+  <p>
+    En síntesis, la Ciencia Militar constituye un dominio interdisciplinario que, al integrar valores, experiencia y evidencia empírica, busca comprender y mejorar la acción militar en un entorno dinámico y complejo, garantizando la seguridad y la protección de la sociedad.
+  </p>
+</section>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Interactivo de Ciberdefensa Global</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: Se ha diseñado una SPA con navegación por pestañas para segmentar el denso informe en cinco áreas temáticas y digeribles: 1) un Panorama General introductorio, 2) una Línea de Tiempo interactiva para la historia, 3) un Cuadro de Mando de Amenazas para el estado actual, 4) un Arsenal Defensivo para las soluciones y estrategias, y 5) una sección de Futuro y Tendencias. Esta estructura no lineal prioriza la exploración del usuario y la síntesis de información sobre la estructura secuencial del informe original, permitiendo a los usuarios acceder directamente a las áreas de su interés y comparar conceptos de manera más efectiva. -->
+    <!-- Visualization & Content Choices: Se han seleccionado visualizaciones para transformar datos y textos en experiencias interactivas. La historia (Sección 1) se convierte en una línea de tiempo clicable (HTML/JS) para mostrar la evolución. Las estadísticas de amenazas (Sección 2.5, 5) se presentan en gráficos de Chart.js (donut y barras) para una comparación visual inmediata de vectores y actores. Los conceptos complejos como Zero Trust y las doctrinas militares (Sección 1.4, 2.1) se simplifican en diagramas y tablas interactivas (HTML/CSS/JS). Las recomendaciones (Sección 7) se organizan en una lista filtrable para una consulta rápida y personalizada. Todas las visualizaciones están diseñadas para ser actualizadas dinámicamente con JS, mejorando el compromiso del usuario. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #383838;
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #3B82F6;
+            color: #FFFFFF;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 400px;
+            }
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 1rem;
+            left: -0.6rem;
+            width: 1.2rem;
+            height: 1.2rem;
+            border-radius: 50%;
+            background-color: #3B82F6;
+            border: 3px solid #BFDBFE;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">El Escudo Digital</h1>
+            <p class="mt-2 text-lg text-gray-600">Un análisis interactivo de la Ciberdefensa en la era del conflicto persistente.</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center gap-2 md:gap-4 mb-12">
+            <button data-target="panorama" class="nav-button active text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-blue-100">Panorama General</button>
+            <button data-target="linea-tiempo" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-blue-100">Línea de Tiempo</button>
+            <button data-target="amenazas" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-blue-100">Amenazas Actuales</button>
+            <button data-target="defensas" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-blue-100">Arsenal Defensivo</button>
+            <button data-target="futuro" class="nav-button text-sm md:text-base font-medium py-2 px-4 rounded-full bg-white shadow-sm hover:bg-blue-100">Futuro y Tendencias</button>
+        </nav>
+
+        <main>
+            <section id="panorama" class="content-section active">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Introducción: El Campo de Batalla Digital</h2>
+                    <p class="text-gray-600 mb-6">Esta aplicación explora el complejo y dinámico mundo de la ciberdefensa. El ciberespacio se ha consolidado como un dominio de conflicto global, inextricablemente ligado al poder nacional, la prosperidad económica y la estabilidad social. Ya no es un ámbito puramente técnico; es un escenario central de competencia geopolítica. Aquí, analizamos su historia, las amenazas actuales, las estrategias de defensa y las tendencias futuras para proporcionar una visión integral del estado del arte en la protección de nuestro mundo digital.</p>
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div class="bg-blue-50 p-6 rounded-lg">
+                            <p class="text-4xl font-bold text-blue-600">~4M</p>
+                            <p class="mt-2 text-sm font-medium text-blue-800">Déficit de Talento Global</p>
+                            <p class="text-xs text-gray-500 mt-1">Escasez de profesionales en ciberseguridad a nivel mundial.</p>
+                        </div>
+                        <div class="bg-red-50 p-6 rounded-lg">
+                            <p class="text-4xl font-bold text-red-600">+150%</p>
+                            <p class="mt-2 text-sm font-medium text-red-800">Aumento de intrusiones (China)</p>
+                             <p class="text-xs text-gray-500 mt-1">Incremento observado en 2024, afectando múltiples sectores.</p>
+                        </div>
+                        <div class="bg-yellow-50 p-6 rounded-lg">
+                            <p class="text-4xl font-bold text-yellow-600">79%</p>
+                            <p class="mt-2 text-sm font-medium text-yellow-800">Ataques "Sin Malware"</p>
+                             <p class="text-xs text-gray-500 mt-1">Los atacantes usan herramientas legítimas para evadir la detección.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="linea-tiempo" class="content-section">
+                 <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Evolución de la Ciberdefensa</h2>
+                    <p class="text-gray-600 mb-8 text-center">La historia de la ciberdefensa es un ciclo constante de ofensa y defensa. Explore los hitos que han definido doctrinas, tecnologías y estrategias a lo largo del tiempo. Haga clic en un evento para ver más detalles.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="relative border-l-2 border-blue-200 pl-8 space-y-8" id="timeline-container">
+                        </div>
+                        <div id="timeline-details" class="bg-gray-50 p-6 rounded-lg h-full">
+                            <h3 id="details-title" class="text-xl font-bold text-gray-800">Seleccione un evento</h3>
+                            <p id="details-text" class="text-gray-600 mt-2">Los detalles del evento seleccionado aparecerán aquí.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="amenazas" class="content-section">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">El Panorama de Amenazas Actual</h2>
+                    <p class="text-gray-600 mb-8 text-center">El entorno de amenazas está dominado por actores estatales audaces y un ciberdelito profesionalizado. Esta sección visualiza los vectores de ataque más comunes y la actividad de los principales actores de amenazas persistentes avanzadas (APT).</p>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-bold text-center text-gray-700 mb-4">Vectores de Infección Inicial (2024)</h3>
+                            <div class="chart-container">
+                                <canvas id="attackVectorChart"></canvas>
+                            </div>
+                            <p class="text-sm text-gray-500 text-center mt-4">El robo de credenciales ha superado al phishing como segundo vector más común, indicando un giro hacia ataques basados en identidad.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-center text-gray-700 mb-4">Actividad de Actores Estatales (APT)</h3>
+                            <div class="chart-container">
+                                <canvas id="aptActivityChart"></canvas>
+                            </div>
+                            <p class="text-sm text-gray-500 text-center mt-4">Aumento significativo en operaciones de espionaje y pre-posicionamiento por parte de actores vinculados a estados-nación.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="defensas" class="content-section">
+                 <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">El Arsenal Defensivo Moderno</h2>
+                    <p class="text-gray-600 mb-8 text-center">Una defensa eficaz requiere un enfoque de múltiples capas que combine tecnología, procesos y personas. Explore los paradigmas, herramientas y recomendaciones estratégicas que definen la ciberdefensa hoy.</p>
+                    
+                    <div class="mb-12">
+                        <h3 class="text-xl font-bold text-center text-gray-700 mb-6">Paradigma de Defensa: Confianza Cero</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                            <div class="border p-4 rounded-lg bg-red-50 border-red-200">
+                                <h4 class="font-bold text-red-800">Modelo Antiguo: Castillo y Foso</h4>
+                                <p class="text-sm text-red-700 mt-2">Confía en todo lo que está dentro del perímetro de la red. El perímetro es fuerte, pero una vez que un atacante entra, tiene libertad de movimiento.</p>
+                            </div>
+                            <div class="border p-4 rounded-lg bg-green-50 border-green-200">
+                                <h4 class="font-bold text-green-800">Modelo Moderno: Confianza Cero</h4>
+                                <p class="text-sm text-green-700 mt-2">"Nunca confíes, siempre verifica". Asume que la red no es segura. Cada solicitud de acceso se autentica y autoriza rigurosamente, limitando el movimiento lateral.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-center text-gray-700 mb-6">Recomendaciones Estratégicas Clave</h3>
+                         <div class="flex justify-center gap-2 mb-4">
+                            <button class="rec-filter-btn active bg-blue-500 text-white px-3 py-1 rounded-full text-sm" data-filter="all">Todos</button>
+                            <button class="rec-filter-btn bg-gray-200 px-3 py-1 rounded-full text-sm" data-filter="gobierno">Gobierno</button>
+                            <button class="rec-filter-btn bg-gray-200 px-3 py-1 rounded-full text-sm" data-filter="empresas">Empresas</button>
+                            <button class="rec-filter-btn bg-gray-200 px-3 py-1 rounded-full text-sm" data-filter="militar">Militar</button>
+                        </div>
+                        <div id="recommendations-container" class="space-y-4">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="futuro" class="content-section">
+                <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Futuro y Tendencias Emergentes</h2>
+                    <p class="text-gray-600 mb-8 text-center">La ciberdefensa se enfrenta a un futuro definido por la IA, la computación cuántica y la expansión del mundo digital. Esta sección explora las fuerzas que darán forma al próximo campo de batalla.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="border p-6 rounded-lg">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">La Doble Hélice de la IA</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-semibold text-green-700">🛡️ IA como Escudo</h4>
+                                    <p class="text-sm text-gray-600">Detección mejorada de anomalías, análisis predictivo de ataques y automatización de la respuesta a incidentes para liberar a los analistas humanos.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-red-700">⚔️ IA como Arma</h4>
+                                    <p class="text-sm text-gray-600">Phishing hiperrealista, malware adaptativo que evade defensas y deepfakes para ingeniería social avanzada (vishing).</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border p-6 rounded-lg">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4">El Horizonte Cuántico</h3>
+                             <div class="space-y-4">
+                                <div>
+                                    <h4 class="font-semibold text-purple-700">💥 La Amenaza: Criptoapocalipsis</h4>
+                                    <p class="text-sm text-gray-600">Los ordenadores cuánticos podrán romper la criptografía actual (RSA, ECC), dejando vulnerables todas las comunicaciones seguras.</p>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-blue-700">⏳ La Mitigación: "Cosechar ahora, descifrar después"</h4>
+                                    <p class="text-sm text-gray-600">Los adversarios ya están almacenando datos cifrados para descifrarlos en el futuro. La migración a la Criptografía Post-Cuántica (PQC) es urgente.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const navButtons = document.querySelectorAll('.nav-button');
+    const contentSections = document.querySelectorAll('.content-section');
+    const recFilterButtons = document.querySelectorAll('.rec-filter-btn');
+
+    const timelineData = [
+        { year: '1971', title: 'Creeper & Reaper', text: 'Nace el primer gusano (Creeper) y el primer antivirus (Reaper), estableciendo el ciclo de ofensa-defensa.' },
+        { year: '1988', title: 'Gusano Morris', text: 'El primer ciberataque a gran escala que paraliza una parte significativa de Internet y conduce a la creación del primer CERT.' },
+        { year: '2007', title: 'Ataques a Estonia', text: 'Demostración concluyente del uso de ciberataques coordinados (DDoS) para ejercer presión geopolítica sobre un estado-nación.' },
+        { year: '2010', title: 'Stuxnet', text: 'Primera arma digital conocida que causa destrucción física, rompiendo la barrera entre el mundo digital y el físico.' },
+        { year: '2017', title: 'WannaCry', text: 'Ataque global de ransomware que demuestra cómo una ciberarma filtrada (EternalBlue) puede causar estragos en infraestructuras críticas como hospitales.' },
+        { year: '2020', title: 'SolarWinds', text: 'Ataque de cadena de suministro de software de espionaje masivo, que revela la vulnerabilidad de confiar en proveedores de software.' },
+    ];
+
+    const recommendationsData = [
+        { category: 'gobierno', title: 'Acelerar la Armonización Regulatoria', text: 'Alinear los requisitos de ciberseguridad entre sectores utilizando marcos como el NIST CSF para reducir la carga de cumplimiento y eliminar lagunas.' },
+        { category: 'gobierno', title: 'Fortalecer la Ciberdiplomacia', text: 'Establecer "líneas rojas" claras y formar coaliciones para imponer consecuencias a los actores estatales maliciosos, reduciendo el riesgo de escalada.' },
+        { category: 'gobierno', title: 'Cerrar la Brecha de Talento', text: 'Lanzar iniciativas nacionales como un "cuerpo civil de ciberseguridad" para abordar la escasez de profesionales, una vulnerabilidad de seguridad nacional.' },
+        { category: 'militar', title: 'Operacionalizar la "Defensa Hacia Adelante"', text: 'Aumentar los recursos para las misiones de "caza hacia adelante" para desbaratar las operaciones de los adversarios en su origen, antes de que alcancen objetivos nacionales.' },
+        { category: 'militar', title: 'Integrar IA y Guerra de Información', text: 'Crear centros de fusión de inteligencia que combinen analistas cibernéticos y de información para contrarrestar las campañas de influencia y desinformación.' },
+        { category: 'empresas', title: 'Priorizar la Resiliencia sobre la Prevención', text: 'Aceptar la mentalidad de "asumir la brecha". Invertir en detección, respuesta y recuperación rápida, incluyendo copias de seguridad inmutables.' },
+        { category: 'empresas', title: 'Elevar la Ciberseguridad al Consejo', text: 'Comunicar el riesgo cibernético en términos de impacto empresarial para que sea tratado como un riesgo estratégico fundamental, no solo un problema de TI.' },
+        { category: 'empresas', title: 'Adoptar un Enfoque Basado en Inteligencia', text: 'Establecer una función de "caza de amenazas" proactiva y operacionalizar la inteligencia de amenazas para detectar ataques "sin malware" y basados en identidad.' },
+    ];
+
+    function setupNavigation() {
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.dataset.target;
+
+                navButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                contentSections.forEach(section => {
+                    if (section.id === targetId) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+            });
+        });
+    }
+
+    function populateTimeline() {
+        const container = document.getElementById('timeline-container');
+        const detailsTitle = document.getElementById('details-title');
+        const detailsText = document.getElementById('details-text');
+
+        timelineData.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'timeline-item relative cursor-pointer hover:bg-gray-100 p-2 rounded-md';
+            div.innerHTML = `<h4 class="font-bold">${item.year}: ${item.title}</h4>`;
+            div.addEventListener('click', () => {
+                detailsTitle.textContent = `${item.year}: ${item.title}`;
+                detailsText.textContent = item.text;
+            });
+            container.appendChild(div);
+        });
+        
+        detailsTitle.textContent = timelineData[0].title;
+        detailsText.textContent = timelineData[0].text;
+    }
+
+    function renderRecommendations(filter = 'all') {
+        const container = document.getElementById('recommendations-container');
+        container.innerHTML = '';
+        const filteredData = filter === 'all' 
+            ? recommendationsData 
+            : recommendationsData.filter(rec => rec.category === filter);
+
+        filteredData.forEach(rec => {
+            const div = document.createElement('div');
+            div.className = 'rec-item border p-4 rounded-lg bg-gray-50';
+            div.dataset.category = rec.category;
+            div.innerHTML = `
+                <h4 class="font-bold text-gray-800">${rec.title}</h4>
+                <p class="text-sm text-gray-600 mt-1">${rec.text}</p>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function setupRecFilters() {
+        recFilterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                recFilterButtons.forEach(btn => btn.classList.remove('active', 'bg-blue-500', 'text-white'));
+                recFilterButtons.forEach(btn => btn.classList.add('bg-gray-200'));
+                
+                button.classList.add('active', 'bg-blue-500', 'text-white');
+                button.classList.remove('bg-gray-200');
+
+                renderRecommendations(button.dataset.filter);
+            });
+        });
+    }
+
+    function createAttackVectorChart() {
+        const ctx = document.getElementById('attackVectorChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Explotación de Vulnerabilidades', 'Credenciales Robadas', 'Phishing', 'Otros'],
+                datasets: [{
+                    label: 'Vectores de Infección',
+                    data: [33, 16, 14, 37],
+                    backgroundColor: ['#3B82F6', '#EF4444', '#F59E0B', '#6B7280'],
+                    borderColor: '#FDFBF8',
+                    borderWidth: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    
+    function createAptActivityChart() {
+        const ctx = document.getElementById('aptActivityChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['China', 'Rusia', 'Irán', 'Corea del Norte'],
+                datasets: [{
+                    label: 'Aumento de Actividad Observada (2024)',
+                    data: [150, 70, 45, 60],
+                    backgroundColor: ['#EF4444', '#3B82F6', '#10B981', '#F59E0B'],
+                    borderColor: '#FDFBF8',
+                    borderWidth: 2,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                     tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return ` Aumento del ${context.raw}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Aumento porcentual (%)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    setupNavigation();
+    populateTimeline();
+    renderRecommendations();
+    setupRecFilters();
+    createAttackVectorChart();
+    createAptActivityChart();
+});
+</script>
+</body>
+</html>

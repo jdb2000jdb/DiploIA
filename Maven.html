@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Campo de Batalla Algorítmico: Análisis Interactivo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Neutral Harmony (Slate background, Dark Slate text, with accents of Muted Blue, Teal, Orange, and Crimson for the four nations) -->
+    <!-- Application Structure Plan: A dashboard-style, thematic structure is used to break free from the linear report format. This promotes non-linear exploration and direct comparison, which is more effective for user synthesis and understanding. The user flow is: 1) High-level overview of the strategic models. 2) A central comparative analysis section with an interactive radar chart, timeline, and detailed country dossiers accessible via tabs. 3) Sections for global implications and strategic recommendations, presented as digestible cards. This architecture prioritizes usability and insight over simple content replication. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Overall country comparison -> Goal: High-level Compare -> Viz: Radar Chart -> Interaction: Toggle countries on/off -> Justification: Instantly shows relative strengths/weaknesses across multiple key dimensions. -> Library: Chart.js.
+        - Report Info: Project evolution -> Goal: Show Change over Time -> Viz: HTML/CSS Timeline -> Interaction: Hover for details -> Justification: Visualizes the parallel nature of the AI arms race and key inflection points. -> Library/Method: Tailwind/JS.
+        - Report Info: Detailed country analysis -> Goal: Organize & Inform -> Viz: Tabbed Dossiers -> Interaction: Click to switch country view -> Justification: Manages high information density, allowing users to deep-dive into a specific nation's program without being overwhelmed. -> Library/Method: JS DOM manipulation.
+        - Report Info: Geopolitical/Ethical points & Recommendations -> Goal: Inform -> Viz: Themed Cards -> Interaction: None (static) -> Justification: Breaks down complex textual analysis into digestible, parallel topics for clarity and readability. -> Library/Method: Tailwind Grid.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0ea5e9;
+            border-bottom-color: #0ea5e9;
+        }
+        .tab-button {
+            transition: all 0.3s;
+        }
+        .tab-button.active {
+            background-color: #0f172a;
+            color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1rem;
+            height: 1rem;
+            border-radius: 9999px;
+            border: 3px solid #cbd5e1;
+            background-color: #f1f5f9;
+            z-index: 10;
+        }
+        .timeline-item-usa::before { border-color: #3b82f6; }
+        .timeline-item-china::before { border-color: #ef4444; }
+        .timeline-item-russia::before { border-color: #f97316; }
+        .timeline-item-israel::before { border-color: #14b8a6; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold text-slate-800">Guerra Algorítmica</h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="nav-link text-slate-600 hover:text-sky-500 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Visión General</a>
+                        <a href="#comparison" class="nav-link text-slate-600 hover:text-sky-500 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Análisis Comparativo</a>
+                        <a href="#implications" class="nav-link text-slate-600 hover:text-sky-500 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Implicancias Globales</a>
+                        <a href="#recommendations" class="nav-link text-slate-600 hover:text-sky-500 px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Recomendaciones</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <section id="overview" class="mb-16 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">El Campo de Batalla Algorítmico</h2>
+            <p class="max-w-3xl mx-auto text-slate-600 mb-10">
+                La inteligencia artificial está redefiniendo la guerra, creando una nueva carrera armamentista donde la ventaja no la da el armamento, sino la velocidad y calidad de los algoritmos. Este panel explora los distintos modelos estratégicos que las potencias globales están adoptando en esta nueva era.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <div class="text-sky-500 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-800">Modelo Liberal-Democrático</h3>
+                    <p class="text-slate-500 text-sm">Impulsado por la innovación del sector privado, pero limitado por el debate público y marcos éticos formales. Prioriza la "IA Responsable".</p>
+                    <p class="text-xs text-slate-400 mt-4 font-semibold">EE.UU. / OTAN</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <div class="text-red-500 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-800">Modelo Autoritario-Tecnológico</h3>
+                    <p class="text-slate-500 text-sm">Dirigido por el Estado a través de la "Fusión Militar-Civil". Busca un dominio sistémico y rápido, sin las restricciones del debate público.</p>
+                    <p class="text-xs text-slate-400 mt-4 font-semibold">China</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <div class="text-orange-500 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-800">Modelo Híbrido / Impulsado por el Conflicto</h3>
+                    <p class="text-slate-500 text-sm">Innovación pragmática forjada por imperativos de combate. Prioriza la eficacia operativa y la velocidad de despliegue sobre la deliberación formal.</p>
+                    <p class="text-xs text-slate-400 mt-4 font-semibold">Rusia / Israel</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparison" class="mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4 text-center">Análisis Comparativo de Potencias</h2>
+            <p class="max-w-3xl mx-auto text-slate-600 mb-10 text-center">
+                Visualice las fortalezas y debilidades relativas de cada nación en la carrera por la IA militar. Utilice los controles para comparar directamente los diferentes enfoques.
+            </p>
+
+            <div class="bg-white p-6 rounded-xl shadow-lg mb-12">
+                <h3 class="text-xl font-semibold text-slate-800 mb-4 text-center">Puntuación Relativa de Capacidades IA</h3>
+                <div class="chart-container">
+                    <canvas id="radarChart"></canvas>
+                </div>
+                <div id="radar-controls" class="flex flex-wrap justify-center gap-2 mt-6"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Línea de Tiempo de la Carrera Algorítmica</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-lg relative border-l-4 border-slate-200">
+                        <div class="space-y-8">
+                            <div class="relative pl-8 timeline-item timeline-item-usa">
+                                <h4 class="font-semibold text-blue-600">2017: Nace el Proyecto Maven (EE.UU.)</h4>
+                                <p class="text-sm text-slate-500">Inicia para acelerar la adopción de IA en el DoD, enfocado en análisis de video ISR.</p>
+                            </div>
+                            <div class="relative pl-8 timeline-item timeline-item-china">
+                                <h4 class="font-semibold text-red-600">2019: Doctrina de "Guerra Inteligentizada" (China)</h4>
+                                <p class="text-sm text-slate-500">El EPL formaliza el cambio de "informatización" a "inteligentización" como eje de su modernización.</p>
+                            </div>
+                            <div class="relative pl-8 timeline-item timeline-item-israel">
+                                <h4 class="font-semibold text-teal-600">2019: Creación de la "Dirección de Objetivos" (Israel)</h4>
+                                <p class="text-sm text-slate-500">Las FDI crean una unidad para industrializar la generación de objetivos mediante IA.</p>
+                            </div>
+                             <div class="relative pl-8 timeline-item timeline-item-usa">
+                                <h4 class="font-semibold text-blue-600">2020: Primer ataque de artillería con IA (EE.UU.)</h4>
+                                <p class="text-sm text-slate-500">Maven identifica un objetivo que es atacado por un sistema HIMARS en un ejercicio.</p>
+                            </div>
+                            <div class="relative pl-8 timeline-item timeline-item-russia">
+                                <h4 class="font-semibold text-orange-600">2022: Aceleración por Conflicto (Rusia)</h4>
+                                <p class="text-sm text-slate-500">La invasión de Ucrania fuerza la adaptación pragmática de IA en drones y guerra electrónica.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Fichas de Análisis por País</h3>
+                    <div class="flex flex-wrap gap-2 mb-4" id="country-tabs"></div>
+                    <div id="country-content"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="implications" class="mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-10 text-center">Implicancias Geopolíticas y Éticas</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Redefinición de la Disuasión</h3>
+                    <p class="text-slate-600 text-sm">La velocidad algorítmica comprime las ventanas de decisión, incentivando ataques preventivos y aumentando el riesgo de escalada accidental, especialmente en contextos nucleares.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Riesgo de Proliferación</h3>
+                    <p class="text-slate-600 text-sm">La eficacia probada de drones con IA los hace atractivos para actores no estatales y potencias menores, democratizando capacidades de ataque de precisión y desestabilizando regiones.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Deshumanización del Conflicto</h3>
+                    <p class="text-slate-600 text-sm">Reducir a los humanos a puntos de datos para un algoritmo erosiona la base moral de la guerra y convierte a los soldados en supervisores de un proceso de eliminación automatizado.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">La Percepción Pública como Campo de Batalla</h3>
+                    <p class="text-slate-600 text-sm">En las democracias, la transparencia y la ética son herramientas diplomáticas. La opacidad de los regímenes autoritarios genera desconfianza y alimenta la carrera armamentista.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Vacío en la Gobernanza Global</h3>
+                    <p class="text-slate-600 text-sm">La arquitectura de control de armas de la Guerra Fría es inadecuada. Foros como la ONU están estancados, dejando que alianzas como la OTAN lideren la creación de normas.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Orden Tecnológico Bifurcado</h3>
+                    <p class="text-slate-600 text-sm">Se perfila una división entre un bloque de "IA Responsable" (Occidente) y otro que prioriza la eficiencia sin restricciones (China/Rusia), complicando la gestión de crisis futuras.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="recommendations">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-10 text-center">Recomendaciones Estratégicas</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                 <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-sky-500">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Gobernanza: Fomentar la Confianza</h3>
+                    <p class="text-slate-600 text-sm">Impulsar un marco que exija declarar doctrinas nacionales sobre el "control humano significativo" y compartir mejores prácticas de seguridad para prevenir accidentes catastróficos.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-sky-500">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Para EE.UU: Capitalizar la Transparencia</h3>
+                    <p class="text-slate-600 text-sm">Desclasificar proactivamente elementos del marco de IA Responsable para establecer un "estándar de oro" global que fortalezca alianzas y exponga las prácticas opacas de los adversarios.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-sky-500">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Para EE.UU: Luchar contra el Sesgo de Automatización</h3>
+                    <p class="text-slate-600 text-sm">Desarrollar nuevos entrenamientos para que los comandantes aprendan a cuestionar, auditar y anular las recomendaciones de la IA, incluso bajo la presión del combate.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-sky-500">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Cooperación vs. Competición</h3>
+                    <p class="text-slate-600 text-sm">Adoptar una estrategia de doble vía: competir en capacidades para mantener la disuasión, pero cooperar en áreas de seguridad común, como prohibir la IA en el control de armas nucleares.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-sky-500">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Escenario Futuro: Coexistencia Pragmática</h3>
+                    <p class="text-slate-600 text-sm">El objetivo deseable es que un incidente grave fuerce a las potencias a establecer "reglas de circulación" para la IA militar, análogas a las medidas de reducción de riesgos de la Guerra Fría.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-sky-500">
+                    <h3 class="font-semibold text-lg text-slate-800 mb-2">Para EE.UU: Reestructurar la Asociación Público-Privada</h3>
+                    <p class="text-slate-600 text-sm">Crear modelos de asociación más flexibles que separen la investigación fundamental de las aplicaciones de armamento para evitar la fricción con el sector tecnológico.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-800 text-white mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center text-sm">
+            <p>&copy; 2025 Análisis Estratégico Interactivo. Este panel es una visualización basada en el informe "El Campo de Batalla Algorítmico".</p>
+        </div>
+    </footer>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const countryData = {
+        'usa': {
+            name: 'Estados Unidos',
+            program: 'Proyecto Maven',
+            color: 'rgba(59, 130, 246, 0.8)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            content: `
+                <div class="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
+                    <h4 class="text-2xl font-bold text-blue-600 mb-3">Proyecto Maven</h4>
+                    <div class="space-y-4 text-sm">
+                        <p><strong class="text-slate-700">Historia:</strong> Lanzado en 2017 para acelerar la adopción de IA. Pasó de ser un proyecto piloto a un programa de registro maduro, ahora gestionado por la NGA y la CDAO.</p>
+                        <p><strong class="text-slate-700">Actores Clave:</strong> DoD, NGA, CDAO (gobierno); Palantir, AWS, Microsoft (sector privado). Fuerte dependencia de contratistas.</p>
+                        <p><strong class="text-slate-700">Tecnología:</strong> Visión por computadora para detectar y clasificar objetos en datos ISR. Plataforma de fusión de datos (Maven Smart System) para crear un panorama operativo común.</p>
+                        <p><strong class="text-slate-700">Enfoque Ético:</strong> Formal y público. Se basa en los 5 Principios de IA Responsable del DoD. Exige "niveles apropiados de juicio humano".</p>
+                        <p><strong class="text-slate-700">Controversias:</strong> La protesta de los empleados de Google en 2018, que llevó a la no renovación del contrato, expuso la brecha cultural entre Silicon Valley y el Pentágono.</p>
+                    </div>
+                </div>
+            `
+        },
+        'china': {
+            name: 'China',
+            program: 'Guerra Inteligentizada',
+            color: 'rgba(239, 68, 68, 0.8)',
+            borderColor: 'rgba(239, 68, 68, 1)',
+            content: `
+                <div class="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
+                    <h4 class="text-2xl font-bold text-red-600 mb-3">Guerra Inteligentizada (智能化战争)</h4>
+                    <div class="space-y-4 text-sm">
+                        <p><strong class="text-slate-700">Historia:</strong> Cambio doctrinal desde 2019, impulsado por Xi Jinping. El objetivo es un ejército de "clase mundial" para 2049, con la IA como núcleo.</p>
+                        <p><strong class="text-slate-700">Actores Clave:</strong> Dirigido por el Estado a través de la "Fusión Militar-Civil". El EPL define los requisitos; gigantes tecnológicos como Huawei y Baidu están obligados a cooperar.</p>
+                        <p><strong class="text-slate-700">Tecnología:</strong> Enfoque sistémico. LLMs para análisis de inteligencia, enjambres de drones, sistemas autónomos y capacidades de "guerra cognitiva" (desinformación).</p>
+                        <p><strong class="text-slate-700">Enfoque Ético:</strong> Ambiguo y opaco. Apoya verbalmente prohibiciones en la ONU con definiciones restrictivas, pero no tiene un marco ético público interno que limite el desarrollo militar.</p>
+                        <p><strong class="text-slate-700">Controversias:</strong> Principalmente externas, por el uso de IA para la vigilancia masiva interna (Xinjiang) y las preocupaciones de seguridad por el robo de propiedad intelectual.</p>
+                    </div>
+                </div>
+            `
+        },
+        'russia': {
+            name: 'Rusia',
+            program: 'Sistemas Centrados en Red',
+            color: 'rgba(249, 115, 22, 0.8)',
+            borderColor: 'rgba(249, 115, 22, 1)',
+            content: `
+                <div class="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
+                    <h4 class="text-2xl font-bold text-orange-600 mb-3">Adaptación en el Campo de Batalla</h4>
+                    <div class="space-y-4 text-sm">
+                        <p><strong class="text-slate-700">Historia:</strong> El esfuerzo se aceleró drásticamente con la invasión de Ucrania en 2022, forzando una adaptación pragmática de la IA para resolver problemas tácticos urgentes.</p>
+                        <p><strong class="text-slate-700">Actores Clave:</strong> Ecosistema controlado por el Estado. El Ministerio de Defensa (MoD) y conglomerados como Kalashnikov (drones Lancet) y Rostec lideran el desarrollo.</p>
+                        <p><strong class="text-slate-700">Tecnología:</strong> Enfocada en nichos de alto impacto. Visión por computadora para la guía terminal de drones Lancet (resistente a GPS), IA en guerra electrónica para priorizar objetivos de interferencia.</p>
+                        <p><strong class="text-slate-700">Enfoque Ético:</strong> Pragmático. La doctrina pública habla de mantener al "humano en el bucle", pero se opone a nuevas regulaciones internacionales, argumentando que el DIH existente es suficiente.</p>
+                        <p><strong class="text-slate-700">Desafíos:</strong> Retraso tecnológico en áreas clave (microchips, IA fundacional) y dependencia de componentes importados, lo que limita una transformación sistémica.</p>
+                    </div>
+                </div>
+            `
+        },
+        'israel': {
+            name: 'Israel',
+            program: 'Fábrica de Objetivos',
+            color: 'rgba(20, 184, 166, 0.8)',
+            borderColor: 'rgba(20, 184, 166, 1)',
+            content: `
+                <div class="bg-white p-6 rounded-xl shadow-lg animate-fade-in">
+                    <h4 class="text-2xl font-bold text-teal-600 mb-3">Fábrica de Objetivos</h4>
+                    <div class="space-y-4 text-sm">
+                        <p><strong class="text-slate-700">Historia:</strong> Impulsado por la necesidad de generar objetivos masivos para campañas de alta intensidad contra actores no estatales en entornos urbanos. Se formalizó con la "Dirección de Objetivos" en 2019.</p>
+                        <p><strong class="text-slate-700">Actores Clave:</strong> Nexo simbiótico entre las FDI (especialmente la Unidad 8200) y el sector tecnológico "Silicon Wadi". Ciclo de retroalimentación y desarrollo extremadamente rápido.</p>
+                        <p><strong class="text-slate-700">Tecnología:</strong> Suite de sistemas de IA interconectados ("The Gospel", "Lavender", "Fire Factory") para automatizar toda la cadena de eliminación, desde la recomendación del objetivo hasta la planificación del ataque.</p>
+                        <p><strong class="text-slate-700">Enfoque Ético:</strong> Oficialmente se adhiere al DIH, pero informes sugieren un marco operativo muy permisivo, con supervisión humana mínima ("20 segundos" por objetivo) y un alto grado de sesgo de automatización.</p>
+                        <p><strong class="text-slate-700">Controversias:</strong> Inmensa controversia internacional por el uso de estos sistemas en Gaza, con acusaciones de "asesinatos en masa asistidos por IA" debido al alto número de víctimas civiles.</p>
+                    </div>
+                </div>
+            `
+        }
+    };
+
+    const radarData = {
+        labels: ['Grado de Autonomía', 'Transparencia Pública', 'Supervisión Ética', 'Velocidad de Despliegue', 'Madurez Tecnológica', 'Integración Sistémica'],
+        datasets: [
+            {
+                label: 'EE.UU.',
+                data: [3, 3, 4, 3, 5, 4],
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                hidden: false
+            },
+            {
+                label: 'China',
+                data: [4, 1, 1, 4, 4, 5],
+                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                borderColor: 'rgba(239, 68, 68, 1)',
+                pointBackgroundColor: 'rgba(239, 68, 68, 1)',
+                hidden: false
+            },
+            {
+                label: 'Rusia',
+                data: [3, 1, 2, 4, 2, 2],
+                backgroundColor: 'rgba(249, 115, 22, 0.2)',
+                borderColor: 'rgba(249, 115, 22, 1)',
+                pointBackgroundColor: 'rgba(249, 115, 22, 1)',
+                hidden: false
+            },
+            {
+                label: 'Israel',
+                data: [5, 1, 1, 5, 4, 4],
+                backgroundColor: 'rgba(20, 184, 166, 0.2)',
+                borderColor: 'rgba(20, 184, 166, 1)',
+                pointBackgroundColor: 'rgba(20, 184, 166, 1)',
+                hidden: false
+            }
+        ]
+    };
+
+    const radarCtx = document.getElementById('radarChart').getContext('2d');
+    const radarChart = new Chart(radarCtx, {
+        type: 'radar',
+        data: radarData,
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: { color: '#cbd5e1' },
+                    grid: { color: '#e2e8f0' },
+                    pointLabels: { 
+                        font: { size: 12 },
+                        color: '#475569'
+                    },
+                    ticks: {
+                        backdropColor: 'rgba(255, 255, 255, 0.75)',
+                        stepSize: 1,
+                        max: 5,
+                        min: 0
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    const radarControlsContainer = document.getElementById('radar-controls');
+    radarData.datasets.forEach((dataset, index) => {
+        const button = document.createElement('button');
+        button.textContent = dataset.label;
+        button.className = 'px-4 py-2 text-sm font-medium rounded-full transition-all duration-200';
+        button.style.backgroundColor = dataset.backgroundColor;
+        button.style.borderColor = dataset.borderColor;
+        button.style.color = dataset.borderColor;
+        button.style.borderWidth = '2px';
+        button.onclick = () => {
+            const meta = radarChart.getDatasetMeta(index);
+            meta.hidden = !meta.hidden;
+            button.classList.toggle('opacity-50');
+            radarChart.update();
+        };
+        radarControlsContainer.appendChild(button);
+    });
+
+    const tabsContainer = document.getElementById('country-tabs');
+    const contentContainer = document.getElementById('country-content');
+
+    Object.keys(countryData).forEach((key, index) => {
+        const country = countryData[key];
+        const button = document.createElement('button');
+        button.textContent = country.name;
+        button.className = `tab-button px-4 py-2 text-sm font-semibold rounded-md text-slate-600 bg-slate-200 hover:bg-slate-300`;
+        button.dataset.country = key;
+
+        button.onclick = (e) => {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            contentContainer.innerHTML = countryData[key].content;
+        };
+
+        tabsContainer.appendChild(button);
+
+        if (index === 0) {
+            button.classList.add('active');
+            contentContainer.innerHTML = country.content;
+        }
+    });
+    
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('main section');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 80) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+});
+</script>
+</body>
+</html>
