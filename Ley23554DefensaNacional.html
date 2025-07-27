@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Interactivo de la Ley de Defensa Nacional 23.554</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Reset y Configuración General --- */
+        :root {
+            --color-primario: #2c3e50;
+            --color-secundario: #3498db;
+            --color-fondo: #f8f9fa;
+            --color-texto: #34495e;
+            --color-resaltado: #e8f4fd;
+            --color-borde: #dee2e6;
+            --color-blanco: #ffffff;
+            --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radio-borde: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* --- Contenedor Principal y Navegación --- */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            background-color: var(--color-primario);
+            z-index: 1000;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .sticky-nav a {
+            color: var(--color-blanco);
+            text-decoration: none;
+            padding: 10px 15px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            border-radius: var(--radio-borde);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .sticky-nav a:hover, .sticky-nav a.active {
+            background-color: var(--color-secundario);
+        }
+
+        /* --- Encabezado y Títulos --- */
+        header {
+            text-align: center;
+            margin: 40px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+            color: var(--color-blanco);
+            border-radius: var(--radio-borde);
+            box-shadow: var(--sombra-suave);
+        }
+
+        header h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        h2 {
+            font-family: 'Roboto', sans-serif;
+            color: var(--color-primario);
+            border-bottom: 3px solid var(--color-secundario);
+            padding-bottom: 10px;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        h3 {
+            font-family: 'Roboto', sans-serif;
+            color: var(--color-primario);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        /* --- Estilos de Contenido --- */
+        .content-section {
+            background-color: var(--color-blanco);
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: var(--radio-borde);
+            box-shadow: var(--sombra-suave);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        strong {
+            color: var(--color-secundario);
+            font-weight: 700;
+        }
+
+        ul {
+            list-style-position: inside;
+            padding-left: 20px;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Elementos Interactivos y Destacados --- */
+        .callout {
+            background-color: var(--color-resaltado);
+            border-left: 5px solid var(--color-secundario);
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 var(--radio-borde) var(--radio-borde) 0;
+        }
+        
+        .callout p {
+            margin: 0;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        details {
+            background-color: #fdfdfd;
+            border: 1px solid var(--color-borde);
+            border-radius: var(--radio-borde);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        details[open] {
+            box-shadow: var(--sombra-suave);
+        }
+        
+        summary {
+            padding: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+            position: relative;
+            font-size: 1.1rem;
+            color: var(--color-primario);
+        }
+        
+        summary::marker {
+            color: var(--color-secundario);
+        }
+
+        summary:hover {
+            background-color: var(--color-resaltado);
+        }
+
+        .details-content {
+            padding: 0 20px 20px 20px;
+            border-top: 1px solid var(--color-borde);
+        }
+        
+        .details-content p, .details-content ul {
+            margin-top: 15px;
+        }
+
+        /* --- Conclusión y Pie de Página --- */
+        .conclusion {
+            background: var(--color-primario);
+            color: var(--color-blanco);
+        }
+        
+        .conclusion h2 {
+            color: var(--color-blanco);
+            border-bottom-color: var(--color-secundario);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        /* --- Responsividad --- */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+            }
+
+            h3 {
+                font-size: 1.3rem;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+            
+            .nav-content {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Ley de Defensa Nacional 23.554</h1>
+            <p>Una guía interactiva para comprender los pilares de la defensa de la Nación Argentina.</p>
+        </div>
+    </header>
+
+    <nav class="sticky-nav" id="main-nav">
+        <div class="nav-content">
+            <a href="#titulo1">Principios</a>
+            <a href="#titulo2">Finalidad</a>
+            <a href="#titulo3">Estructura</a>
+            <a href="#titulo4">FF.AA.</a>
+            <a href="#titulo5">Servicio</a>
+            <a href="#titulo6">Territorio</a>
+            <a href="#conclusion">Conclusión</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <section id="titulo1" class="content-section">
+            <h2>TÍTULO I: Principios Básicos</h2>
+            <p>Este título sienta las bases conceptuales de la ley, definiendo qué es la Defensa Nacional y diferenciándola claramente de la Seguridad Interior.</p>
+
+            <div class="callout">
+                <p><strong>Definición Clave (Art. 2):</strong> La Defensa Nacional es la integración de todas las fuerzas de la Nación para enfrentar <strong>agresiones de origen externo</strong>, garantizando la soberanía, independencia e integridad territorial.</p>
+            </div>
+
+            <details>
+                <summary>Análisis de los Principios (Art. 1-6)</summary>
+                <div class="details-content">
+                    <p><strong>Artículo 1:</strong> Establece el objeto de la ley: crear las bases jurídicas y funcionales para la preparación, ejecución y control de la defensa nacional.</p>
+                    <p><strong>Artículo 3:</strong> La defensa se materializa en planes y acciones para prevenir o superar conflictos, tanto en paz como en guerra.</p>
+                    <p><strong>Artículo 4:</strong> Subraya la <strong>diferencia fundamental</strong> entre Defensa Nacional (amenazas externas) y Seguridad Interior (regida por una ley especial).</p>
+                    <p><strong>Artículo 5:</strong> Define el ámbito geográfico de la defensa, incluyendo todos los espacios soberanos de Argentina y el Sector Antártico.</p>
+                    <p><strong>Artículo 6:</strong> Establece la defensa como un <strong>derecho y un deber</strong> para todos los argentinos.</p>
+                </div>
+            </details>
+        </section>
+
+        <section id="titulo2" class="content-section">
+            <h2>TÍTULO II: Finalidad y Estructura del Sistema</h2>
+            <p>Aquí se detallan los objetivos del Sistema de Defensa Nacional, que van desde la planificación estratégica hasta la conducción de la guerra y la consolidación de la paz.</p>
+
+            <details>
+                <summary>Objetivos del Sistema (Art. 8)</summary>
+                <div class="details-content">
+                    <p>El sistema tiene como finalidad principal:</p>
+                    <ul>
+                        <li>Determinar <strong>hipótesis de conflicto y de guerra</strong>.</li>
+                        <li>Elaborar planes para la preparación de la Nación y la conducción de la estrategia militar.</li>
+                        <li>Dirigir la guerra en todos sus aspectos.</li>
+                        <li>Conducir las Fuerzas Armadas y asegurar operaciones conjuntas.</li>
+                        <li>Preparar y ejecutar la movilización nacional.</li>
+                        <li>Controlar las acciones de la posguerra.</li>
+                    </ul>
+                </div>
+            </details>
+        </section>
+
+        <section id="titulo3" class="content-section">
+            <h2>TÍTULO III: Estructura del Sistema de Defensa</h2>
+            <p>Define quiénes son los actores que componen el sistema, sus roles y jerarquías, desde el Presidente de la Nación hasta el pueblo argentino.</p>
+
+            <div class="callout">
+                <p><strong>Actores Clave (Art. 9):</strong> El sistema está integrado por el Presidente, el Congreso, el Consejo de Defensa Nacional, el Ministro de Defensa, el Estado Mayor Conjunto, las Fuerzas Armadas, Gendarmería, Prefectura y el Pueblo de la Nación.</p>
+            </div>
+
+            <details>
+                <summary>Roles y Responsabilidades (Art. 10-19)</summary>
+                <div class="details-content">
+                    <p><strong>Presidente de la Nación (Art. 10):</strong> Es el Comandante en Jefe de las Fuerzas Armadas y máximo responsable de la dirección de la Defensa Nacional.</p>
+                    <p><strong>Consejo de Defensa Nacional (Art. 12 y 14):</strong> Asesora al Presidente en la determinación de conflictos, hipótesis y estrategias. Está integrado por el Vicepresidente, ministros y puede incluir legisladores y otros expertos.</p>
+                    <p><strong>Ministro de Defensa (Art. 11):</strong> Ejerce la dirección y coordinación de las actividades de defensa, actuando como nexo principal.</p>
+                    <p><strong>Inteligencia (Art. 15):</strong> Se establece una clara división. La inteligencia estratégica nacional es provista por el organismo de mayor nivel, mientras que la inteligencia estratégica militar depende del Ministro de Defensa. Crucialmente, se prohíbe que los organismos de inteligencia militar traten temas de política interna como hipótesis de trabajo.</p>
+                    <p><strong>Estado Mayor Conjunto (EMCO) (Art. 16-18):</strong> Depende del Ministro de Defensa, asiste en la estrategia militar, formula la doctrina conjunta y dirige el adiestramiento conjunto. Es el órgano de trabajo del comité de crisis.</p>
+                </div>
+            </details>
+        </section>
+        
+        <section id="titulo4" class="content-section">
+            <h2>TÍTULO IV: Organización de las Fuerzas Armadas</h2>
+            <p>Describe a las Fuerzas Armadas como el instrumento militar de la nación, estableciendo su composición, dependencia y principios de organización.</p>
+
+            <details>
+                <summary>Composición y Misión (Art. 20-24)</summary>
+                <div class="details-content">
+                    <p><strong>Instrumento Militar (Art. 20):</strong> Las FF.AA. son el instrumento militar para el empleo disuasivo o efectivo de la fuerza, sometidas siempre al derecho nacional e internacional.</p>
+                    <p><strong>Composición (Art. 21):</strong> Constituidas por el <strong>Ejército, la Armada y la Fuerza Aérea</strong>. Su organización debe buscar la eficiencia conjunta, unificando funciones no específicas.</p>
+                    <p><strong>Dependencia (Art. 23):</strong> Los Jefes de Estados Mayores Generales de cada fuerza dependen del Ministro de Defensa, por delegación del Presidente.</p>
+                    <p><strong>Funciones de los Jefes de Estado Mayor (Art. 24):</strong> Ejercen el gobierno y administración de sus fuerzas, dirigen su preparación para la guerra y asesoran al Estado Mayor Conjunto.</p>
+                </div>
+            </details>
+        </section>
+
+        <section id="titulo5" class="content-section">
+            <h2>TÍTULO V: Servicio de Defensa Nacional</h2>
+            <p>Establece las obligaciones de los ciudadanos y personas jurídicas para con la defensa, incluyendo el servicio militar y el servicio civil.</p>
+
+            <div class="callout">
+                <p><strong>Obligación Ciudadana (Art. 25):</strong> Todas las personas pueden ser requeridas para cumplir obligaciones destinadas a asegurar la Defensa Nacional.</p>
+            </div>
+
+            <details>
+                <summary>Tipos de Servicio (Art. 26-27)</summary>
+                <div class="details-content">
+                    <p><strong>Servicio Militar (Art. 26):</strong> Cumplido por argentinos incorporados a las FF.AA. (conscripción, reserva o voluntarios), según el artículo 21 de la Constitución Nacional.</p>
+                    <p><strong>Servicio Civil de Defensa (Art. 27):</strong> Obligación de prestar servicios no militares para satisfacer necesidades de la defensa, ya sea en la preparación o durante un conflicto.</p>
+                </div>
+            </details>
+        </section>
+
+        <section id="titulo6" class="content-section">
+            <h2>TÍTULO VI: Organización Territorial y Movilización</h2>
+            <p>Regula cómo se organiza el territorio en caso de guerra, el rol de las fuerzas de seguridad y los mecanismos de movilización de recursos.</p>
+
+            <details>
+                <summary>Teatros de Operaciones y Zonas Militares (Art. 28-30)</summary>
+                <div class="details-content">
+                    <p><strong>Teatros de Operaciones (Art. 28):</strong> En caso de guerra, el Presidente puede establecer teatros de operaciones, designando un comandante militar que dependerá directamente de él.</p>
+                    <p><strong>Vigencia de Autoridades (Art. 29):</strong> Se garantiza que las autoridades constitucionales mantendrán la plena vigencia de sus atribuciones, incluso en zonas de operaciones.</p>
+                    <p><strong>Zonas Militares (Art. 30):</strong> El Poder Ejecutivo, con aprobación del Congreso, puede declarar "zona militar" a ámbitos de interés para la defensa.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Fuerzas de Seguridad y Movilización (Art. 31-37)</summary>
+                <div class="details-content">
+                    <p><strong>Gendarmería y Prefectura (Art. 31):</strong> Son parte del Sistema de Defensa. Dependen del Ministro de Defensa y en caso de guerra, sus medios pueden ser asignados a los comandos operacionales.</p>
+                    <p><strong>Movilización (Art. 32):</strong> Los planes para adecuar los recursos de la Nación son elaborados por el Ministerio de Defensa y aprobados por el Presidente.</p>
+                    <p><strong>Defensa Civil (Art. 33):</strong> Se define como el conjunto de medidas no agresivas para proteger a la población y sus bienes de los efectos de la guerra o desastres.</p>
+                    <p><strong>Requisiciones (Art. 34-37):</strong> En caso de guerra o su inminencia, el Estado puede requerir servicios o bienes, lo cual es una carga pública irrenunciable. Se establecen indemnizaciones y sanciones para quienes no cumplan.</p>
+                </div>
+            </details>
+        </section>
+
+        <section id="conclusion" class="content-section conclusion">
+            <h2>Conclusión: Pilares de la Ley 23.554</h2>
+            <p>La Ley de Defensa Nacional 23.554, sancionada en 1988, representó un cambio fundamental en la concepción de la defensa en Argentina, subordinando el poder militar a la autoridad civil y democrática.</p>
+            <ul>
+                <li><strong>Separación Clara:</strong> Su aporte más significativo es la distinción tajante entre <strong>Defensa Nacional</strong> (agresiones externas) y <strong>Seguridad Interior</strong>, prohibiendo la intervención de las Fuerzas Armadas en asuntos de seguridad interna.</li>
+                <li><strong>Conducción Civil:</strong> Centraliza la dirección de la defensa en el poder político constitucional, liderado por el Presidente de la Nación y articulado a través del Ministro de Defensa.</li>
+                <li><strong>Accionar Conjunto:</strong> Promueve la integración y la eficiencia de las tres Fuerzas Armadas a través del Estado Mayor Conjunto, superando la lógica de funcionamiento aislado.</li>
+                <li><strong>Defensa como Tarea de Todos:</strong> Involucra a toda la Nación en el esfuerzo de la defensa, no solo a su componente militar, reconociendo que la soberanía se protege con la fortaleza de todas las instituciones y ciudadanos.</li>
+            </ul>
+            <p>Esta ley sigue siendo la piedra angular del sistema de defensa argentino, estableciendo un marco jurídico que busca garantizar la soberanía nacional dentro de los principios del estado de derecho.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Contenido generado con fines educativos, basado en la Ley de Defensa Nacional 23.554 de la República Argentina. Este no es un documento oficial.</p>
+    </footer>
+
+    <script>
+        // Script para resaltar el enlace de navegación activo al hacer scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('#main-nav a');
+            const sections = document.querySelectorAll('section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-50% 0px -50% 0px', // Activa cuando la sección está en el centro de la pantalla
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
