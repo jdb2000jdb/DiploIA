@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe: Ministerio de Defensa, Gestión Petri y Uso de IA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Reset y Configuración General --- */
+        :root {
+            --color-primario: #2c3e50;
+            --color-secundario: #2980b9;
+            --color-fondo: #f4f6f9;
+            --color-texto: #34495e;
+            --color-resaltado: #eaf2f8;
+            --color-borde: #d1d9e6;
+            --color-blanco: #ffffff;
+            --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radio-borde: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        /* --- Contenedor Principal y Navegación --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            background-color: var(--color-primario);
+            z-index: 1000;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .sticky-nav a {
+            color: var(--color-blanco);
+            text-decoration: none;
+            padding: 10px 15px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            border-radius: var(--radio-borde);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .sticky-nav a:hover, .sticky-nav a.active {
+            background-color: var(--color-secundario);
+        }
+
+        /* --- Encabezado y Títulos --- */
+        header {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+            color: var(--color-blanco);
+            border-radius: var(--radio-borde);
+            box-shadow: var(--sombra-suave);
+        }
+
+        header h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-family: 'Roboto', sans-serif;
+            color: var(--color-primario);
+            border-bottom: 3px solid var(--color-secundario);
+            padding-bottom: 10px;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        h3 {
+            font-family: 'Roboto', sans-serif;
+            color: var(--color-primario);
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        /* --- Estilos de Contenido --- */
+        .content-section {
+            background-color: var(--color-blanco);
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: var(--radio-borde);
+            box-shadow: var(--sombra-suave);
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: var(--color-secundario); font-weight: 700; }
+        ul { list-style-position: inside; padding-left: 20px; margin-bottom: 1rem; }
+        li { margin-bottom: 0.5rem; }
+        a { color: var(--color-secundario); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* --- Elementos Interactivos y Tablas --- */
+        details {
+            background-color: #fdfdfd;
+            border: 1px solid var(--color-borde);
+            border-radius: var(--radio-borde);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        details[open] { box-shadow: var(--sombra-suave); }
+        summary {
+            padding: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+            font-size: 1.1rem;
+            color: var(--color-primario);
+        }
+        summary::marker { color: var(--color-secundario); }
+        summary:hover { background-color: var(--color-resaltado); }
+        .details-content {
+            padding: 0 20px 20px 20px;
+            border-top: 1px solid var(--color-borde);
+        }
+        .details-content p, .details-content ul { margin-top: 15px; }
+
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid var(--color-borde);
+            text-align: left;
+        }
+        th {
+            background-color: var(--color-resaltado);
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+        }
+        tbody tr:nth-of-type(even) {
+            background-color: #fcfcfc;
+        }
+
+        /* --- Conclusión y Pie de Página --- */
+        .conclusion {
+            background: var(--color-primario);
+            color: var(--color-blanco);
+        }
+        .conclusion h2 {
+            color: var(--color-blanco);
+            border-bottom-color: var(--color-secundario);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        /* --- Responsividad --- */
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.75rem; }
+            .container { padding: 10px; }
+            .content-section { padding: 20px; }
+            .nav-content { justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Ministerio de Defensa: Gestión Petri, Modernización y Uso de IA</h1>
+            <p>Bajo la gestión del ministro Luis Petri, el Ministerio de Defensa ha impulsado la modernización de las Fuerzas Armadas y ha comenzado a explorar el uso de la Inteligencia Artificial como herramienta estratégica para la soberanía nacional.</p>
+        </div>
+    </header>
+
+    <nav class="sticky-nav" id="main-nav">
+        <div class="nav-content">
+            <a href="#ia">IA en Defensa</a>
+            <a href="#decisiones">Decisiones Clave</a>
+            <a href="#medios">Cobertura Mediática</a>
+            <a href="#discursos">Discursos</a>
+            <a href="#desafios">Análisis y Desafíos</a>
+            <a href="#conclusion">Conclusión</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <section id="ia" class="content-section">
+            <h2>Iniciativas y Proyectos de IA en Defensa</h2>
+            <p>El ministerio ha iniciado una fase exploratoria para integrar la Inteligencia Artificial en diversas áreas, nombrando expertos y participando en foros internacionales para definir una estrategia soberana.</p>
+
+            <details>
+                <summary>Nombramiento de Raúl Guillermo Marino</summary>
+                <div class="details-content">
+                    <p><strong>Descripción:</strong> Experto en IA y doctor en Ciencias de la Ingeniería, fue designado Secretario de Investigación, Política Industrial y Producción para la Defensa en enero de 2024.</p>
+                    <p><strong>Objetivos:</strong> Liderar el desarrollo de capacidades tecnológicas, con un enfoque en la integración de IA.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Participación en la Cumbre REAIM 2024</summary>
+                <div class="details-content">
+                    <p><strong>Descripción:</strong> Una delegación argentina participó en la Cumbre sobre la Responsabilidad en el Dominio de la IA Militar en Seúl (septiembre de 2024).</p>
+                    <p><strong>Objetivos:</strong> Discutir avances, limitaciones y aspectos éticos de la IA en el ámbito militar.</p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Jornadas de Reflexión sobre IA y Ciberdefensa</summary>
+                <div class="details-content">
+                    <p><strong>Descripción:</strong> Evento organizado por la Subsecretaría de Ciberdefensa y la UNDEF (septiembre de 2023) para debatir sobre regulación, innovación y soberanía en el uso de IA.</p>
+                </div>
+            </details>
+            
+            <details>
+                <summary>Exploración de Aplicaciones de IA</summary>
+                <div class="details-content">
+                     <p>El Ministerio está explorando activamente el uso de IA en áreas críticas como:</p>
+                    <ul>
+                        <li>Gobernanza de sistemas de armas.</li>
+                        <li>Identificación de imágenes.</li>
+                        <li>Ciberdefensa y ciberseguridad.</li>
+                        <li>Análisis predictivo para anticipar amenazas.</li>
+                        <li>Vigilancia marítima.</li>
+                    </ul>
+                </div>
+            </details>
+        </section>
+
+        <section id="decisiones" class="content-section">
+            <h2>Resoluciones y Decisiones Ministeriales Clave</h2>
+            <p>La gestión de Luis Petri se ha caracterizado por un fuerte impulso a la modernización del equipamiento de las Fuerzas Armadas y la cooperación estratégica internacional.</p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Decisión / Hito</th>
+                            <th>Fecha</th>
+                            <th>Asunto Principal</th>
+                            <th>Impacto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Incorporación de F-16</td>
+                            <td>25/02/2025</td>
+                            <td>Adquisición de 24 aviones F-16.</td>
+                            <td>Recupera la capacidad supersónica de la Fuerza Aérea, marcando un salto tecnológico.</td>
+                        </tr>
+                        <tr>
+                            <td>Acuerdo con EE.UU.</td>
+                            <td>05/07/2025</td>
+                            <td>Cooperación para adquirir vehículos Stryker.</td>
+                            <td>Moderniza el equipamiento del Ejército y mejora su capacidad de despliegue rápido.</td>
+                        </tr>
+                        <tr>
+                            <td>Incorporación de Beechcraft TC12B</td>
+                            <td>22/01/2025</td>
+                            <td>Adquisición de aviones para la Armada.</td>
+                            <td>Mejora el patrullaje aeronaval y la logística, incluyendo misiones antárticas.</td>
+                        </tr>
+                        <tr>
+                           <td>Operativo "Julio Argentino Roca"</td>
+                           <td>2025</td>
+                           <td>Despliegue en fronteras norte y noreste.</td>
+                           <td>Involucra a las FF.AA. en tareas de seguridad, generando debate sobre su rol.</td>
+                        </tr>
+                        <tr>
+                           <td>Decreto 1112/2024</td>
+                           <td>20/12/2024</td>
+                           <td>Actualización del Sistema de Defensa Nacional.</td>
+                           <td>Reconoce la importancia de la IA y establece un marco para su inclusión en la defensa.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="medios" class="content-section">
+            <h2>Cobertura Mediática y Noticias Destacadas</h2>
+            <p>Las decisiones del ministerio han tenido una amplia repercusión en los medios, destacando tanto los avances en equipamiento como el incipiente debate sobre la inteligencia artificial.</p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Título de la Noticia</th>
+                            <th>Medio/Fuente</th>
+                            <th>Fecha</th>
+                            <th>Enlace</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Uso de IA en el sistema de Defensa: Argentina está en fase exploratoria</td>
+                            <td>Ambito.com</td>
+                            <td>10/09/2024</td>
+                            <td><a href="https://www.ambito.com/politica/uso-ia-el-sistema-defensa-argentina-esta-fase-exploratoria-y-desarrollo-n6058284" target="_blank">Ver nota</a></td>
+                        </tr>
+                        <tr>
+                            <td>Expertos analizan cómo usar la IA para la vigilancia marítima</td>
+                            <td>Infobae</td>
+                            <td>14/10/2024</td>
+                            <td><a href="https://www.infobae.com/politica/2024/10/14/un-grupo-de-expertos-analizo-como-usar-la-inteligencia-artificial-para-la-vigilancia-maritima-y-la-defensa-nacional/" target="_blank">Ver nota</a></td>
+                        </tr>
+                        <tr>
+                            <td>Luis Petri sumó a un mendocino experto en Inteligencia Artificial</td>
+                            <td>Diario Uno</td>
+                            <td>25/01/2024</td>
+                            <td><a href="https://www.diariouno.com.ar/politica/luis-petri-sumo-al-ministerio-defensa-un-mendocino-experto-inteligencia-artificial-n1282213" target="_blank">Ver nota</a></td>
+                        </tr>
+                        <tr>
+                            <td>Histórica presentación del Sistema de Armas F-16</td>
+                            <td>Argentina.gob.ar</td>
+                            <td>25/02/2025</td>
+                            <td><a href="https://www.argentina.gob.ar/noticias/historica-presentacion-del-sistema-de-armas-f-16-damos-un-paso-trascendental-en-la-politica" target="_blank">Ver nota</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="discursos" class="content-section">
+            <h2>Declaraciones y Discursos Relevantes</h2>
+            <p>Las intervenciones públicas del ministro Luis Petri han delineado los ejes de su gestión: recuperación de capacidades, cooperación internacional y preparación frente a nuevas amenazas.</p>
+            <details>
+                <summary>Presentación del Sistema de Armas F-16 (25/02/2025)</summary>
+                <div class="details-content">
+                    <p><em>"Con la presentación de este primer caza que tienen frente a ustedes damos un paso trascendental en la política de Defensa que llevamos adelante en el gobierno del presidente, Javier Milei."</em></p>
+                </div>
+            </details>
+            <details>
+                <summary>XVI Conferencia de Ministros de Defensa de las Américas (14/10/2024)</summary>
+                <div class="details-content">
+                    <p><em>"La Argentina se posiciona hoy como un actor dispuesto a cooperar proactivamente, reconociendo que solo a través de la acción mancomunada podremos afrontar los desafíos multidimensionales que afectan tanto a nuestra región como al mundo."</em></p>
+                </div>
+            </details>
+             <details>
+                <summary>Discurso en el Rotary Club de Buenos Aires (23/10/2024)</summary>
+                <div class="details-content">
+                    <p><em>"El mundo sufre constantemente atentados o amenazas terroristas y la Argentina tiene que estar preparada para repeler o eventualmente disuadir a aquellos Estados que utilizan como proxys a organizaciones terroristas..."</em></p>
+                </div>
+            </details>
+        </section>
+
+        <section id="desafios" class="content-section">
+            <h2>Análisis de Implicaciones y Desafíos</h2>
+            <p>La adopción de IA presenta un enorme potencial para modernizar la defensa, pero también conlleva desafíos significativos que deben ser abordados de manera estratégica.</p>
+            <h3>Potencial Impacto de la IA</h3>
+            <ul>
+                <li><strong>Eficiencia Operativa:</strong> Optimización de la logística, mantenimiento predictivo y análisis de inteligencia.</li>
+                <li><strong>Vigilancia y Control:</strong> Mejora del monitoreo de fronteras y espacios marítimos y aéreos.</li>
+                <li><strong>Ciberdefensa:</strong> Capacidad para anticipar, detectar y neutralizar ciberataques a infraestructuras críticas.</li>
+            </ul>
+            <h3>Desafíos Identificados</h3>
+            <ul>
+                <li><strong>Formación de Recursos Humanos:</strong> Necesidad crítica de capacitar personal militar y civil especializado.</li>
+                <li><strong>Regulación Ética:</strong> Urgencia de establecer un marco normativo claro para el uso responsable de la IA, especialmente en sistemas autónomos.</li>
+                <li><strong>Inversión y Financiamiento:</strong> La implementación de estas tecnologías requiere una inversión sostenida en infraestructura y desarrollo.</li>
+                <li><strong>Privacidad y Seguridad de Datos:</strong> Equilibrio entre las necesidades de seguridad y la protección de los derechos individuales.</li>
+            </ul>
+        </section>
+
+        <section id="conclusion" class="content-section conclusion">
+            <h2>Conclusión: Dos Ejes para una Nueva Defensa</h2>
+            <p>La gestión actual del Ministerio de Defensa avanza sobre dos ejes paralelos y complementarios. Por un lado, una decidida <strong>modernización del equipamiento militar</strong> (F-16, Stryker), que busca recuperar capacidades operativas largamente postergadas y fortalecer la postura disuasiva del país. Por otro, una <strong>incipiente pero estratégica exploración de la Inteligencia Artificial</strong>, reconociendo que las futuras capacidades de defensa dependerán cada vez más del dominio tecnológico y digital.</p>
+            <p>El principal desafío será convertir el interés exploratorio en la IA en proyectos concretos y sostenibles, superando obstáculos de financiamiento, capacitación y regulación, para asegurar que la Argentina no solo recupere su capacidad militar tradicional, sino que también se posicione a la vanguardia de la defensa del siglo XXI.</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Contenido generado con fines educativos, basado en el informe sobre el Ministerio de Defensa. Este no es un documento oficial.</p>
+    </footer>
+
+    <script>
+        // Script para resaltar el enlace de navegación activo al hacer scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('#main-nav a');
+            const sections = document.querySelectorAll('section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-50% 0px -50% 0px',
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
