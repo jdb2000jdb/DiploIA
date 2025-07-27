@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compendio Interactivo de Leyes y Decretos de Argentina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primario: #2c3e50;
+            --color-secundario: #2980b9;
+            --color-fondo: #f4f6f9;
+            --color-texto: #34495e;
+            --color-resaltado: #eaf2f8;
+            --color-borde: #d1d9e6;
+            --color-blanco: #ffffff;
+            --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radio-borde: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            background-color: var(--color-primario);
+            z-index: 1000;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .sticky-nav a {
+            color: var(--color-blanco);
+            text-decoration: none;
+            padding: 10px 15px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+            border-radius: var(--radio-borde);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin: 0 5px;
+        }
+
+        .sticky-nav a:hover, .sticky-nav a.active {
+            background-color: var(--color-secundario);
+        }
+
+        header {
+            text-align: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+            color: var(--color-blanco);
+            border-radius: var(--radio-borde);
+            box-shadow: var(--sombra-suave);
+        }
+
+        header h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-family: 'Roboto', sans-serif;
+            color: var(--color-primario);
+            border-bottom: 3px solid var(--color-secundario);
+            padding-bottom: 10px;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        
+        h2 .law-subtitle {
+            display: block;
+            font-size: 1rem;
+            color: #7f8c8d;
+            margin-top: 5px;
+            font-weight: 400;
+        }
+
+        .content-section {
+            background-color: var(--color-blanco);
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: var(--radio-borde);
+            box-shadow: var(--sombra-suave);
+        }
+
+        p { margin-bottom: 1rem; }
+        strong { color: var(--color-secundario); font-weight: 700; }
+        ul { list-style-position: inside; padding-left: 20px; margin-bottom: 1rem; }
+        li { margin-bottom: 0.5rem; }
+        
+        .source-link {
+            display: inline-block;
+            background-color: var(--color-secundario);
+            color: var(--color-blanco);
+            padding: 10px 20px;
+            border-radius: var(--radio-borde);
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .source-link:hover {
+            background-color: #2471a3;
+            text-decoration: none;
+        }
+
+        details {
+            background-color: #fdfdfd;
+            border: 1px solid var(--color-borde);
+            border-radius: var(--radio-borde);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        details[open] { box-shadow: var(--sombra-suave); }
+        summary {
+            padding: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+            font-size: 1.1rem;
+            color: var(--color-primario);
+        }
+        summary::marker { color: var(--color-secundario); }
+        summary:hover { background-color: var(--color-resaltado); }
+        .details-content {
+            padding: 0 20px 20px 20px;
+            border-top: 1px solid var(--color-borde);
+        }
+        .details-content p, .details-content ul { margin-top: 15px; }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.75rem; }
+            .container { padding: 10px; }
+            .content-section { padding: 20px; }
+            .nav-content { justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Compendio de Leyes y Decretos de Argentina</h1>
+            <p>Una guía interactiva para explorar normativas clave en materia de Defensa, Seguridad, Justicia e Innovación Tecnológica.</p>
+        </div>
+    </header>
+
+    <nav class="sticky-nav" id="main-nav">
+        <div class="nav-content">
+            <a href="#ley23554">Ley 23.554</a>
+            <a href="#res72-2025">Res. 72/2025</a>
+            <a href="#dec1112-2024">Dec. 1112/2024</a>
+            <a href="#da899-2024">DA 899/2024</a>
+            <a href="#res710-2024">Res. 710/2024</a>
+            <a href="#dec663-2024">Dec. 663/2024</a>
+            <a href="#res111-2024">Res. 111/2024</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <section id="ley23554" class="content-section">
+            <h2>Ley N° 23.554 <span class="law-subtitle">Defensa Nacional</span></h2>
+            <p>Establece las bases jurídicas, orgánicas y funcionales para la preparación, ejecución y control de la defensa nacional, diferenciándola de la seguridad interior.</p>
+            <details>
+                <summary>Principios Básicos (Título I)</summary>
+                <div class="details-content">
+                    <p><strong>Art. 2:</strong> Define la Defensa Nacional como la integración de fuerzas para enfrentar <strong>agresiones de origen externo</strong>.</p>
+                    <p><strong>Art. 4:</strong> Marca la diferencia fundamental entre Defensa Nacional y Seguridad Interior.</p>
+                </div>
+            </details>
+            <details>
+                <summary>Estructura del Sistema (Título III)</summary>
+                <div class="details-content">
+                    <p>Detalla los integrantes del Sistema de Defensa Nacional: Presidente, Consejo de Defensa, Congreso, Ministro de Defensa, Estado Mayor Conjunto, Fuerzas Armadas, y más.</p>
+                </div>
+            </details>
+             <a href="https://servicios.infoleg.gob.ar/infolegInternet/anexos/20000-24999/20988/texact.htm" target="_blank" class="source-link">Ver Texto Completo</a>
+        </section>
+
+        <section id="res72-2025" class="content-section">
+            <h2>Resolución 72/2025 <span class="law-subtitle">Ministerio de Seguridad</span></h2>
+            <p>Aprueba el "Plan Federal de Prevención de Ciberdelitos y Gestión Estratégica de la Ciberseguridad (2025 - 2027)" para fortalecer la respuesta del Estado frente a los desafíos del ciberespacio.</p>
+            <details>
+                <summary>Considerandos Clave</summary>
+                <div class="details-content">
+                    <p>Reconoce el vertiginoso avance de las tecnologías digitales y la necesidad de un enfoque integral y colaborativo para fortalecer las capacidades de prevención e investigación de los ciberdelitos.</p>
+                </div>
+            </details>
+            <details>
+                <summary>Objetivos del Plan</summary>
+                <div class="details-content">
+                    <p><strong>General:</strong> Garantizar el uso seguro del ciberespacio para proteger los derechos de los habitantes.</p>
+                    <p><strong>Específicos:</strong> Coordinación federal, fortalecimiento y capacitación, actualización normativa, cooperación internacional y protección de la niñez, entre otros.</p>
+                </div>
+            </details>
+            <a href="https://servicios.infoleg.gob.ar/infolegInternet/anexos/405000-409999/408408/norma.htm" target="_blank" class="source-link">Ver Texto Completo</a>
+        </section>
+
+        <section id="dec1112-2024" class="content-section">
+            <h2>Decreto 1112/2024 <span class="law-subtitle">Sistema de Defensa Nacional</span></h2>
+            <p>Actualiza la reglamentación de la Ley de Defensa Nacional, incorporando nuevos supuestos de amenazas y agresiones, y redefiniendo el rol de las Fuerzas Armadas frente a actores no estatales y en nuevos dominios como el ciberespacio.</p>
+            <details>
+                <summary>Puntos Destacados</summary>
+                <div class="details-content">
+                    <p><strong>Art. 1:</strong> Considera como agresiones las provenientes de organizaciones terroristas u otras organizaciones transnacionales.</p>
+                    <p><strong>Art. 3:</strong> Menciona explícitamente el ciberespacio, el espectro electromagnético y el espacio exterior como dominios de operaciones militares.</p>
+                    <p><strong>Art. 17:</strong> Permite que las Fuerzas Armadas complementen el accionar de las Fuerzas de Seguridad en zonas de frontera.</p>
+                </div>
+            </details>
+            <a href="https://servicios.infoleg.gob.ar/infolegInternet/resaltaranexos/405000-409999/407456/norma.htm" target="_blank" class="source-link">Ver Texto Completo</a>
+        </section>
+
+        <section id="da899-2024" class="content-section">
+            <h2>Decisión Administrativa 899/2024 <span class="law-subtitle">Mesa Interministerial sobre IA</span></h2>
+            <p>Modifica la estructura de la Mesa Interministerial sobre Inteligencia Artificial, designando a la Secretaría de Innovación, Ciencia y Tecnología como presidenta para alinear las políticas de IA con los objetivos de modernización del Estado.</p>
+            <details>
+                <summary>Modificaciones Clave</summary>
+                <div class="details-content">
+                    <p><strong>Art. 1:</strong> La Mesa será presidida por la Secretaría de Innovación, Ciencia y Tecnología y coordinada con la Secretaría de Asuntos Estratégicos.</p>
+                    <p><strong>Art. 2:</strong> Amplía la integración de la Mesa para incluir a más ministerios como Defensa, Seguridad y Justicia.</p>
+                </div>
+            </details>
+            <a href="https://servicios.infoleg.gob.ar/infolegInternet/resaltaranexos/400000-404999/404410/norma.htm" target="_blank" class="source-link">Ver Texto Completo</a>
+        </section>
+        
+        <section id="res710-2024" class="content-section">
+            <h2>Resolución 710/2024 <span class="law-subtitle">Ministerio de Seguridad</span></h2>
+            <p>Crea la "Unidad de Inteligencia Artificial Aplicada a la Seguridad (UIAAS)" para la prevención, detección, investigación y persecución del delito utilizando herramientas de IA.</p>
+            <details>
+                <summary>Misión y Funciones de la UIAAS</summary>
+                <div class="details-content">
+                    <p><strong>Misión (Art. 3):</strong> Prevención y persecución del delito mediante el uso de inteligencia artificial.</p>
+                    <p><strong>Funciones (Art. 4):</strong> Incluyen patrullar redes sociales y la "Dark-Web", analizar imágenes de cámaras de seguridad, predecir crímenes con algoritmos, detectar amenazas cibernéticas y más.</p>
+                </div>
+            </details>
+            <a href="https://servicios.infoleg.gob.ar/infolegInternet/resaltaranexos/400000-404999/402139/norma.htm" target="_blank" class="source-link">Ver Texto Completo</a>
+        </section>
+
+        <section id="dec663-2024" class="content-section">
+            <h2>Decreto 663/2024 <span class="law-subtitle">Aviación Civil no Tripulada</span></h2>
+            <p>Aprueba el nuevo "Reglamento para la Aviación Civil no Tripulada", buscando un equilibrio entre la seguridad operacional y el desarrollo de actividades comerciales con drones y otros vehículos aéreos no tripulados.</p>
+            <details>
+                <summary>Categorías y Principios</summary>
+                <div class="details-content">
+                    <p><strong>Categorías (Art. 4):</strong> Establece tres categorías de operación: Abierta, Específica y Certificada, cada una con distintos niveles de regulación.</p>
+                    <p><strong>Principios:</strong> Promueve la libre competencia, la armonización con la aviación militar y la responsabilidad del operador.</p>
+                </div>
+            </details>
+            <a href="https://servicios.infoleg.gob.ar/infolegInternet/resaltaranexos/400000-404999/401986/norma.htm" target="_blank" class="source-link">Ver Texto Completo</a>
+        </section>
+
+        <section id="res111-2024" class="content-section">
+            <h2>Resolución 111/2024 <span class="law-subtitle">Ministerio de Justicia</span></h2>
+            <p>Crea el "Programa Nacional Integral de Inteligencia Artificial en la Justicia" para promover el uso ético y eficiente de la IA en procedimientos administrativos y procesos judiciales, mejorando el acceso y la celeridad de la justicia.</p>
+            <details>
+                <summary>Objetivos del Programa</summary>
+                <div class="details-content">
+                    <p>Promover el uso de IA para mejorar respuestas y procedimientos, garantizar la observancia de los derechos fundamentales, facilitar el acceso a la justicia y optimizar la labor de los actores del sistema judicial.</p>
+                </div>
+            </details>
+            <a href="https://servicios.infoleg.gob.ar/infolegInternet/resaltaranexos/395000-399999/397996/norma.htm" target="_blank" class="source-link">Ver Texto Completo</a>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Contenido generado con fines educativos, basado en normativas publicadas en el Boletín Oficial de la República Argentina. Este no es un documento oficial.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('#main-nav a');
+            const sections = document.querySelectorAll('section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-50% 0px -50% 0px',
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
