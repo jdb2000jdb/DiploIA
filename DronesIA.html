@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Revolución de los Drones: Un Análisis Interactivo</title>
+    
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: A thematic, non-linear journey designed for exploration. It starts with a historical timeline to set context, moves to a core interactive dashboard comparing Civil vs. Military domains, delves into AI concepts with visual diagrams, presents the global market with dynamic charts, and concludes with a balanced view of risks vs. regulations. This structure breaks down the report's dense information into digestible, task-oriented modules (Explore History, Compare Uses, Understand AI, Analyze Market, Evaluate Risks), which is more engaging for a professional audience than a linear text format. -->
+    <!-- Visualization & Content Choices: 
+        - History: Report Info -> Historical Milestones -> Goal: Show Change -> Viz: Interactive Timeline -> Interaction: Click events to reveal details -> Justification: More engaging than a list, shows progression. -> Library/Method: HTML/CSS/JS.
+        - Civil/Military: Report Info -> Sector Applications -> Goal: Compare/Organize -> Viz: Tabbed Dashboard with Cards -> Interaction: Toggle between views -> Justification: Allows direct comparison of the two main ecosystems. -> Library/Method: HTML/CSS/JS.
+        - Market Projections: Report Info -> Market Growth Data -> Goal: Show Change -> Viz: Line Chart -> Interaction: Hover for details -> Justification: Best way to visualize time-series financial data. -> Library/Method: Chart.js.
+        - Manufacturer Share: Report Info -> Key Players -> Goal: Compare -> Viz: Bar Chart -> Interaction: Hover for details -> Justification: Clearly shows market dominance. -> Library/Method: Chart.js.
+        - AI Concepts: Report Info -> SLAM, Swarm Intelligence -> Goal: Inform/Explain -> Viz: HTML/CSS Diagrams -> Interaction: Static display for clarity -> Justification: Simplifies complex technical concepts visually. -> Library/Method: HTML/CSS.
+        - Risks vs. Mitigation: Report Info -> Risks & Regulations -> Goal: Compare/Inform -> Viz: Balanced two-column layout -> Interaction: Static display for clarity -> Justification: Presents a clear "problem vs. solution" framework. -> Library/Method: HTML/CSS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #2C3E50;
+        }
+        h1, h2, h3 {
+            font-family: 'Roboto Slab', serif;
+        }
+        .accent-color { color: #4A6C6F; }
+        .accent-bg { background-color: #4A6C6F; }
+        .accent-border { border-color: #4A6C6F; }
+        .secondary-bg { background-color: #EAE7E1; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 400px; }
+        }
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2.5rem;
+            padding-left: 2.5rem;
+            border-left: 2px solid #D1CFC8;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -0.7rem;
+            top: 0;
+            height: 1.25rem;
+            width: 1.25rem;
+            border-radius: 9999px;
+            background-color: #F8F7F4;
+            border: 2px solid #4A6C6F;
+            transition: background-color 0.3s;
+        }
+        .timeline-item.active .timeline-dot {
+            background-color: #4A6C6F;
+        }
+        .tab.active {
+            background-color: #4A6C6F;
+            color: #F8F7F4;
+        }
+    </style>
+</head>
+<body class="w-full overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-sm border-b border-gray-200">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold accent-color">Drone.IA</span>
+                </div>
+                <nav class="hidden md:flex md:space-x-8">
+                    <a href="#historia" class="font-medium text-gray-600 hover:accent-color">Historia</a>
+                    <a href="#ecosistema" class="font-medium text-gray-600 hover:accent-color">Ecosistema</a>
+                    <a href="#ia" class="font-medium text-gray-600 hover:accent-color">El Motor IA</a>
+                    <a href="#mercado" class="font-medium text-gray-600 hover:accent-color">Mercado Global</a>
+                    <a href="#riesgos" class="font-medium text-gray-600 hover:accent-color">Riesgos y Ética</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative py-20 md:py-32 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold tracking-tight">La Revolución de los Drones</h1>
+                <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Un análisis interactivo sobre la fusión de los sistemas no tripulados y la inteligencia artificial, y su impacto en el futuro del poder aéreo, la industria y la sociedad.</p>
+            </div>
+        </section>
+
+        <!-- Historia Section -->
+        <section id="historia" class="py-20 secondary-bg">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold">La Génesis del Vuelo Autónomo</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">La historia de los drones no es una línea recta, sino una serie de saltos innovadores impulsados por el conflicto y la tecnología. Explore los hitos clave que nos llevaron desde los globos bomba hasta los cazadores-asesinos modernos.</p>
+                </div>
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div id="timeline-nav" class="md:w-1/3">
+                        <!-- Timeline items will be injected by JS -->
+                    </div>
+                    <div class="md:w-2/3 p-8 bg-white rounded-lg shadow-md">
+                        <h3 id="timeline-title" class="text-2xl font-bold accent-color mb-2"></h3>
+                        <p id="timeline-description" class="text-gray-700"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ecosistema Section -->
+        <section id="ecosistema" class="py-20 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold">Ecosistema Contemporáneo: Civil vs. Militar</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">La tecnología de drones ha evolucionado en dos ramas distintas pero interconectadas. Utilice los botones para alternar entre el dominio civil, enfocado en la eficiencia, y el dominio militar, centrado en la proyección de poder.</p>
+                </div>
+                <div class="flex justify-center mb-8">
+                    <button id="tab-civil" class="tab text-lg font-semibold py-2 px-6 rounded-l-lg transition-colors duration-300">Uso Civil</button>
+                    <button id="tab-militar" class="tab text-lg font-semibold py-2 px-6 rounded-r-lg transition-colors duration-300">Uso Militar</button>
+                </div>
+                <div id="ecosystem-content" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards will be injected by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- IA Section -->
+        <section id="ia" class="py-20 secondary-bg">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold">El Motor de la Revolución: Inteligencia Artificial</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">La IA es el catalizador que transforma a los drones de herramientas remotas a agentes autónomos. Explore cómo estas capacidades están redefiniendo la navegación, las operaciones colectivas y el análisis de datos.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
+                    <div class="p-6 bg-white rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-2 accent-color">Navegación sin GPS (SLAM)</h3>
+                        <p class="text-gray-600">La Localización y Mapeo Simultáneos (SLAM) permite a los drones construir mapas de entornos desconocidos y navegar en ellos, una capacidad crucial para interiores o zonas de conflicto donde el GPS es denegado.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-2 accent-color">Inteligencia de Enjambre</h3>
+                        <p class="text-gray-600">Inspirados en la naturaleza, los enjambres de drones operan de forma coordinada y masiva. Su poder reside en el colectivo, permitiendo saturar defensas o cubrir vastas áreas de búsqueda de forma resiliente.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-2 accent-color">Análisis de Datos en Tiempo Real</h3>
+                        <p class="text-gray-600">La IA convierte el torrente de datos de los sensores en inteligencia procesable. Identifica objetos, detecta anomalías y predice patrones, transformando la información en decisiones.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mercado Global Section -->
+        <section id="mercado" class="py-20 bg-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold">Panorama Global: Mercados y Geopolítica</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">El mercado de drones es un campo de batalla económico y estratégico. Las siguientes visualizaciones muestran las proyecciones de crecimiento del mercado y la cuota de los principales actores industriales, reflejando las esferas de influencia globales.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-4">Proyección del Mercado Global de Drones (USD)</h3>
+                        <div class="chart-container">
+                            <canvas id="marketProjectionChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-center mb-4">Cuota de Mercado (Fabricantes Clave)</h3>
+                        <div class="chart-container">
+                            <canvas id="marketShareChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Riesgos y Etica Section -->
+        <section id="riesgos" class="py-20 secondary-bg">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold">Gobernando los Cielos: Riesgos y Ética</h2>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">La rápida proliferación de drones presenta complejos desafíos. Esta sección contrasta los riesgos inherentes de seguridad, privacidad y uso malicioso con las estrategias de mitigación y los marcos regulatorios que buscan garantizar un desarrollo responsable.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-bold text-red-700 mb-4">Riesgos y Amenazas</h3>
+                        <ul class="space-y-3 list-disc list-inside text-gray-700">
+                            <li><strong>Ciberseguridad:</strong> Vulnerables a hacking, jamming y spoofing de GPS para secuestrar o inutilizar el dron.</li>
+                            <li><strong>Privacidad:</strong> Potencial de vigilancia masiva con cámaras de alta resolución y reconocimiento facial.</li>
+                            <li><strong>Uso Malicioso:</strong> Empleados para contrabando, espionaje y como armas improvisadas por actores no estatales.</li>
+                            <li><strong>Dilema Ético (LAWS):</strong> El debate sobre delegar decisiones de vida o muerte a algoritmos y el riesgo de un "vacío de responsabilidad".</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-md">
+                        <h3 class="text-2xl font-bold text-green-700 mb-4">Mitigación y Regulación</h3>
+                        <ul class="space-y-3 list-disc list-inside text-gray-700">
+                            <li><strong>Remote ID:</strong> Actúa como una "matrícula digital" para identificar y rastrear drones en tiempo real.</li>
+                            <li><strong>Geofencing:</strong> Barreras virtuales basadas en GPS para impedir el vuelo en zonas restringidas como aeropuertos.</li>
+                            <li><strong>Sistemas C-UAS:</strong> Defensa activa para detectar, rastrear y neutralizar drones hostiles (jamming, redes, láseres).</li>
+                            <li><strong>Marcos Regulatorios (FAA/AESA):</strong> Esfuerzos para armonizar reglas basadas en el riesgo y la certificación de operadores.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Análisis Interactivo de Drones. Todos los derechos reservados.</p>
+            <p class="text-gray-400 mt-2">Una visualización de datos basada en el "Análisis Integral de Drones e IA".</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- DATA ---
+            const timelineData = [
+                { 
+                    era: "Inicios (S.XIX - I GM)", 
+                    title: "Inicios Conceptuales y Primeras Bombas Voladoras", 
+                    description: "Los precursores de los drones surgieron con el control por radio de Tesla y los primeros vuelos no tripulados de Langley. La Primera Guerra Mundial vio nacer prototipos como el Kettering Bug, un 'torpedo aéreo' diseñado para estrellarse contra objetivos, estableciendo el concepto de munición merodeadora." 
+                },
+                { 
+                    era: "Guerra Fría", 
+                    title: "El Auge de los Drones de Reconocimiento", 
+                    description: "El derribo del avión espía U-2 en 1960 aceleró el desarrollo de UAS para misiones de alto riesgo. El Ryan Lightning Bug se usó masivamente en Vietnam para reconocimiento fotográfico. Israel fue pionero en el uso táctico de drones como señuelos en el Valle de la Bekaa en 1982." 
+                },
+                { 
+                    era: "Post-11S", 
+                    title: "La Revolución del 'Cazador-Asesino'", 
+                    description: "Los ataques del 11-S transformaron a los drones de 'ojos' a 'ejecutores'. El MQ-1 Predator fue armado con misiles Hellfire, y su sucesor, el MQ-9 Reaper, fue diseñado desde cero como una plataforma de vigilancia y ataque persistente, definiendo la guerra contra el terrorismo." 
+                },
+                { 
+                    era: "Era Actual", 
+                    title: "Democratización y Guerra Algorítmica", 
+                    description: "Conflictos como el de Ucrania demuestran el poder de drones baratos como los FPV, que pueden destruir tanques millonarios. El uso de municiones merodeadoras (Shahed-136) y UCAVs (Bayraktar TB2) ha redefinido el campo de batalla moderno." 
+                }
+            ];
+
+            const ecosystemData = {
+                civil: [
+                    { title: "Logística y Entrega", icon: "📦", description: "Revolucionando la 'última milla' con entregas rápidas y eficientes, evitando el tráfico. Empresas como Zipline entregan suministros médicos vitales en zonas remotas." },
+                    { title: "Agricultura de Precisión", icon: "🌾", description: "Con cámaras multiespectrales, se monitorea la salud de los cultivos, se optimiza el uso de fertilizantes y se aumenta el rendimiento de forma sostenible." },
+                    { title: "Inspección de Infraestructuras", icon: "🏗️", description: "Inspección segura y económica de puentes, líneas eléctricas y turbinas eólicas, detectando fallos de forma temprana para un mantenimiento predictivo." },
+                    { title: "Respuesta a Emergencias", icon: "�", description: "Búsqueda y rescate en desastres, localización de personas con cámaras térmicas y evaluación de daños en tiempo real (programas DFR)." },
+                    { title: "Medios y Entretenimiento", icon: "🎬", description: "Reemplazando helicópteros y grúas para capturar tomas aéreas espectaculares, democratizando la producción cinematográfica de alta calidad." },
+                    { title: "Mapeo y Topografía", icon: "🗺️", description: "Creación de modelos 3D y ortomosaicos de alta precisión para la construcción, la minería y la planificación urbana." }
+                ],
+                militar: [
+                    { title: "ISR y Adquisición de Objetivos", icon: "👁️", description: "La función militar principal. Proporcionan 'ojos en el cielo' de forma persistente para vigilar los movimientos del enemigo y dirigir ataques." },
+                    { title: "UCAVs y Ataques de Precisión", icon: "💥", description: "Sistemas como el MQ-9 Reaper y el Bayraktar TB2 combinan largos tiempos de merodeo con la capacidad de desplegar municiones guiadas con gran precisión." },
+                    { title: "Municiones Merodeadoras", icon: "🎯", description: "Drones 'kamikaze' como el Shahed-136, diseñados para saturar defensas aéreas o atacar objetivos de alto valor. Son baratos y fungibles." },
+                    { title: "Drones FPV Tácticos", icon: "🚀", description: "La innovación más disruptiva en Ucrania. Drones de carreras modificados, baratos y ágiles que actúan como 'misiles guiados del pobre' con una precisión devastadora." },
+                    { title: "Guerra Electrónica", icon: "📡", description: "Drones equipados para interferir las comunicaciones y los radares enemigos, o para actuar como señuelos y engañar a las defensas antiaéreas." },
+                    { title: "Logística en el Campo de Batalla", icon: "🩸", description: "Transporte de suministros críticos como municiones, medicinas y sangre directamente a las unidades en la línea del frente, reduciendo el riesgo para los convoyes terrestres." }
+                ]
+            };
+
+            // --- TIMELINE LOGIC ---
+            const timelineNav = document.getElementById('timeline-nav');
+            const timelineTitle = document.getElementById('timeline-title');
+            const timelineDescription = document.getElementById('timeline-description');
+
+            timelineData.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'timeline-item cursor-pointer';
+                div.dataset.index = index;
+                div.innerHTML = `
+                    <div class="timeline-dot"></div>
+                    <h4 class="font-bold text-lg">${item.era}</h4>
+                `;
+                timelineNav.appendChild(div);
+            });
+
+            const timelineItems = document.querySelectorAll('.timeline-item');
+
+            function updateTimeline(index) {
+                const item = timelineData[index];
+                timelineTitle.textContent = item.title;
+                timelineDescription.textContent = item.description;
+
+                timelineItems.forEach((el, i) => {
+                    if (i == index) {
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+                });
+            }
+
+            timelineNav.addEventListener('click', (e) => {
+                const item = e.target.closest('.timeline-item');
+                if (item) {
+                    updateTimeline(item.dataset.index);
+                }
+            });
+
+            updateTimeline(0); // Set initial state
+
+            // --- ECOSYSTEM TABS LOGIC ---
+            const tabCivil = document.getElementById('tab-civil');
+            const tabMilitar = document.getElementById('tab-militar');
+            const ecosystemContent = document.getElementById('ecosystem-content');
+
+            function renderEcosystem(type) {
+                ecosystemContent.innerHTML = '';
+                const data = ecosystemData[type];
+                data.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-gray-50 p-6 rounded-lg shadow-sm';
+                    card.innerHTML = `
+                        <div class="text-4xl mb-3">${item.icon}</div>
+                        <h3 class="text-xl font-bold mb-2">${item.title}</h3>
+                        <p class="text-gray-600">${item.description}</p>
+                    `;
+                    ecosystemContent.appendChild(card);
+                });
+            }
+
+            tabCivil.addEventListener('click', () => {
+                tabCivil.classList.add('active');
+                tabMilitar.classList.remove('active');
+                renderEcosystem('civil');
+            });
+
+            tabMilitar.addEventListener('click', () => {
+                tabMilitar.classList.add('active');
+                tabCivil.classList.remove('active');
+                renderEcosystem('militar');
+            });
+
+            tabCivil.click(); // Set initial state
+
+            // --- CHARTS LOGIC ---
+            // Market Projection Chart
+            const projectionCtx = document.getElementById('marketProjectionChart').getContext('2d');
+            new Chart(projectionCtx, {
+                type: 'line',
+                data: {
+                    labels: ['2024', '2026', '2028', '2030', '2032', '2034'],
+                    datasets: [{
+                        label: 'Mercado Global de Drones (en miles de millones de USD)',
+                        data: [30.64, 37.2, 45.4, 55.4, 67.6, 75.0],
+                        borderColor: '#4A6C6F',
+                        backgroundColor: 'rgba(74, 108, 111, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value + 'B';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y) + 'B';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Market Share Chart
+            const shareCtx = document.getElementById('marketShareChart').getContext('2d');
+            new Chart(shareCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['DJI (China)', 'General Atomics (EE.UU.)', 'Parrot (Francia)', 'Skydio (EE.UU.)', 'Baykar (Turquía)', 'Otros'],
+                    datasets: [{
+                        label: 'Cuota de Mercado Estimada',
+                        data: [70, 8, 5, 4, 3, 10], 
+                        backgroundColor: [
+                            'rgba(74, 108, 111, 0.7)',
+                            'rgba(44, 62, 80, 0.7)',
+                            'rgba(149, 165, 166, 0.7)',
+                            'rgba(189, 195, 199, 0.7)',
+                            'rgba(231, 76, 60, 0.7)',
+                            'rgba(210, 207, 200, 0.7)'
+                        ],
+                        borderColor: '#2C3E50',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+�
