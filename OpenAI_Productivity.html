@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Interactivo: Oportunidad Económica Impulsada por IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #1f2937;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #0d6efd;
+        }
+        .stat-label {
+            font-size: 1rem;
+            color: #4b5563;
+        }
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #111827;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Section -->
+    <header class="bg-white shadow-md py-8">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">Desbloqueando la Oportunidad Económica</h1>
+            <p class="mt-2 text-xl text-gray-600">Un Vistazo a la Productividad Impulsada por ChatGPT</p>
+            <p class="mt-4 text-sm text-gray-500">
+                Basado en el informe de OpenAI. Ver análisis original: 
+                <a href="https://openai.com/es-ES/global-affairs/new-economic-analysis/" target="_blank" class="text-blue-600 hover:underline">aquí</a>.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 md:p-8">
+
+        <!-- Key Metrics Section -->
+        <section id="key-metrics" class="my-8">
+            <h2 class="text-center mb-8">La Escala de Adopción de ChatGPT</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                <div class="card p-6">
+                    <div class="stat-value">>500M</div>
+                    <div class="stat-label">Usuarios Globales</div>
+                </div>
+                <div class="card p-6">
+                    <div class="stat-value">>2.5B</div>
+                    <div class="stat-label">Mensajes Diarios Globales</div>
+                </div>
+                <div class="card p-6">
+                    <div class="stat-value">>330M</div>
+                    <div class="stat-label">Mensajes Diarios en EE.UU.</div>
+                </div>
+                <div class="card p-6">
+                    <div class="stat-value">28%</div>
+                    <div class="stat-label">Adultos en EE.UU. lo usan en el trabajo (frente al 8% en 2023)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases and Demographics Section -->
+        <section id="usage" class="my-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Use Cases Chart -->
+                <div class="card p-6">
+                    <h3>Principales Casos de Uso en EE.UU.</h3>
+                    <p class="text-gray-600 mb-4">Análisis de los propósitos de los mensajes enviados a ChatGPT.</p>
+                    <div class="chart-container" style="height: 350px;">
+                        <canvas id="useCasesChart"></canvas>
+                    </div>
+                </div>
+                <!-- Demographics Chart -->
+                <div class="card p-6">
+                    <h3>Demografía de Usuarios en EE.UU. por Edad</h3>
+                    <p class="text-gray-600 mb-4">La adopción es más fuerte entre las generaciones más jóvenes.</p>
+                    <div class="chart-container" style="height: 350px;">
+                        <canvas id="demographicsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sector Productivity Gains Section -->
+        <section id="productivity" class="my-12">
+            <h2 class="text-center mb-8">Impulso a la Productividad por Sector</h2>
+            <p class="text-center text-gray-600 max-w-3xl mx-auto mb-10">Estudios muestran ganancias significativas en eficiencia y calidad del trabajo en diversas industrias al utilizar herramientas de IA como los modelos de OpenAI.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card for Legal -->
+                <div class="card p-6 flex flex-col">
+                    <h3 class="text-blue-700">Servicios Legales</h3>
+                    <p class="text-gray-600 flex-grow">Aumento de productividad de entre <strong>34% y 140%</strong> en flujos de trabajo legales, con mejoras sustanciales en la calidad.</p>
+                </div>
+                <!-- Card for Customer Support -->
+                <div class="card p-6 flex flex-col">
+                    <h3 class="text-green-700">Soporte al Cliente</h3>
+                    <p class="text-gray-600 flex-grow">Los agentes fueron un <strong>14% más productivos</strong>. Los trabajadores menos cualificados vieron las mayores mejoras.</p>
+                </div>
+                <!-- Card for Consulting -->
+                <div class="card p-6 flex flex-col">
+                    <h3 class="text-purple-700">Consultoría</h3>
+                    <p class="text-gray-600 flex-grow">Completaron tareas un <strong>25% más eficientemente</strong> y produjeron trabajo de un <strong>40% más de calidad</strong>. El rendimiento de los consultores de bajo desempeño aumentó un 43%.</p>
+                </div>
+            </div>
+
+            <div class="card p-6 mt-8">
+                <h3>Ahorro de Tiempo Semanal por Profesional</h3>
+                <p class="text-gray-600 mb-4">La IA permite a los profesionales reasignar su tiempo a tareas de mayor valor.</p>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="timeSavedChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Entrepreneurship Section -->
+        <section id="entrepreneurship" class="my-12 bg-gray-100 py-12 rounded-lg">
+            <div class="container mx-auto px-6 text-center">
+                <h2>IA: Un Catalizador para el Emprendimiento</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto mb-8">La IA está reduciendo las barreras de entrada, permitiendo a las pequeñas empresas escalar más rápido y fomentando la creación de startups "AI-first".</p>
+                <div class="flex flex-wrap justify-center gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center w-64">
+                        <div class="text-3xl font-bold text-indigo-600">~40%</div>
+                        <p class="text-gray-700 mt-2">de las pequeñas empresas ya utilizan IA.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center w-64">
+                         <div class="text-3xl font-bold text-indigo-600">46%</div>
+                        <p class="text-gray-700 mt-2">del empleo del sector privado en EE.UU. corresponde a pequeñas empresas.</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-lg text-center w-64">
+                         <div class="text-3xl font-bold text-indigo-600">10%</div>
+                        <p class="text-gray-700 mt-2">de crecimiento semanal en la cohorte de Y Combinator (invierno 2025), atribuido a startups "AI-first".</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Análisis Interactivo. Creado para visualizar el informe de OpenAI.</p>
+            <p class="text-sm text-gray-400 mt-1">Este es un proyecto no oficial con fines educativos.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const chartColors = {
+        blue: 'rgba(59, 130, 246, 0.7)',
+        purple: 'rgba(139, 92, 246, 0.7)',
+        green: 'rgba(16, 185, 129, 0.7)',
+        yellow: 'rgba(234, 179, 8, 0.7)',
+        red: 'rgba(239, 68, 68, 0.7)',
+        indigo: 'rgba(99, 102, 241, 0.7)',
+        pink: 'rgba(236, 72, 153, 0.7)',
+        
+        blue_border: 'rgb(59, 130, 246)',
+        purple_border: 'rgb(139, 92, 246)',
+        green_border: 'rgb(16, 185, 129)',
+        yellow_border: 'rgb(234, 179, 8)',
+        red_border: 'rgb(239, 68, 68)',
+        indigo_border: 'rgb(99, 102, 241)',
+        pink_border: 'rgb(236, 72, 153)',
+    };
+
+    // Chart 1: Use Cases
+    const useCasesCtx = document.getElementById('useCasesChart').getContext('2d');
+    new Chart(useCasesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Aprendizaje y Mejora de Habilidades', 'Escritura y Comunicación', 'Programación, Datos y Matemáticas', 'Diseño e Ideación Creativa', 'Análisis de Negocios', 'Traducción', 'Otros'],
+            datasets: [{
+                label: 'Casos de Uso (%)',
+                data: [20, 18, 7, 5, 4, 2, 44],
+                backgroundColor: [
+                    chartColors.blue,
+                    chartColors.green,
+                    chartColors.purple,
+                    chartColors.yellow,
+                    chartColors.indigo,
+                    chartColors.pink,
+                    'rgba(156, 163, 175, 0.5)'
+                ],
+                borderColor: [
+                    chartColors.blue_border,
+                    chartColors.green_border,
+                    chartColors.purple_border,
+                    chartColors.yellow_border,
+                    chartColors.indigo_border,
+                    chartColors.pink_border,
+                    'rgb(156, 163, 175)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.label}: ${context.raw}%`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Chart 2: Demographics
+    const demographicsCtx = document.getElementById('demographicsChart').getContext('2d');
+    new Chart(demographicsCtx, {
+        type: 'bar',
+        data: {
+            labels: ['18-24 años', '25-34 años'],
+            datasets: [{
+                label: '% de Usuarios en EE.UU.',
+                data: [24, 32],
+                backgroundColor: [chartColors.blue, chartColors.green],
+                borderColor: [chartColors.blue_border, chartColors.green_border],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Porcentaje (%)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+    
+    // Chart 3: Time Saved
+    const timeSavedCtx = document.getElementById('timeSavedChart').getContext('2d');
+    new Chart(timeSavedCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Creadores de Contenido', 'Profesores (K-12)', 'Empleados Gobierno de PA'],
+            datasets: [{
+                label: 'Horas Ahorradas por Semana',
+                data: [11, 5.8, 7.9], // 95 min/day * 5 days / 60 min/hr = 7.9 hrs/week
+                backgroundColor: [chartColors.purple, chartColors.yellow, chartColors.red],
+                borderColor: [chartColors.purple_border, chartColors.yellow_border, chartColors.red_border],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Horas por Semana'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                 tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y.toFixed(1) + ' horas';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
