@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevos Horizontes: Roles Emergentes en la Era de la IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos personalizados para complementar Tailwind CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a192f; /* Azul marino oscuro */
+            color: #ccd6f6; /* Texto claro */
+        }
+
+        .glass-effect {
+            background: rgba(10, 25, 47, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(45, 212, 191, 0.2);
+        }
+
+        .role-node {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .role-node:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .role-line {
+            position: absolute;
+            background-color: #38bdf8; /* Azul claro para las líneas */
+            z-index: 1;
+        }
+        
+        /* Colores de las categorías */
+        .ai-role { border-left: 4px solid #38bdf8; } /* Azul claro */
+        .emerging-ai-role { border-left: 4px solid #a78bfa; } /* Púrpura */
+        .must-have-ai-role { border-left: 4px solid #f59e0b; } /* Naranja */
+
+        /* Estilo para el modal */
+        .modal {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .modal.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+        }
+        .modal.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Contenedor principal -->
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Encabezado -->
+        <header class="text-center mb-16 fade-in">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+                Nuevos Horizontes: <span class="text-cyan-400">Roles Emergentes</span> en la Era de la IA
+            </h1>
+            <p class="mt-4 text-lg text-slate-400 max-w-3xl mx-auto">
+                Con la creciente adopción de la IA, están surgiendo nuevos roles en la industria de datos y análisis.
+            </p>
+            <p class="mt-2 text-sm text-slate-500">
+                Fuente: <a href="https://www.gartner.com/en/newsroom/press-releases/2024-05-14-artificial-intelligence-is-creating-new-roles-and-skills-in-data-and-analytics" target="_blank" rel="noopener noreferrer" class="underline hover:text-cyan-400 transition-colors">Gartner Newsroom</a>
+            </p>
+        </header>
+
+        <!-- Sección de Visualización Interactiva -->
+        <section class="mb-20 fade-in" style="animation-delay: 0.2s;">
+            <h2 class="text-3xl font-bold text-center mb-12 text-white">Explora los Roles de la IA</h2>
+            <!-- Contenedor con altura ajustada para evitar solapamiento -->
+            <div class="relative flex justify-center items-center h-[650px] md:h-[700px]">
+                <!-- Elemento Central IA -->
+                <div id="ai-core" class="absolute z-20 bg-cyan-500 text-white font-bold text-2xl rounded-full w-24 h-24 flex items-center justify-center shadow-lg shadow-cyan-500/50">
+                    IA
+                </div>
+                <!-- Contenedor de Roles -->
+                <div id="roles-container" class="absolute w-full h-full">
+                    <!-- Las líneas y los nodos se insertarán aquí con JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Categorías -->
+        <section class="fade-in" style="animation-delay: 0.4s;">
+            <h2 class="text-3xl font-bold text-center mb-12 text-white">Roles por Categoría</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Roles Imprescindibles (Must-have) -->
+                <div id="must-have-roles" class="glass-effect rounded-lg p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-amber-400">Roles Imprescindibles</h3>
+                    <ul class="space-y-3 text-slate-300"></ul>
+                </div>
+
+                <!-- Roles de IA (AI roles) -->
+                <div id="ai-roles" class="glass-effect rounded-lg p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-cyan-400">Roles de IA</h3>
+                    <ul class="space-y-3 text-slate-300"></ul>
+                </div>
+                
+                <!-- Roles Emergentes (Emerging) -->
+                <div id="emerging-roles" class="glass-effect rounded-lg p-6">
+                    <h3 class="text-2xl font-bold mb-4 text-violet-400">Roles Emergentes</h3>
+                    <ul class="space-y-3 text-slate-300"></ul>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Modal para detalles del rol -->
+    <div id="role-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
+        <div id="modal-content" class="modal-content glass-effect rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 relative">
+            <button id="close-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors text-3xl font-bold">&times;</button>
+            <h3 id="modal-title" class="text-3xl font-bold mb-4 text-white"></h3>
+            <p id="modal-category" class="mb-6 text-sm font-medium uppercase tracking-wider"></p>
+            <div id="modal-description" class="text-slate-300 space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DATOS DE LOS ROLES ---
+            const roles = [
+                // Roles Imprescindibles
+                { name: 'Data Scientist', category: 'must-have', description: '<strong>Responsabilidades:</strong> Analiza datos complejos para extraer insights y construir modelos predictivos. Utiliza machine learning, modelado estadístico y visualización de datos para resolver problemas de negocio.<br><strong>Habilidades Clave:</strong> Python/R, SQL, Machine Learning, Estadística, Comunicación.' },
+                { name: 'ML Engineer', category: 'must-have', description: '<strong>Responsabilidades:</strong> Diseña, construye y despliega sistemas de Machine Learning a escala. Se enfoca en la operacionalización (MLOps) de los modelos creados por los Data Scientists, asegurando su rendimiento y fiabilidad en producción.<br><strong>Habilidades Clave:</strong> Programación (Python), MLOps, Infraestructura Cloud, Ingeniería de Software.' },
+                { name: 'Data Engineer', category: 'must-have', description: '<strong>Responsabilidades:</strong> Construye y mantiene la infraestructura y las arquitecturas de datos. Desarrolla pipelines de ETL/ELT para mover y transformar datos, asegurando que sean accesibles y fiables para los analistas y científicos de datos.<br><strong>Habilidades Clave:</strong> SQL, Python/Scala, Big Data (Spark, Hadoop), Cloud (AWS, GCP, Azure).' },
+                { name: 'Head of AI', category: 'must-have', description: '<strong>Responsabilidades:</strong> Lidera la estrategia y la visión de IA de la organización. Define la hoja de ruta, gestiona el equipo de IA y asegura que las iniciativas de IA estén alineadas con los objetivos de negocio. <br><strong>Habilidades Clave:</strong> Liderazgo, Estrategia de Negocio, Conocimiento Profundo de IA, Gestión de Proyectos.' },
+                { name: 'AI Ethicist', category: 'must-have', description: '<strong>Responsabilidades:</strong> Asegura que los sistemas de IA se desarrollen y operen de manera ética, justa y transparente. Evalúa los riesgos de sesgo, privacidad y equidad, y establece políticas de gobernanza para mitigarlos.<br><strong>Habilidades Clave:</strong> Ética, Filosofía, Regulación de IA, Análisis de Riesgos, Comunicación.' },
+
+                // Roles de IA
+                { name: 'Model Manager', category: 'ai', description: '<strong>Responsabilidades:</strong> Supervisa el ciclo de vida completo de los modelos de IA, desde el desarrollo hasta el monitoreo y la retirada. Se encarga del versionado, la evaluación de rendimiento y la gobernanza de los modelos en producción.<br><strong>Habilidades Clave:</strong> MLOps, Gestión de Proyectos, Gobernanza de Datos, Monitoreo de Modelos.' },
+                { name: 'Analytics Engineer', category: 'ai', description: '<strong>Responsabilidades:</strong> Puente entre los Data Engineers y los Analistas. Transforma datos crudos en conjuntos de datos limpios, fiables y listos para el análisis, aplicando prácticas de ingeniería de software al modelado de datos (ej. dbt).<br><strong>Habilidades Clave:</strong> SQL avanzado, dbt, Python, Modelado de Datos, BI.' },
+                { name: 'AI Architect', category: 'ai', description: '<strong>Responsabilidades:</strong> Diseña la arquitectura técnica para las soluciones de IA. Selecciona las tecnologías, plataformas y herramientas adecuadas para construir sistemas de IA escalables, robustos y eficientes.<br><strong>Habilidades Clave:</strong> Arquitectura de Software, Cloud Computing, Sistemas de IA/ML, Big Data.' },
+                { name: 'AI Product Manager', category: 'ai', description: '<strong>Responsabilidades:</strong> Define la visión y estrategia para productos basados en IA. Traduce las necesidades del negocio en requerimientos técnicos para el equipo de desarrollo y gestiona el ciclo de vida del producto.<br><strong>Habilidades Clave:</strong> Gestión de Producto, Conocimiento de IA, UX, Estrategia de Mercado.' },
+                { name: 'UX Designer (for AI)', category: 'ai', description: '<strong>Responsabilidades:</strong> Diseña la interacción entre humanos y sistemas de IA. Se enfoca en crear experiencias de usuario intuitivas, transparentes y que generen confianza en productos con componentes de IA.<br><strong>Habilidades Clave:</strong> Diseño de Interacción, Investigación de Usuario, Prototipado, Psicología Cognitiva.' },
+                { name: 'D&A and AI Translator', category: 'ai', description: '<strong>Responsabilidades:</strong> Actúa como enlace entre los equipos técnicos de IA y las áreas de negocio. Traduce los problemas de negocio en casos de uso de IA y comunica los resultados técnicos en un lenguaje comprensible para los stakeholders.<br><strong>Habilidades Clave:</strong> Comunicación, Conocimiento de Negocio, Fundamentos de IA, Gestión de Proyectos.' },
+                { name: 'AI Developer', category: 'ai', description: '<strong>Responsabilidades:</strong> Construye y mantiene las aplicaciones y sistemas que utilizan modelos de IA. Se enfoca en la integración de los modelos en software funcional, APIs y productos finales.<br><strong>Habilidades Clave:</strong> Programación (Python, Java, etc.), Ingeniería de Software, APIs, Frameworks de IA.' },
+                { name: 'Model Validator', category: 'ai', description: '<strong>Responsabilidades:</strong> Realiza pruebas rigurosas e independientes de los modelos de IA para asegurar su precisión, robustez, y cumplimiento con las regulaciones. Identifica debilidades y potenciales fallos antes del despliegue.<br><strong>Habilidades Clave:</strong> Estadística, Pruebas de Software, Conocimiento de ML, Análisis de Riesgos.' },
+                { name: 'Prompt Engineer', category: 'ai', description: '<strong>Responsabilidades:</strong> Especialista en diseñar, refinar y optimizar las instrucciones (prompts) para interactuar con modelos de IA generativa (como LLMs). Su objetivo es obtener los resultados más precisos, relevantes y creativos posibles.<br><strong>Habilidades Clave:</strong> Creatividad, Lingüística, Lógica, Comprensión de Modelos Generativos.' },
+                { name: 'Knowledge Engineer', category: 'ai', description: '<strong>Responsabilidades:</strong> Estructura y organiza el conocimiento para que los sistemas de IA puedan utilizarlo. Construye ontologías y bases de conocimiento que sirven como "cerebro" para sistemas expertos y de razonamiento.<br><strong>Habilidades Clave:</strong> Ontologías, Grafos de Conocimiento, Lógica Simbólica, Modelado de Datos.' },
+                { name: 'Decision Engineer', category: 'ai', description: '<strong>Responsabilidades:</strong> Aplica principios de la ciencia de la decisión para diseñar sistemas que ayuden a los humanos a tomar mejores decisiones con el apoyo de la IA. Modela procesos de decisión y los integra con insights de IA.<br><strong>Habilidades Clave:</strong> Ciencia de la Decisión, Modelado de Procesos, Psicología, Estadística Bayesiana.' },
+                
+                // Roles Emergentes
+                { name: 'AI Risk and Governance Specialist', category: 'emerging', description: '<strong>Responsabilidades:</strong> Identifica, evalúa y gestiona los riesgos asociados con el uso de la IA. Desarrolla marcos de gobernanza, políticas y controles para asegurar un uso responsable y seguro de la tecnología.<br><strong>Habilidades Clave:</strong> Gestión de Riesgos, Cumplimiento Normativo, Ciberseguridad, Gobernanza de Datos.' }
+            ];
+
+            const categoryMap = {
+                'must-have': { name: 'Rol Imprescindible', color: 'text-amber-400', listId: 'must-have-roles' },
+                'ai': { name: 'Rol de IA', color: 'text-cyan-400', listId: 'ai-roles' },
+                'emerging': { name: 'Rol Emergente', color: 'text-violet-400', listId: 'emerging-roles' }
+            };
+
+            const rolesContainer = document.getElementById('roles-container');
+            const aiCore = document.getElementById('ai-core');
+            const modal = document.getElementById('role-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            
+            // --- RENDERIZADO DE ELEMENTOS ---
+            function renderRoles() {
+                // Limpiar contenedor antes de renderizar
+                rolesContainer.innerHTML = '';
+
+                // Radio del círculo ajustado para evitar solapamiento
+                const radius = window.innerWidth < 768 ? 240 : 300; 
+                const angleStep = (2 * Math.PI) / roles.length;
+                const containerRect = rolesContainer.getBoundingClientRect();
+                const centerX = containerRect.width / 2;
+                const centerY = containerRect.height / 2;
+
+                roles.forEach((role, i) => {
+                    const angle = i * angleStep - (Math.PI / 2); // Empezar desde la parte superior
+                    const nodeWidth = 128; // Ancho del nodo (w-32)
+                    const nodeHeight = 64; // Altura estimada del nodo
+                    const x = centerX + radius * Math.cos(angle) - (nodeWidth / 2);
+                    const y = centerY + radius * Math.sin(angle) - (nodeHeight / 2);
+
+                    // Crear nodo del rol
+                    const node = document.createElement('div');
+                    node.className = 'role-node absolute p-3 w-32 text-center rounded-lg shadow-md glass-effect flex items-center justify-center';
+                    node.style.left = `${x}px`;
+                    node.style.top = `${y}px`;
+                    node.style.height = `${nodeHeight}px`;
+                    node.dataset.role = role.name;
+                    
+                    const categoryClass = {
+                        'must-have': 'must-have-ai-role',
+                        'ai': 'ai-role',
+                        'emerging': 'emerging-ai-role'
+                    }[role.category];
+                    node.classList.add(categoryClass);
+
+                    node.innerHTML = `<span class="font-semibold text-sm text-slate-200">${role.name}</span>`;
+                    rolesContainer.appendChild(node);
+                    
+                    // Crear línea de conexión
+                    const line = document.createElement('div');
+                    const nodeCenterX = x + (nodeWidth / 2);
+                    const nodeCenterY = y + (nodeHeight / 2);
+                    
+                    const distance = Math.sqrt(Math.pow(nodeCenterX - centerX, 2) + Math.pow(nodeCenterY - centerY, 2));
+                    const lineAngle = Math.atan2(nodeCenterY - centerY, nodeCenterX - centerX) * (180 / Math.PI);
+
+                    line.className = 'role-line';
+                    line.style.width = `${distance}px`;
+                    line.style.height = '2px';
+                    line.style.left = `${centerX}px`;
+                    line.style.top = `${centerY}px`;
+                    line.style.transformOrigin = 'left center';
+                    line.style.transform = `rotate(${lineAngle}deg)`;
+                    rolesContainer.insertBefore(line, node);
+                });
+
+                // Asignar eventos a los nodos recién creados
+                document.querySelectorAll('[data-role]').forEach(el => {
+                    el.addEventListener('click', (e) => {
+                        openModal(e.currentTarget.dataset.role);
+                    });
+                });
+            }
+
+            // Renderizar las listas de categorías (solo una vez)
+            roles.forEach(role => {
+                const listContainer = document.getElementById(categoryMap[role.category].listId).querySelector('ul');
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<span class="font-medium hover:text-white transition-colors cursor-pointer" data-role-list-item="${role.name}">${role.name}</span>`;
+                listContainer.appendChild(listItem);
+            });
+
+            // --- MANEJO DE EVENTOS ---
+            const openModal = (roleName) => {
+                const role = roles.find(r => r.name === roleName);
+                if (!role) return;
+
+                document.getElementById('modal-title').textContent = role.name;
+                const categoryInfo = categoryMap[role.category];
+                const categoryEl = document.getElementById('modal-category');
+                categoryEl.textContent = categoryInfo.name;
+                categoryEl.className = `mb-6 text-sm font-medium uppercase tracking-wider ${categoryInfo.color}`;
+                document.getElementById('modal-description').innerHTML = role.description;
+                
+                modal.classList.remove('hidden');
+                modal.classList.add('visible');
+                document.body.style.overflow = 'hidden';
+            };
+
+            const closeModal = () => {
+                modal.classList.remove('visible');
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            };
+            
+            // Asignar eventos a los items de la lista
+            document.querySelectorAll('[data-role-list-item]').forEach(el => {
+                el.addEventListener('click', (e) => {
+                    openModal(e.currentTarget.dataset.roleListItem);
+                });
+            });
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            // Renderizar al cargar y al cambiar tamaño de ventana
+            renderRoles();
+            window.addEventListener('resize', renderRoles);
+        });
+    </script>
+</body>
+</html>
