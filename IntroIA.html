@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Universo de la Inteligencia Artificial: Una Guía Interactiva</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos personalizados y animaciones */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e5e5e5;
+        }
+        .font-title {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-code {
+            font-family: 'Roboto Mono', monospace;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #4f46e5, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.2), 0 10px 10px -5px rgba(79, 70, 229, 0.1);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+        .accordion-button.active + .accordion-content {
+            max-height: 500px; /* Ajusta según el contenido */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+        }
+        .flip-card-front {
+            background-color: #1e1e1e;
+            border: 1px solid #4f46e5;
+        }
+        .flip-card-back {
+            background-color: #4f46e5;
+            color: white;
+            transform: rotateY(180deg);
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #4f46e5;
+        }
+        .timeline-item {
+            position: relative;
+            width: 50%;
+        }
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 2rem;
+        }
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 2rem;
+        }
+        .timeline-dot {
+            content: '';
+            position: absolute;
+            top: 1.25rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background-color: #ec4899;
+            border: 2px solid #0a0a0a;
+        }
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -0.5rem;
+            transform: translateX(50%);
+        }
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -0.5rem;
+            transform: translateX(-50%);
+        }
+        #hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.25; /* Aumentado para mayor visibilidad */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Canvas para animación de fondo -->
+    <canvas id="hero-bg"></canvas>
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+
+        <!-- BLOQUE 1: ¿Por qué debería interesarme en la IA? -->
+        <section class="text-center mb-24 sm:mb-32">
+            <h1 class="font-title text-4xl sm:text-5xl lg:text-7xl font-black mb-4 tracking-tight">
+                Desbloquea tu Potencial con la <span class="gradient-text">Inteligencia Artificial</span>
+            </h1>
+            <p class="max-w-3xl mx-auto text-lg sm:text-xl text-gray-400 mb-12">
+                Estás en el umbral de una nueva era. La IA no es solo tecnología; es una extensión de nuestras capacidades, una herramienta para construir el futuro que deseas. La elección es tuya.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Card 1 -->
+                <div class="card p-8 rounded-xl">
+                    <svg class="w-12 h-12 mb-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H5v-2H3v-2H1v-4a6 6 0 016-6h4a6 6 0 016 6z"></path></svg>
+                    <h3 class="font-title text-2xl font-bold mb-2">Tomar el Control</h3>
+                    <p class="text-gray-400">Anticípate a los cambios y toma decisiones informadas sobre tu futuro en un mundo en constante evolución.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="card p-8 rounded-xl">
+                    <svg class="w-12 h-12 mb-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m0 18a9 9 0 009-9m-9 9a9 9 0 00-9-9"></path></svg>
+                    <h3 class="font-title text-2xl font-bold mb-2">Ampliar Horizontes</h3>
+                    <p class="text-gray-400">Descubre nuevas formas de crear, innovar y comunicar, explorando mundos y posibilidades que antes eran inimaginables.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="card p-8 rounded-xl">
+                    <svg class="w-12 h-12 mb-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    <h3 class="font-title text-2xl font-bold mb-2">Ser Parte de la Solución</h3>
+                    <p class="text-gray-400">Usa la IA como una herramienta poderosa para abordar desafíos globales y contribuir a un futuro más sostenible y equitativo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOQUE 2: ¿Qué es la IA? -->
+        <section class="mb-24 sm:mb-32">
+            <div class="text-center mb-12">
+                <h2 class="font-title text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">¿Qué es la <span class="gradient-text">Inteligencia Artificial</span>?</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-400 mt-4">La IA es un punto de inflexión histórico, una fuerza transformadora que redefine nuestra relación con la tecnología. Para entenderla, miremos al pasado.</p>
+            </div>
+            <div class="max-w-6xl mx-auto">
+                <div class="space-y-8">
+                    <!-- Analogía 1: Revolución Industrial -->
+                    <div class="accordion-item">
+                        <button class="accordion-button w-full flex justify-between items-center text-left p-6 rounded-lg bg-[#1e1e1e] border border-[#333] hover:bg-[#2a2a2a] transition-colors">
+                            <span class="text-xl sm:text-2xl font-bold font-title">Revolución Industrial: La Expansión de la Fuerza</span>
+                            <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content px-6 text-gray-300">
+                            <p>Así como la Revolución Industrial mecanizó el trabajo manual, la IA está redefiniendo la frontera entre lo humano y lo artificial. Pero esta vez, no se trata solo de extender nuestras capacidades físicas, sino de <strong class="text-indigo-400">expandir nuestra mente y cognición</strong>.</p>
+                        </div>
+                    </div>
+                    <!-- Analogía 2: La Imprenta -->
+                    <div class="accordion-item">
+                        <button class="accordion-button w-full flex justify-between items-center text-left p-6 rounded-lg bg-[#1e1e1e] border border-[#333] hover:bg-[#2a2a2a] transition-colors">
+                            <span class="text-xl sm:text-2xl font-bold font-title">La Imprenta: La Democratización del Conocimiento</span>
+                            <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content px-6 text-gray-300">
+                            <p>La invención de la imprenta permitió que las ideas trascendieran fronteras. De forma similar, la IA tiene el potencial de <strong class="text-indigo-400">amplificar exponencialmente nuestra capacidad</strong> de crear, innovar y comunicar a una escala global e instantánea.</p>
+                        </div>
+                    </div>
+                    <!-- Analogía 3: El Fuego -->
+                    <div class="accordion-item">
+                        <button class="accordion-button w-full flex justify-between items-center text-left p-6 rounded-lg bg-[#1e1e1e] border border-[#333] hover:bg-[#2a2a2a] transition-colors">
+                            <span class="text-xl sm:text-2xl font-bold font-title">El Fuego: La Herramienta de Doble Filo</span>
+                            <svg class="w-6 h-6 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="accordion-content px-6 text-gray-300">
+                            <p>Al igual que el fuego, que nos dio calor y protección pero también puede destruir, la IA es una herramienta fundamental. Su impacto, positivo o negativo, depende enteramente de <strong class="text-indigo-400">nuestra sabiduría, ética y responsabilidad</strong> al utilizarla.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOQUE 3: ¿Cómo incorporo la IA? -->
+        <section class="mb-24 sm:mb-32">
+            <div class="text-center mb-16">
+                <h2 class="font-title text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">Tu Hoja de Ruta para <span class="gradient-text">Adoptar la IA</span></h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-400 mt-4">Incorporar la IA en tu vida es un viaje de aprendizaje y experimentación. Aquí tienes los pasos clave para comenzar.</p>
+            </div>
+            <div class="relative max-w-4xl mx-auto">
+                <div class="timeline">
+                    <!-- Paso 1 -->
+                    <div class="timeline-item mb-8">
+                        <div class="timeline-dot"></div>
+                        <div class="p-6 rounded-lg bg-[#1e1e1e] border border-[#333]">
+                            <h3 class="font-title text-xl font-bold mb-2 text-pink-400">1. Aprende los Conceptos Básicos</h3>
+                            <p class="text-gray-300">Sumérgete en los fundamentos. Entiende qué es la IA, cómo funcionan los modelos de lenguaje y cuáles son sus aplicaciones principales. La curiosidad es tu mejor guía.</p>
+                        </div>
+                    </div>
+                    <!-- Paso 2 -->
+                    <div class="timeline-item mb-8">
+                        <div class="timeline-dot"></div>
+                        <div class="p-6 rounded-lg bg-[#1e1e1e] border border-[#333]">
+                            <h3 class="font-title text-xl font-bold mb-2 text-pink-400">2. Explora Herramientas y Plataformas</h3>
+                            <p class="text-gray-300">No necesitas programar para empezar. Prueba herramientas de IA para automatización, análisis de datos, generación de imágenes o creación de contenido. ¡Hay un universo por descubrir!</p>
+                        </div>
+                    </div>
+                    <!-- Paso 3 -->
+                    <div class="timeline-item mb-8">
+                        <div class="timeline-dot"></div>
+                        <div class="p-6 rounded-lg bg-[#1e1e1e] border border-[#333]">
+                            <h3 class="font-title text-xl font-bold mb-2 text-pink-400">3. Practica y Experimenta</h3>
+                            <p class="text-gray-300">La mejor manera de aprender es haciendo. Crea un chatbot simple, analiza un set de datos de tu interés o genera un poema con un modelo de lenguaje. No tengas miedo de equivocarte.</p>
+                        </div>
+                    </div>
+                    <!-- Paso 4 -->
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="p-6 rounded-lg bg-[#1e1e1e] border border-[#333]">
+                            <h3 class="font-title text-xl font-bold mb-2 text-pink-400">4. Incorpora la IA en tu Pasión</h3>
+                            <p class="text-gray-300">Aplica lo aprendido a tu trabajo o hobbies. Automatiza tareas repetitivas, úsala como fuente de inspiración creativa o para resolver problemas que siempre te han intrigado.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOQUE 4: ¿Qué más debo saber de la IA? -->
+        <section>
+            <div class="text-center mb-16">
+                <h2 class="font-title text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">Preguntas para <span class="gradient-text">Profundizar</span></h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-400 mt-4">La verdadera integración de la IA viene de la reflexión. Haz clic en cada tarjeta para explorar las preguntas que te llevarán al siguiente nivel.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <!-- Tarjeta Flip 1 -->
+                <div class="flip-card h-64">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3 class="font-title text-2xl font-bold">¿Qué problemas puedo resolver?</h3>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>Piensa en tus desafíos diarios. La IA puede automatizar tareas, analizar datos para tomar mejores decisiones o mejorar la comunicación. ¿Qué tarea repetitiva te gustaría eliminar?</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta Flip 2 -->
+                <div class="flip-card h-64">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3 class="font-title text-2xl font-bold">¿Qué oportunidades puedo crear?</h3>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>La IA abre puertas a nuevos productos, servicios o modelos de negocio. ¿Cómo podrías usarla para mejorar la experiencia de tus clientes o para lanzar un proyecto innovador?</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta Flip 3 -->
+                <div class="flip-card h-64">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3 class="font-title text-2xl font-bold">¿Cómo puedo combinarla con otras tecnologías?</h3>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>Su poder se multiplica al combinarla con IoT, Realidad Virtual o Blockchain. Imagina sensores inteligentes que aprenden o contratos que se ejecutan de forma autónoma.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta Flip 4 -->
+                <div class="flip-card h-64">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3 class="font-title text-2xl font-bold">¿Qué habilidades necesito desarrollar?</h3>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>Más allá de la programación, cultiva el pensamiento crítico, el análisis de datos y la resolución de problemas. La habilidad más importante es la capacidad de hacer las preguntas correctas.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tarjeta Flip 5 -->
+                <div class="flip-card h-64">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3 class="font-title text-2xl font-bold">¿Cómo aseguro un uso ético?</h3>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>La ética no es una opción. Reflexiona sobre la privacidad, el sesgo y el impacto social de tus proyectos. La responsabilidad es clave para construir un futuro positivo con la IA.</p>
+                        </div>
+                    </div>
+                </div>
+                 <!-- Tarjeta Flip 6 -->
+                 <div class="flip-card h-64">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <h3 class="font-title text-2xl font-bold">¿Estás listo para la conversación?</h3>
+                        </div>
+                        <div class="flip-card-back">
+                            <p>¿Qué preguntas tienes? ¿Qué te emociona? ¿Qué te preocupa? El futuro de la IA se construye en comunidad. Tu voz es importante.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="text-center py-8 mt-16 border-t border-gray-800">
+        <p class="text-gray-500">Informe interactivo diseñado para explorar el mundo de la IA.</p>
+    </footer>
+
+    <script>
+        // Script para la animación de fondo
+        const canvas = document.getElementById('hero-bg');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+
+        // get mouse position
+        let mouse = {
+            x: null,
+            y: null,
+            radius: (canvas.height/120) * (canvas.width/120)
+        }
+
+        window.addEventListener('mousemove', 
+            function(event) {
+                mouse.x = event.x;
+                mouse.y = event.y;
+            }
+        );
+
+        // create particle
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            // method to draw individual particle
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = '#666'; // Color de partícula más claro
+                ctx.fill();
+            }
+            // check particle position, check mouse position, move the particle, draw the particle
+            update() {
+                //check if particle is still within canvas
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+
+                // check collision detection - mouse position / particle position
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+                if (distance < mouse.radius + this.size){
+                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
+                        this.x += 10;
+                    }
+                    if (mouse.x > this.x && this.x > this.size * 10) {
+                        this.x -= 10;
+                    }
+                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
+                        this.y += 10;
+                    }
+                    if (mouse.y > this.y && this.y > this.size * 10) {
+                        this.y -= 10;
+                    }
+                }
+                // move particle
+                this.x += this.directionX;
+                this.y += this.directionY;
+                // draw particle
+                this.draw();
+            }
+        }
+
+        // create particle array
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.4) - 0.2;
+                let directionY = (Math.random() * 0.4) - 0.2;
+                let color = '#666';
+
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0,0,innerWidth, innerHeight);
+
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        // check if particles are close enough to draw a line between them
+        function connect(){
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                    + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/25000); // Ajustado para que la opacidad disminuya más lentamente
+                        ctx.strokeStyle='rgba(129, 140, 248,' + opacityValue + ')'; // Tono de índigo más claro
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+        
+        // resize event
+        window.addEventListener('resize', 
+            function(){
+                canvas.width = innerWidth;
+                canvas.height = innerHeight;
+                mouse.radius = ((canvas.height/120) * (canvas.height/120));
+                init();
+            }
+        );
+
+        // mouse out event
+        window.addEventListener('mouseout', 
+            function(){
+                mouse.x = undefined;
+                mouse.y = undefined;
+            }
+        )
+
+        init();
+        animate();
+
+
+        // Script para el componente de acordeón
+        const accordionButtons = document.querySelectorAll('.accordion-button');
+
+        accordionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Cierra todos los demás
+                accordionButtons.forEach(otherButton => {
+                    if (otherButton !== button) {
+                        otherButton.classList.remove('active');
+                        otherButton.querySelector('svg').style.transform = 'rotate(0deg)';
+                    }
+                });
+
+                // Alterna el actual
+                const isActive = button.classList.toggle('active');
+                const icon = button.querySelector('svg');
+                icon.style.transform = isActive ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+    </script>
+
+</body>
+</html>
