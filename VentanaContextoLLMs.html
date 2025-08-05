@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventana de Contexto en Modelos de Lenguaje (LLMs)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos base (Modo Claro por defecto) */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* gris muy claro */
+            color: #0f172a; /* gris oscuro */
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .hero-bg {
+            background-color: #f1f5f9;
+            background-image: radial-gradient(circle at 1px 1px, #cbd5e1 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+        .content-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            /* Ajuste para el anclaje del scroll */
+            scroll-margin-top: 80px; 
+        }
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .table-responsive { display: block; width: 100%; overflow-x: auto; }
+        th, td { padding: 1rem; text-align: left; }
+        
+        /* Estilos para el Modo Oscuro */
+        .dark body {
+            background-color: #0a0a0a;
+            color: #e2e8f0;
+        }
+        .dark .glass-nav {
+            background: rgba(17, 17, 17, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .dark .hero-bg {
+            background-color: #111;
+            background-image: radial-gradient(circle at 1px 1px, #374151 1px, transparent 0);
+        }
+        .dark .card, .dark .table-container, .dark .info-box {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+        .dark .text-main { color: #e2e8f0; }
+        .dark .text-secondary { color: #94a3b8; }
+        .dark .text-headings { color: #fff; }
+        .dark .hover-card:hover { border-color: #818cf8; }
+        .dark thead { background-color: #1e293b; }
+        .dark tbody tr:nth-child(even) { background-color: #111827; }
+        .dark tbody tr:nth-child(odd) { background-color: #1f2937; }
+
+        /* Estilos para el Tooltip del Glosario */
+        .tooltip {
+            position: relative;
+            cursor: pointer;
+            border-bottom: 2px dotted;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: 220px;
+            background-color: #1e293b;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -110px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            font-weight: normal;
+        }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1e293b transparent transparent transparent;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+    <script>
+        // Configuración para que Tailwind reconozca el modo oscuro por clase
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+</head>
+<body class="antialiased text-main">
+
+    <!-- Navigation -->
+    <nav class="glass-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-headings">Ventana de Contexto</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-1">
+                        <a href="#introduccion" class="text-secondary hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-headings px-3 py-2 rounded-md text-sm font-medium">Introducción</a>
+                        <a href="#evolucion" class="text-secondary hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-headings px-3 py-2 rounded-md text-sm font-medium">Evolución</a>
+                        <a href="#tecnica" class="text-secondary hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-headings px-3 py-2 rounded-md text-sm font-medium">Técnica</a>
+                        <a href="#limitaciones" class="text-secondary hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-headings px-3 py-2 rounded-md text-sm font-medium">Límites</a>
+                        <a href="#futuro" class="text-secondary hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-headings px-3 py-2 rounded-md text-sm font-medium">Futuro</a>
+                        <a href="#comparativa" class="text-secondary hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-headings px-3 py-2 rounded-md text-sm font-medium">Comparativa</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                     <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 8.486a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-bg py-20 sm:py-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight">
+                <span class="block text-headings">Análisis de la</span>
+                <span class="gradient-text block">Ventana de Contexto en LLMs</span>
+            </h1>
+            <p class="mt-6 max-w-3xl mx-auto text-lg sm:text-xl text-secondary">
+                Una inmersión profunda en la evolución, los desafíos técnicos y el futuro de la memoria de los modelos de inteligencia artificial.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Section 1: Introducción -->
+        <section id="introduccion" class="content-section my-16">
+            <h2 class="text-3xl font-bold mb-6 text-sky-400">1. Introducción Conceptual</h2>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="text-secondary space-y-4 text-lg leading-relaxed">
+                    <p>La <strong class="tooltip text-headings" data-tooltip-text="La cantidad máxima de texto que un modelo puede procesar a la vez.">ventana de contexto</strong> en los <strong class="tooltip text-headings" data-tooltip-text="Modelos de Lenguaje Grandes (Large Language Models), como GPT-4.">LLMs</strong> es la cantidad máxima de texto (<strong class="tooltip text-headings" data-tooltip-text="Unidades de texto. Pueden ser palabras, partes de palabras o caracteres.">tokens</strong>) que un modelo puede procesar simultáneamente. Funciona como la <strong class="text-headings">memoria de trabajo</strong> del modelo.</p>
+                    <p>Una ventana más grande mejora la precisión y reduce las "alucinaciones", pero su ampliación presenta enormes desafíos computacionales y de eficiencia.</p>
+                </div>
+                <div class="p-8 card rounded-xl border">
+                     <div class="flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7.014A8.003 8.003 0 0122 12c0 3.771-2.582 7.026-6.09 7.842-.5.132-.9.216-1.26.216-.296 0-.6-.06-.85-.157z" /><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.5A2.5 2.5 0 0110 6v2.5a2.5 2.5 0 01-5 0V6a2.5 2.5 0 012.5-2.5zM5 12.5A2.5 2.5 0 017.5 10v2.5a2.5 2.5 0 01-5 0V10a2.5 2.5 0 012.5-2.5z" /></svg>
+                    </div>
+                    <p class="text-center mt-4 text-secondary">La ventana de contexto es la clave para la coherencia y la comprensión profunda del lenguaje.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Evolución Histórica -->
+        <section id="evolucion" class="content-section my-16">
+            <h2 class="text-3xl font-bold mb-6 text-indigo-400">2. Desarrollo Histórico</h2>
+            <p class="text-lg text-secondary mb-8 max-w-4xl">La expansión de las ventanas de contexto refleja el rápido avance en las arquitecturas de IA. El siguiente gráfico muestra el crecimiento exponencial en la capacidad de tokens.</p>
+            <div class="p-4 sm:p-6 rounded-xl border table-container">
+                <canvas id="evolutionChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Section 3: Aspectos Técnicos -->
+        <section id="tecnica" class="content-section my-16">
+            <h2 class="text-3xl font-bold mb-6 text-purple-400">3. Aspectos Técnicos y Soluciones</h2>
+            <p class="text-lg text-secondary mb-8 max-w-4xl">El mecanismo de autoatención tiene una complejidad cuadrática (O(n²)), lo que hace costoso ampliar la ventana. Para superar esto, se han desarrollado técnicas innovadoras.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card p-6 rounded-xl border hover-card transition-colors"><h3 class="font-bold text-lg text-headings">Interpolación de Posiciones (PI)</h3><p class="text-secondary mt-2">Escala los índices de posición para manejar secuencias más largas con un ajuste mínimo.</p></div>
+                <div class="card p-6 rounded-xl border hover-card transition-colors"><h3 class="font-bold text-lg text-headings"><strong class="tooltip" data-tooltip-text="Reduce la complejidad computacional al no conectar cada token con todos los demás.">Atención Dispersa</strong></h3><p class="text-secondary mt-2">Limita los tokens a los que cada token presta atención, reduciendo la carga.</p></div>
+                <div class="card p-6 rounded-xl border hover-card transition-colors"><h3 class="font-bold text-lg text-headings">Modelos de Espacio de Estado</h3><p class="text-secondary mt-2">Arquitecturas como <strong class="tooltip" data-tooltip-text="Un modelo de secuencia que escala linealmente, siendo muy eficiente para contextos largos.">Mamba</strong> que escalan linealmente, permitiendo un manejo eficiente.</p></div>
+                <div class="card p-6 rounded-xl border hover-card transition-colors"><h3 class="font-bold text-lg text-headings">Segmentación y Deslizamiento</h3><p class="text-secondary mt-2">Divide las entradas largas en fragmentos que se procesan por separado.</p></div>
+                <div class="card p-6 rounded-xl border hover-card transition-colors"><h3 class="font-bold text-lg text-headings">Compresión de Prompts</h3><p class="text-secondary mt-2">Condensa la información de entrada para que quepa en la ventana.</p></div>
+                <div class="card p-6 rounded-xl border hover-card transition-colors"><h3 class="font-bold text-lg text-headings">Ajustes en RoPE</h3><p class="text-secondary mt-2">Modifica la codificación posicional para soportar secuencias más largas.</p></div>
+            </div>
+        </section>
+
+        <!-- Section 4: Limitaciones Actuales -->
+        <section id="limitaciones" class="content-section my-16">
+            <h2 class="text-3xl font-bold mb-6 text-amber-400">4. Limitaciones Actuales</h2>
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="space-y-6">
+                    <div class="flex items-start"><svg class="h-6 w-6 text-amber-400 mr-4 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div><h3 class="font-bold text-headings">Requisitos Computacionales</h3><p class="text-secondary">El costo en memoria y cálculo crece exponencialmente.</p></div></div>
+                    <div class="flex items-start"><svg class="h-6 w-6 text-amber-400 mr-4 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div><h3 class="font-bold text-headings">"Perdido en el Medio"</h3><p class="text-secondary">Los modelos olvidan el contenido intermedio en contextos muy largos.</p></div></div>
+                    <div class="flex items-start"><svg class="h-6 w-6 text-amber-400 mr-4 mt-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div><h3 class="font-bold text-headings">Latencia y Coherencia</h3><p class="text-secondary">Secuencias largas aumentan el tiempo de respuesta y el riesgo de errores.</p></div></div>
+                </div>
+                <div class="p-8 info-box rounded-xl border bg-amber-500/10 border-amber-500/30"><h3 class="font-bold text-amber-400 text-lg">Consideraciones Éticas</h3><ul class="mt-4 space-y-3 list-disc list-inside text-secondary"><li class="text-main"><strong class="text-headings">Privacidad de Datos:</strong> Riesgo de filtrar información sensible.</li><li class="text-main"><strong class="text-headings">Impacto Ambiental:</strong> Alto consumo energético.</li><li class="text-main"><strong class="text-headings">Brecha Tecnológica:</strong> Los altos costos limitan el acceso.</li></ul></div>
+            </div>
+        </section>
+
+        <!-- Section 5: Tendencias Futuras -->
+        <section id="futuro" class="content-section my-16">
+            <h2 class="text-3xl font-bold mb-6 text-teal-400">5. Tendencias y Proyecciones Futuras</h2>
+            <p class="text-lg text-secondary mb-8 max-w-4xl">El futuro no solo se centra en ventanas más grandes, sino en un uso más inteligente y eficiente del contexto disponible.</p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card p-6 rounded-xl border"><h3 class="font-bold text-lg text-teal-400">Arquitecturas Eficientes</h3><p class="text-secondary mt-2">Modelos con escalado lineal podrían complementar a los transformadores.</p></div>
+                <div class="card p-6 rounded-xl border"><h3 class="font-bold text-lg text-teal-400">Gestión Dinámica del Contexto</h3><p class="text-secondary mt-2">Los modelos se adaptarán, usando solo la ventana necesaria para cada tarea.</p></div>
+                <div class="card p-6 rounded-xl border"><h3 class="font-bold text-lg text-teal-400">Integración con <strong class="tooltip" data-tooltip-text="Generación Aumentada por Recuperación: permite al modelo consultar bases de datos externas en tiempo real.">RAG</strong></h3><p class="text-secondary mt-2">Permitirá acceder a información externa sin sobrecargar la ventana de contexto.</p></div>
+                <div class="card p-6 rounded-xl border"><h3 class="font-bold text-lg text-teal-400">Avances en Hardware</h3><p class="text-secondary mt-2">Nuevas generaciones de hardware facilitarán el procesamiento de contextos masivos.</p></div>
+            </div>
+        </section>
+
+        <!-- Section 6: Comparativa -->
+        <section id="comparativa" class="content-section my-16">
+            <h2 class="text-3xl font-bold mb-6 text-rose-400">6. Comparativa de Modelos Modernos</h2>
+            <p class="text-lg text-secondary mb-8 max-w-4xl">Una vista comparativa de los principales modelos de la industria (datos hasta 2025).</p>
+            <div class="table-responsive rounded-lg border table-container">
+                <table class="w-full text-sm text-secondary"><thead class="text-xs uppercase"><tr class="text-headings"><th>Empresa</th><th>Modelo</th><th>Tamaño de Ventana (Tokens)</th><th>Notas</th></tr></thead><tbody><tr><td>OpenAI</td><td>GPT-4o</td><td>128,000</td><td>Equilibrio entre eficiencia y capacidad.</td></tr><tr><td>OpenAI</td><td>GPT-4.1</td><td>1,047,576</td><td>Análisis de documentos extensos.</td></tr><tr><td>Google</td><td>Gemini 1.5 Pro</td><td>2,000,000</td><td>Ideal para aplicaciones de contexto masivo.</td></tr><tr><td>Anthropic</td><td>Claude 4</td><td>200,000</td><td>Optimizado para flujos de alta precisión.</td></tr><tr><td>Mistral</td><td>Mixtral 8x22B</td><td>65,000</td><td>Contextos significativos sin ventanas extremas.</td></tr><tr><td>Meta</td><td>Llama 3 (70B)</td><td>8,000</td><td>Adecuado para aplicaciones generales.</td></tr><tr><td>Magic.dev</td><td>LTM-2-Mini</td><td>100,000,000</td><td>Diseñado para datasets masivos.</td></tr></tbody></table>
+            </div>
+        </section>
+
+        <!-- Section 7: Conclusiones -->
+        <section id="conclusiones" class="content-section my-16 text-center">
+            <h2 class="text-3xl font-bold mb-6 gradient-text">Conclusiones Críticas</h2>
+            <div class="max-w-4xl mx-auto text-lg text-secondary space-y-6">
+                <p>La ventana de contexto es un pilar en la evolución de la IA. Su crecimiento exponencial ha desbloqueado capacidades sin precedentes.</p>
+                <p>Sin embargo, el futuro no reside solo en el tamaño, sino en la <strong class="text-headings">eficiencia</strong>. Superar los desafíos computacionales y el impacto ambiental es crucial. Técnicas como RAG marcan el camino hacia un uso más inteligente del contexto.</p>
+                <p>El equilibrio entre poder tecnológico y responsabilidad ética definirá la próxima generación de modelos de lenguaje.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t dark:border-slate-800 border-gray-200">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center text-secondary text-sm">
+            <p>Página generada a partir del documento "Análisis de la evolución, desafíos y estado actual de la ventana de contexto".</p>
+            <p class="mt-2">Diseño y desarrollo con HTML5, Tailwind CSS y JavaScript.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- LÓGICA PARA EL MODO CLARO/OSCURO ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+        const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+        // Aplicar tema guardado en localStorage o el preferido por el sistema
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeToggleLightIcon.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            themeToggleDarkIcon.classList.remove('hidden');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            // Alternar iconos
+            themeToggleDarkIcon.classList.toggle('hidden');
+            themeToggleLightIcon.classList.toggle('hidden');
+
+            // Alternar tema
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+
+        // --- LÓGICA PARA ANIMACIÓN DE SCROLL ---
+        const sections = document.querySelectorAll('.content-section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        sections.forEach(section => observer.observe(section));
+
+        // --- LÓGICA PARA EL GRÁFICO INTERACTIVO ---
+        const ctx = document.getElementById('evolutionChart').getContext('2d');
+        const evolutionChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['GPT-2 (2019)', 'GPT-3 (2020)', 'GPT-4 (2023)', 'Claude 3 (2024)', 'Gemini 1.5 Pro (2024)', 'LTM-2-Mini (2025)'],
+                datasets: [{
+                    label: 'Tamaño de Ventana de Contexto (Tokens, escala logarítmica)',
+                    data: [1024, 4096, 128000, 200000, 2000000, 100000000],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.5)',
+                        'rgba(99, 102, 241, 0.5)',
+                        'rgba(139, 92, 246, 0.5)',
+                        'rgba(217, 70, 239, 0.5)',
+                        'rgba(236, 72, 153, 0.5)',
+                        'rgba(244, 63, 94, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(59, 130, 246, 1)',
+                        'rgba(99, 102, 241, 1)',
+                        'rgba(139, 92, 246, 1)',
+                        'rgba(217, 70, 239, 1)',
+                        'rgba(236, 72, 153, 1)',
+                        'rgba(244, 63, 94, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('es-ES').format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'logarithmic',
+                        beginAtZero: true,
+                        ticks: {
+                            color: document.documentElement.classList.contains('dark') ? '#94a3b8' : '#475569',
+                            callback: function(value, index, values) {
+                                return Number(value.toString()).toLocaleString();
+                            }
+                        },
+                        grid: {
+                            color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                        }
+                    },
+                    x: {
+                       ticks: {
+                           color: document.documentElement.classList.contains('dark') ? '#94a3b8' : '#475569'
+                       },
+                       grid: {
+                           display: false
+                       }
+                    }
+                }
+            }
+        });
+
+        // --- LÓGICA PARA EL GLOSARIO (TOOLTIPS) ---
+        const tooltips = document.querySelectorAll('.tooltip');
+        tooltips.forEach(tooltip => {
+            const tooltipText = document.createElement('span');
+            tooltipText.classList.add('tooltip-text');
+            tooltipText.innerText = tooltip.dataset.tooltipText;
+            tooltip.appendChild(tooltipText);
+        });
+    });
+    </script>
+
+</body>
+</html>
