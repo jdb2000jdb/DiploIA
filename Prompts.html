@@ -108,6 +108,11 @@
             font-size: 0.95rem;
             flex-grow: 1;
         }
+        
+        .card p strong {
+            color: var(--text-color);
+            font-weight: 600;
+        }
 
         .card pre {
             background-color: var(--code-bg);
@@ -118,6 +123,7 @@
             word-wrap: break-word;
             color: #a78bfa;
             border: 1px solid var(--border-color);
+            margin-top: 15px;
         }
 
         .section-title {
@@ -140,7 +146,7 @@
             border-radius: 2px;
         }
 
-        /* Interactive Demo Buttons */
+        /* Interactive Demo Styles */
         .interactive-container {
             text-align: center;
         }
@@ -199,6 +205,56 @@
             border: 1px solid var(--border-color);
             text-align: left;
         }
+        
+        /* Slider for Temperature Demo */
+        .slider-container {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .slider-container label {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .slider-container input[type="range"] {
+            -webkit-appearance: none;
+            width: 50%;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        .slider-container input[type="range"]:hover {
+            opacity: 1;
+        }
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid var(--bg-color);
+        }
+        .slider-container input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-color);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid var(--bg-color);
+        }
+        .slider-container #temp-value {
+            font-weight: 700;
+            color: #a78bfa;
+            min-width: 40px;
+        }
+
 
         footer {
             text-align: center;
@@ -379,10 +435,55 @@ Paso 2: Usando esos datos, explica cómo se formó Hawái.</code></pre>
                     </div>
                 </div>
             </section>
+            
+            <!-- NEW SECTION: Control de la Generación de Texto -->
+            <section id="control-generacion">
+                <h2 class="section-title">6. Control de la Generación de Texto</h2>
+                <div class="card">
+                    <h3>Demo: El Termostato de la Creatividad 🌡️</h3>
+                    <p>La <strong>Temperatura</strong> ajusta la creatividad del modelo. Un valor bajo produce respuestas predecibles y enfocadas. Un valor alto genera respuestas más diversas y sorprendentes. Mueve el control para ver cómo cambia la respuesta a la pregunta "¿Qué es el éxito?".</p>
+                     <div class="interactive-container">
+                        <div class="slider-container">
+                            <label for="temp-slider">Baja (Predecible)</label>
+                            <input type="range" id="temp-slider" min="0.1" max="1.5" step="0.1" value="0.2">
+                            <label for="temp-slider">Alta (Creativa)</label>
+                            <span id="temp-value">0.2</span>
+                        </div>
+                        <div class="interactive-output" id="temp-output">
+                            <p><strong>Respuesta (Temp: 0.2):</strong> El éxito es la consecución de metas y objetivos previamente establecidos, a menudo asociado con el logro profesional y la estabilidad financiera.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-container" style="margin-top: 25px;">
+                    <div class="card">
+                        <span class="tag">Parámetro</span>
+                        <h3>Top-K: Selección por Ranking 🏆</h3>
+                        <p>Limita la selección a un <strong>número fijo (K)</strong> de las opciones más probables. Es como decir "dame solo las 2 mejores opciones".</p>
+                        <pre><code># Prompt: "El cielo es de color..."
+# Probabilidades: azul (90%), gris (5%), naranja (3%)
+
+# Con K=2, el modelo solo ve: [azul, gris]
+# Ignora "naranja" por completo.</code></pre>
+                    </div>
+                    <div class="card">
+                        <span class="tag">Parámetro</span>
+                        <h3>Top-P: Selección por Probabilidad 🥧</h3>
+                        <p>Selecciona el grupo más pequeño de palabras cuya <strong>probabilidad sumada</strong> supera un umbral (P). Es más flexible que Top-K.</p>
+                        <pre><code># Prompt: "El cielo es de color..."
+# Probabilidades: azul (90%), gris (5%), naranja (3%)
+
+# Con P=0.92 (92%), el modelo suma:
+# 1. "azul" (90%) -> Suma = 90%
+# 2. "gris" (5%)  -> Suma = 95%
+# Se detiene porque 95% > 92%.
+# Elige entre: [azul, gris]</code></pre>
+                    </div>
+                </div>
+            </section>
 
             <!-- Técnicas Avanzadas y Agentes -->
             <section id="avanzadas">
-                <h2 class="section-title">6. Técnicas Avanzadas, Agentes y Automatización</h2>
+                <h2 class="section-title">7. Técnicas Avanzadas y Agentes</h2>
                 <div class="grid-container">
                     <div class="card">
                         <span class="tag">Agente</span>
@@ -417,12 +518,12 @@ Comienza ahora con el paso 1.</code></pre>
             
             <!-- Empujar un poco más al modelo -->
             <section id="empujar-modelo">
-                <h2 class="section-title">7. Empujar un poco más al modelo</h2>
+                <h2 class="section-title">8. Empujar un poco más al modelo</h2>
                 <p style="text-align: center; color: var(--text-muted); max-width: 700px; margin: -20px auto 30px;">Agrega estas opciones para incentivar al modelo a ir más a fondo con el objetivo del prompt.</p>
                 <div class="grid-container">
                     <div class="card">
                         <span class="tag">Claridad</span>
-                        <h3>Hazme preguntas aclaratorias...</h3>
+                        <h3>Hazme preguntas aclaratorias hasta que estés 95% seguro de que puedes completar la tarea exitosamente</h3>
                         <p>Esta instrucción obliga al modelo a no asumir nada. Actúa como un consultor diligente, solicitando detalles y aclarando ambigüedades hasta tener un entendimiento profundo del objetivo, lo que reduce errores y aumenta la relevancia de la respuesta.</p>
                     </div>
                     <div class="card">
@@ -515,9 +616,37 @@ Sentimiento:`
                     updateShotDescription(shotType);
                 }
             });
-
+            
             // Set initial state for shot demo
             updateShotDescription('Zero-Shot');
+
+            // --- NEW: Interactive Temperature Demo ---
+            const tempSlider = document.getElementById('temp-slider');
+            const tempValueSpan = document.getElementById('temp-value');
+            const tempOutput = document.getElementById('temp-output');
+
+            const tempResponses = {
+                '0.1': '<strong>Respuesta (Temp: 0.1):</strong> El éxito es la consecución de un objetivo o propósito deseado.',
+                '0.2': '<strong>Respuesta (Temp: 0.2):</strong> El éxito es la consecución de metas y objetivos previamente establecidos, a menudo asociado con el logro profesional y la estabilidad financiera.',
+                '0.5': '<strong>Respuesta (Temp: 0.5):</strong> El éxito es un estado de realización personal que se manifiesta al alcanzar metas significativas, ya sean profesionales, personales o espirituales, generando una sensación de satisfacción.',
+                '0.8': '<strong>Respuesta (Temp: 0.8):</strong> El éxito puede ser visto como un viaje de crecimiento continuo, donde cada paso, incluso los fracasos, contribuyen a una mayor sabiduría y a la realización de nuestro potencial único.',
+                '1.0': '<strong>Respuesta (Temp: 1.0):</strong> El éxito es una danza entre la ambición y la serenidad, un mosaico de momentos de triunfo, aprendizaje en la derrota y la paz encontrada en el simple acto de crear una vida auténtica.',
+                '1.2': '<strong>Respuesta (Temp: 1.2):</strong> El éxito es el eco de tu alma resonando en el universo; una constelación de sueños materializados, no en la cima de una montaña, sino en el coraje de haberla escalado.',
+                '1.5': '<strong>Respuesta (Temp: 1.5):</strong> El éxito es un río de luz líquida que fluye a través del tiempo, a veces calmo, a veces turbulento, reflejando no solo destinos alcanzados, sino también los paisajes oníricos del alma que se atrevió a navegarlo.'
+            };
+
+            tempSlider.addEventListener('input', function() {
+                const temp = parseFloat(this.value).toFixed(1);
+                tempValueSpan.textContent = temp;
+                
+                // Find the closest available response
+                const closestTemp = Object.keys(tempResponses).reduce((prev, curr) => {
+                    return (Math.abs(curr - temp) < Math.abs(prev - temp) ? curr : prev);
+                });
+
+                tempOutput.innerHTML = tempResponses[closestTemp];
+            });
+
         });
     </script>
 
