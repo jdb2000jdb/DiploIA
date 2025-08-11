@@ -18,6 +18,8 @@
             --radio-borde: 8px;
             --fuente-cabecera: 'Poppins', sans-serif;
             --fuente-cuerpo: 'Roboto', sans-serif;
+            --header-height-desktop: 80px;
+            --header-height-mobile: 140px;
         }
 
         * {
@@ -67,14 +69,14 @@
         }
 
         /* --- Contenedor Principal y Layout --- */
-       .container {
+        .container {
             max-width: 960px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
         /* --- Cabecera y Navegación --- */
-       .main-header {
+        .main-header {
             background-color: var(--color-blanco);
             padding: 1rem 0;
             position: sticky;
@@ -84,35 +86,35 @@
             transition: all 0.3s ease;
         }
 
-       .main-header .container {
+        .main-header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
         }
 
-       .logo {
+        .logo {
             font-family: var(--fuente-cabecera);
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--color-primario);
         }
 
-       .main-nav ul {
+        .main-nav ul {
             list-style: none;
             padding: 0;
             display: flex;
             gap: 1.5rem;
         }
 
-       .main-nav a {
+        .main-nav a {
             font-weight: 500;
             padding: 0.5rem 0;
             position: relative;
             color: var(--color-texto);
         }
 
-       .main-nav a::after {
+        .main-nav a::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -123,28 +125,93 @@
             transition: width 0.3s ease;
         }
 
-       .main-nav a:hover::after,
-       .main-nav a.active::after {
+        .main-nav a:hover::after,
+        .main-nav a.active::after {
             width: 100%;
         }
 
         /* --- Hero Section --- */
-       .hero {
+        .hero {
             background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
             color: var(--color-blanco);
-            padding: 5rem 0;
+            padding: 4rem 0; /* Ajustado para dar espacio al tablero */
             text-align: center;
         }
 
-       .hero p {
+        .hero p {
             font-size: 1.2rem;
             max-width: 700px;
             margin: 1rem auto 0;
             opacity: 0.9;
         }
 
+        /* --- ESTILOS DEL TABLERO KANBAN --- */
+        .kanban-board-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+
+        .kanban-column {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radio-borde);
+            padding: 1rem;
+            flex: 1;
+            min-width: 280px;
+            max-width: 320px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        
+        .kanban-column.drag-over {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .kanban-column-header {
+            font-family: var(--fuente-cabecera);
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+            color: var(--color-blanco);
+        }
+
+        .kanban-cards {
+            min-height: 150px; /* Espacio para soltar tarjetas */
+        }
+
+        .kanban-card {
+            background-color: var(--color-blanco);
+            color: var(--color-texto);
+            padding: 1rem;
+            border-radius: var(--radio-borde);
+            margin-bottom: 1rem;
+            box-shadow: var(--sombra-suave);
+            cursor: grab;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-size: 0.95rem;
+            border-left: 5px solid var(--color-acento);
+        }
+
+        .kanban-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .kanban-card.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+            transform: scale(1.05);
+        }
+
         /* --- Secciones de Contenido --- */
-       .content-section {
+        .content-section {
             background-color: var(--color-blanco);
             padding: 3rem 2.5rem;
             margin: 2rem 0;
@@ -155,13 +222,18 @@
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-       .content-section.visible {
+        /* --- CORRECCIÓN PARA EL ANCLAJE DEL MENÚ --- */
+        section[id] {
+            scroll-margin-top: var(--header-height-desktop);
+        }
+
+        .content-section.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
         /* --- Estilos de Tabla --- */
-       .table-container {
+        .table-container {
             overflow-x: auto;
             margin: 2rem 0;
         }
@@ -195,7 +267,7 @@
         }
 
         /* --- Pie de Página --- */
-       .main-footer {
+        .main-footer {
             text-align: center;
             padding: 2rem 0;
             margin-top: 2rem;
@@ -209,25 +281,35 @@
             h2 { font-size: 1.8rem; }
             h3 { font-size: 1.4rem; }
 
-           .main-header .container {
+            .main-header .container {
                 flex-direction: column;
                 gap: 1rem;
             }
 
-           .main-nav ul {
+            .main-nav ul {
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 1rem;
             }
 
-           .content-section {
+            .content-section {
                 padding: 2rem 1.5rem;
+            }
+            
+            .kanban-board-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            /* --- CORRECCIÓN PARA EL ANCLAJE DEL MENÚ EN MÓVIL --- */
+            section[id] {
+                scroll-margin-top: var(--header-height-mobile);
             }
         }
 
         @media (max-width: 480px) {
             body { font-size: 15px; }
-           .main-nav ul {
+            .main-nav ul {
                 flex-direction: column;
                 align-items: center;
             }
@@ -260,7 +342,38 @@
         <section class="hero">
             <div class="container">
                 <h1>Análisis Profundo de Kanban Visual</h1>
-                <p>Una guía completa para entender y aplicar la metodología Kanban, desde sus orígenes en Toyota hasta su aplicación moderna en la gestión de proyectos y el trabajo del conocimiento.</p>
+                <p>Una guía completa para entender y aplicar la metodología Kanban, desde sus orígenes en Toyota hasta su aplicación moderna en la gestión de proyectos.</p>
+                
+                <!-- INICIO DEL EJEMPLO DE TABLERO KANBAN -->
+                <div class="kanban-board-container">
+                    <!-- Columna Pendientes -->
+                    <div class="kanban-column" id="todo-col">
+                        <div class="kanban-column-header">Pendientes</div>
+                        <div class="kanban-cards">
+                            <div class="kanban-card" draggable="true">Analizar métricas de la campaña anterior</div>
+                            <div class="kanban-card" draggable="true">Diseñar mockups para la nueva App</div>
+                            <div class="kanban-card" draggable="true">Preparar presentación para el cliente</div>
+                        </div>
+                    </div>
+                    <!-- Columna En Progreso -->
+                    <div class="kanban-column" id="inprogress-col">
+                        <div class="kanban-column-header">En Progreso</div>
+                        <div class="kanban-cards">
+                            <div class="kanban-card" draggable="true">Desarrollar la función de login</div>
+                            <div class="kanban-card" draggable="true">Escribir el contenido del blog</div>
+                        </div>
+                    </div>
+                    <!-- Columna Finalizados -->
+                    <div class="kanban-column" id="done-col">
+                        <div class="kanban-column-header">Finalizados</div>
+                        <div class="kanban-cards">
+                            <div class="kanban-card" draggable="true">Realizar investigación de mercado</div>
+                            <div class="kanban-card" draggable="true">Configurar el entorno de desarrollo</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- FIN DEL EJEMPLO DE TABLERO KANBAN -->
+
             </div>
         </section>
 
@@ -446,10 +559,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Lógica para animaciones de scroll ---
             const sections = document.querySelectorAll('.content-section');
             const navLinks = document.querySelectorAll('.main-nav a');
 
-            // --- Animación de aparición al hacer scroll ---
             const observerOptions = {
                 root: null,
                 rootMargin: '0px',
@@ -469,7 +582,6 @@
                 observer.observe(section);
             });
 
-            // --- Resaltado de navegación activa al hacer scroll ---
             const navObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -485,6 +597,50 @@
 
             document.querySelectorAll('section[id]').forEach(section => {
                 navObserver.observe(section);
+            });
+
+            // --- LÓGICA PARA ARRASTRAR Y SOLTAR TARJETAS KANBAN ---
+            const cards = document.querySelectorAll('.kanban-card');
+            const columns = document.querySelectorAll('.kanban-column');
+            let draggedCard = null;
+
+            cards.forEach(card => {
+                // Evento cuando se empieza a arrastrar una tarjeta
+                card.addEventListener('dragstart', () => {
+                    draggedCard = card;
+                    setTimeout(() => {
+                        card.classList.add('dragging');
+                    }, 0);
+                });
+
+                // Evento cuando se suelta la tarjeta
+                card.addEventListener('dragend', () => {
+                    draggedCard.classList.remove('dragging');
+                    draggedCard = null;
+                });
+            });
+
+            columns.forEach(column => {
+                // Evento cuando una tarjeta arrastrada entra en el área de una columna
+                column.addEventListener('dragover', e => {
+                    e.preventDefault(); // Necesario para permitir el 'drop'
+                    column.classList.add('drag-over');
+                });
+
+                // Evento cuando la tarjeta sale del área de la columna
+                column.addEventListener('dragleave', () => {
+                    column.classList.remove('drag-over');
+                });
+
+                // Evento cuando se suelta la tarjeta sobre la columna
+                column.addEventListener('drop', e => {
+                    e.preventDefault();
+                    column.classList.remove('drag-over');
+                    if (draggedCard) {
+                        const cardContainer = column.querySelector('.kanban-cards');
+                        cardContainer.appendChild(draggedCard);
+                    }
+                });
             });
         });
     </script>
