@@ -3,299 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevos Horizontes: Roles Emergentes en la Era de la IA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <title>Visualización de Roles de IA</title>
     <style>
-        /* Estilos personalizados para complementar Tailwind CSS */
+        /* --- Estilos Generales --- */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a192f; /* Azul marino oscuro */
-            color: #ccd6f6; /* Texto claro */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
         }
 
-        .glass-effect {
-            background: rgba(10, 25, 47, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(45, 212, 191, 0.2);
+        h1 {
+            color: #212529;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-align: center;
+            padding: 0 15px;
         }
 
-        .role-node {
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        /* --- Contenedor de la Visualización --- */
+        #cluster-container {
+            width: 95vw;
+            height: 80vh;
+            max-width: 1200px;
+            max-height: 750px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             position: relative;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- Estilos de Nodos y Enlaces --- */
+        .link {
+            stroke: #adb5bd;
+            stroke-opacity: 0.6;
+        }
+
+        .node {
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .node circle {
+            stroke: #fff;
+            stroke-width: 2px;
+            transition: r 0.2s ease, filter 0.2s ease;
+        }
+        
+        .node:not(.central-node):hover circle {
+            filter: brightness(1.1);
+            r: 18; /* Aumenta el radio al pasar el cursor */
+        }
+
+        .node text {
+            font-size: 11px;
+            font-weight: 500;
+            fill: #343a40;
+            pointer-events: none; /* Para que el texto no interfiera con el clic en el círculo */
+            text-anchor: middle;
+            dy: 26px; /* Desplazamiento vertical del texto */
+        }
+        
+        .central-node {
+            cursor: default;
+        }
+
+        /* --- Tabla de Referencias/Leyenda --- */
+        #legend {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 12px;
             z-index: 10;
         }
-
-        .role-node:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        #legend h4 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            font-weight: 600;
         }
-
-        .role-line {
-            position: absolute;
-            background-color: #38bdf8; /* Azul claro para las líneas */
-            z-index: 1;
+        #legend div {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
         }
-        
-        /* Colores de las categorías */
-        .ai-role { border-left: 4px solid #38bdf8; } /* Azul claro */
-        .emerging-ai-role { border-left: 4px solid #a78bfa; } /* Púrpura */
-        .must-have-ai-role { border-left: 4px solid #f59e0b; } /* Naranja */
+        #legend div:last-child {
+            margin-bottom: 0;
+        }
+        .dot {
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        .dot.standard { background-color: #28a745; }
+        .dot.must-have { background-color: #fd7e14; }
+        .dot.emerging { background-color: #17a2b8; }
 
-        /* Estilo para el modal */
+
+        /* --- Ventana Modal --- */
         .modal {
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+
         .modal-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 25px 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: scale(0.95);
             transition: transform 0.3s ease;
         }
-        .modal.hidden {
-            opacity: 0;
-            transform: scale(0.95);
-            pointer-events: none;
-        }
-        .modal.visible {
-            opacity: 1;
+
+        .modal.show .modal-content {
             transform: scale(1);
         }
-        
-        /* Animación de entrada */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
         }
-        .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+
+        .modal-content h3 {
+            color: #495057;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 5px;
+        }
+
+        .modal-content p {
+            line-height: 1.6;
+            color: #495057;
+            margin-top: 0;
+        }
+
+        /* --- Pie de página y Fuente --- */
+        footer {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <!-- Contenedor principal -->
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1>Visualización Interactiva de Roles de IA</h1>
 
-        <!-- Encabezado -->
-        <header class="text-center mb-16 fade-in">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-                Nuevos Horizontes: <span class="text-cyan-400">Roles Emergentes</span> en la Era de la IA
-            </h1>
-            <p class="mt-4 text-lg text-slate-400 max-w-3xl mx-auto">
-                Con la creciente adopción de la IA, están surgiendo nuevos roles en la industria de datos y análisis.
-            </p>
-            <p class="mt-2 text-sm text-slate-500">
-                Fuente: <a href="https://www.gartner.com/en/newsroom/press-releases/2024-05-14-artificial-intelligence-is-creating-new-roles-and-skills-in-data-and-analytics" target="_blank" rel="noopener noreferrer" class="underline hover:text-cyan-400 transition-colors">Gartner Newsroom</a>
-            </p>
-        </header>
-
-        <!-- Sección de Visualización Interactiva -->
-        <section class="mb-20 fade-in" style="animation-delay: 0.2s;">
-            <h2 class="text-3xl font-bold text-center mb-12 text-white">Explora los Roles de la IA</h2>
-            <!-- Contenedor con altura ajustada para evitar solapamiento -->
-            <div class="relative flex justify-center items-center h-[650px] md:h-[700px]">
-                <!-- Elemento Central IA -->
-                <div id="ai-core" class="absolute z-20 bg-cyan-500 text-white font-bold text-2xl rounded-full w-24 h-24 flex items-center justify-center shadow-lg shadow-cyan-500/50">
-                    IA
-                </div>
-                <!-- Contenedor de Roles -->
-                <div id="roles-container" class="absolute w-full h-full">
-                    <!-- Las líneas y los nodos se insertarán aquí con JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Sección de Categorías -->
-        <section class="fade-in" style="animation-delay: 0.4s;">
-            <h2 class="text-3xl font-bold text-center mb-12 text-white">Roles por Categoría</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                
-                <!-- Roles Imprescindibles (Must-have) -->
-                <div id="must-have-roles" class="glass-effect rounded-lg p-6">
-                    <h3 class="text-2xl font-bold mb-4 text-amber-400">Roles Imprescindibles</h3>
-                    <ul class="space-y-3 text-slate-300"></ul>
-                </div>
-
-                <!-- Roles de IA (AI roles) -->
-                <div id="ai-roles" class="glass-effect rounded-lg p-6">
-                    <h3 class="text-2xl font-bold mb-4 text-cyan-400">Roles de IA</h3>
-                    <ul class="space-y-3 text-slate-300"></ul>
-                </div>
-                
-                <!-- Roles Emergentes (Emerging) -->
-                <div id="emerging-roles" class="glass-effect rounded-lg p-6">
-                    <h3 class="text-2xl font-bold mb-4 text-violet-400">Roles Emergentes</h3>
-                    <ul class="space-y-3 text-slate-300"></ul>
-                </div>
-
-            </div>
-        </section>
-
-    </div>
-
-    <!-- Modal para detalles del rol -->
-    <div id="role-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
-        <div id="modal-content" class="modal-content glass-effect rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 relative">
-            <button id="close-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors text-3xl font-bold">&times;</button>
-            <h3 id="modal-title" class="text-3xl font-bold mb-4 text-white"></h3>
-            <p id="modal-category" class="mb-6 text-sm font-medium uppercase tracking-wider"></p>
-            <div id="modal-description" class="text-slate-300 space-y-4"></div>
+    <div id="cluster-container">
+         <div id="legend">
+            <h4>Referencias</h4>
+            <div><span class="dot standard"></span> Roles Estándar</div>
+            <div><span class="dot must-have"></span> Roles Imprescindibles</div>
+            <div><span class="dot emerging"></span> Roles Emergentes</div>
         </div>
     </div>
 
+    <footer>
+        Fuente: <a href="https://www.gartner.com/en/newsroom/press-releases/2024-05-14-artificial-intelligence-is-creating-new-roles-and-skills-in-data-and-analytics" target="_blank" rel="noopener noreferrer">Gartner Newsroom</a>
+    </footer>
+
+    <!-- Ventana Modal para Definiciones -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 id="modal-title"></h2>
+            <h3>Definición</h3>
+            <p id="modal-definition"></p>
+            <h3>Ejemplo Práctico</h3>
+            <p id="modal-example"></p>
+        </div>
+    </div>
+
+    <!-- Librería D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- DATOS DE LOS ROLES ---
-            const roles = [
-                // Roles Imprescindibles
-                { name: 'Data Scientist', category: 'must-have', description: '<strong>Responsabilidades:</strong> Analiza datos complejos para extraer insights y construir modelos predictivos. Utiliza machine learning, modelado estadístico y visualización de datos para resolver problemas de negocio.<br><strong>Habilidades Clave:</strong> Python/R, SQL, Machine Learning, Estadística, Comunicación.' },
-                { name: 'ML Engineer', category: 'must-have', description: '<strong>Responsabilidades:</strong> Diseña, construye y despliega sistemas de Machine Learning a escala. Se enfoca en la operacionalización (MLOps) de los modelos creados por los Data Scientists, asegurando su rendimiento y fiabilidad en producción.<br><strong>Habilidades Clave:</strong> Programación (Python), MLOps, Infraestructura Cloud, Ingeniería de Software.' },
-                { name: 'Data Engineer', category: 'must-have', description: '<strong>Responsabilidades:</strong> Construye y mantiene la infraestructura y las arquitecturas de datos. Desarrolla pipelines de ETL/ELT para mover y transformar datos, asegurando que sean accesibles y fiables para los analistas y científicos de datos.<br><strong>Habilidades Clave:</strong> SQL, Python/Scala, Big Data (Spark, Hadoop), Cloud (AWS, GCP, Azure).' },
-                { name: 'Head of AI', category: 'must-have', description: '<strong>Responsabilidades:</strong> Lidera la estrategia y la visión de IA de la organización. Define la hoja de ruta, gestiona el equipo de IA y asegura que las iniciativas de IA estén alineadas con los objetivos de negocio. <br><strong>Habilidades Clave:</strong> Liderazgo, Estrategia de Negocio, Conocimiento Profundo de IA, Gestión de Proyectos.' },
-                { name: 'AI Ethicist', category: 'must-have', description: '<strong>Responsabilidades:</strong> Asegura que los sistemas de IA se desarrollen y operen de manera ética, justa y transparente. Evalúa los riesgos de sesgo, privacidad y equidad, y establece políticas de gobernanza para mitigarlos.<br><strong>Habilidades Clave:</strong> Ética, Filosofía, Regulación de IA, Análisis de Riesgos, Comunicación.' },
-
-                // Roles de IA
-                { name: 'Model Manager', category: 'ai', description: '<strong>Responsabilidades:</strong> Supervisa el ciclo de vida completo de los modelos de IA, desde el desarrollo hasta el monitoreo y la retirada. Se encarga del versionado, la evaluación de rendimiento y la gobernanza de los modelos en producción.<br><strong>Habilidades Clave:</strong> MLOps, Gestión de Proyectos, Gobernanza de Datos, Monitoreo de Modelos.' },
-                { name: 'Analytics Engineer', category: 'ai', description: '<strong>Responsabilidades:</strong> Puente entre los Data Engineers y los Analistas. Transforma datos crudos en conjuntos de datos limpios, fiables y listos para el análisis, aplicando prácticas de ingeniería de software al modelado de datos (ej. dbt).<br><strong>Habilidades Clave:</strong> SQL avanzado, dbt, Python, Modelado de Datos, BI.' },
-                { name: 'AI Architect', category: 'ai', description: '<strong>Responsabilidades:</strong> Diseña la arquitectura técnica para las soluciones de IA. Selecciona las tecnologías, plataformas y herramientas adecuadas para construir sistemas de IA escalables, robustos y eficientes.<br><strong>Habilidades Clave:</strong> Arquitectura de Software, Cloud Computing, Sistemas de IA/ML, Big Data.' },
-                { name: 'AI Product Manager', category: 'ai', description: '<strong>Responsabilidades:</strong> Define la visión y estrategia para productos basados en IA. Traduce las necesidades del negocio en requerimientos técnicos para el equipo de desarrollo y gestiona el ciclo de vida del producto.<br><strong>Habilidades Clave:</strong> Gestión de Producto, Conocimiento de IA, UX, Estrategia de Mercado.' },
-                { name: 'UX Designer (for AI)', category: 'ai', description: '<strong>Responsabilidades:</strong> Diseña la interacción entre humanos y sistemas de IA. Se enfoca en crear experiencias de usuario intuitivas, transparentes y que generen confianza en productos con componentes de IA.<br><strong>Habilidades Clave:</strong> Diseño de Interacción, Investigación de Usuario, Prototipado, Psicología Cognitiva.' },
-                { name: 'D&A and AI Translator', category: 'ai', description: '<strong>Responsabilidades:</strong> Actúa como enlace entre los equipos técnicos de IA y las áreas de negocio. Traduce los problemas de negocio en casos de uso de IA y comunica los resultados técnicos en un lenguaje comprensible para los stakeholders.<br><strong>Habilidades Clave:</strong> Comunicación, Conocimiento de Negocio, Fundamentos de IA, Gestión de Proyectos.' },
-                { name: 'AI Developer', category: 'ai', description: '<strong>Responsabilidades:</strong> Construye y mantiene las aplicaciones y sistemas que utilizan modelos de IA. Se enfoca en la integración de los modelos en software funcional, APIs y productos finales.<br><strong>Habilidades Clave:</strong> Programación (Python, Java, etc.), Ingeniería de Software, APIs, Frameworks de IA.' },
-                { name: 'Model Validator', category: 'ai', description: '<strong>Responsabilidades:</strong> Realiza pruebas rigurosas e independientes de los modelos de IA para asegurar su precisión, robustez, y cumplimiento con las regulaciones. Identifica debilidades y potenciales fallos antes del despliegue.<br><strong>Habilidades Clave:</strong> Estadística, Pruebas de Software, Conocimiento de ML, Análisis de Riesgos.' },
-                { name: 'Prompt Engineer', category: 'ai', description: '<strong>Responsabilidades:</strong> Especialista en diseñar, refinar y optimizar las instrucciones (prompts) para interactuar con modelos de IA generativa (como LLMs). Su objetivo es obtener los resultados más precisos, relevantes y creativos posibles.<br><strong>Habilidades Clave:</strong> Creatividad, Lingüística, Lógica, Comprensión de Modelos Generativos.' },
-                { name: 'Knowledge Engineer', category: 'ai', description: '<strong>Responsabilidades:</strong> Estructura y organiza el conocimiento para que los sistemas de IA puedan utilizarlo. Construye ontologías y bases de conocimiento que sirven como "cerebro" para sistemas expertos y de razonamiento.<br><strong>Habilidades Clave:</strong> Ontologías, Grafos de Conocimiento, Lógica Simbólica, Modelado de Datos.' },
-                { name: 'Decision Engineer', category: 'ai', description: '<strong>Responsabilidades:</strong> Aplica principios de la ciencia de la decisión para diseñar sistemas que ayuden a los humanos a tomar mejores decisiones con el apoyo de la IA. Modela procesos de decisión y los integra con insights de IA.<br><strong>Habilidades Clave:</strong> Ciencia de la Decisión, Modelado de Procesos, Psicología, Estadística Bayesiana.' },
+        // --- 1. DATOS DE LOS ROLES ---
+        const rolesData = {
+            nodes: [
+                // Roles Estándar (Verde)
+                { id: "Gestor de Modelos", group: "standard", definition: "Supervisa el ciclo de vida de los modelos de IA, desde el despliegue hasta el monitoreo y la retirada, asegurando su rendimiento y relevancia.", example: "Un Gestor de Modelos en un banco utiliza una plataforma para rastrear el rendimiento de un modelo de riesgo de crédito, decidiendo cuándo debe ser reentrenado con nuevos datos." },
+                { id: "Ingeniero de Analítica", group: "standard", definition: "Crea y mantiene pipelines de datos robustos y transformaciones de datos limpias, sirviendo como puente entre los ingenieros de datos y los analistas.", example: "Un Ingeniero de Analítica en una empresa de e-commerce construye tablas de datos agregadas y fiables para que el equipo de marketing pueda analizar el comportamiento del cliente fácilmente." },
+                { id: "Arquitecto de IA", group: "standard", definition: "Diseña la infraestructura y los sistemas generales para soportar las iniciativas de IA de una organización, seleccionando las tecnologías y plataformas adecuadas.", example: "Un Arquitecto de IA define la arquitectura en la nube (AWS, Azure, GCP) que permitirá a los equipos de ciencia de datos entrenar y desplegar modelos a gran escala de forma segura." },
+                { id: "Especialista en Riesgo y Gobernanza de IA", group: "standard", definition: "Se especializa en identificar, evaluar y mitigar los riesgos asociados con la IA, incluyendo sesgos, privacidad y cumplimiento normativo.", example: "Este especialista revisa un nuevo sistema de reconocimiento facial para asegurar que cumple con las leyes de protección de datos y no discrimina a ciertos grupos demográficos." },
+                { id: "Jefe de Producto de IA", group: "standard", definition: "Define la visión, estrategia y hoja de ruta para productos basados en IA, traduciendo las necesidades del negocio en requisitos técnicos para el equipo de desarrollo.", example: "Un Jefe de Producto de IA decide las nuevas funcionalidades para un asistente virtual, como la capacidad de entender el sarcasmo, basándose en la investigación de usuarios y los objetivos de la empresa." },
+                { id: "Diseñador de UX para IA", group: "standard", definition: "Diseña la interacción entre los humanos y los sistemas de IA, asegurando que la experiencia del usuario sea intuitiva, transparente y genere confianza.", example: "Un diseñador UX crea la interfaz de una herramienta de IA que sugiere textos, mostrando claramente por qué se hacen ciertas sugerencias y permitiendo al usuario aceptar o rechazarlas fácilmente." },
+                { id: "Desarrollador de IA", group: "standard", definition: "Construye, prueba y despliega aplicaciones y sistemas de IA, implementando los modelos creados por los científicos de datos en productos funcionales.", example: "Un Desarrollador de IA integra un modelo de lenguaje en una aplicación de chatbot, escribiendo el código que gestiona las conversaciones con los usuarios." },
                 
-                // Roles Emergentes
-                { name: 'AI Risk and Governance Specialist', category: 'emerging', description: '<strong>Responsabilidades:</strong> Identifica, evalúa y gestiona los riesgos asociados con el uso de la IA. Desarrolla marcos de gobernanza, políticas y controles para asegurar un uso responsable y seguro de la tecnología.<br><strong>Habilidades Clave:</strong> Gestión de Riesgos, Cumplimiento Normativo, Ciberseguridad, Gobernanza de Datos.' }
-            ];
+                // Roles Imprescindibles (Naranja)
+                { id: "Ingeniero de ML", group: "must-have", definition: "Se enfoca en la operacionalización de modelos de machine learning, construyendo sistemas escalables para el entrenamiento, despliegue y monitoreo (MLOps).", example: "Un Ingeniero de ML crea un pipeline automatizado que reentrena un modelo de recomendación de productos cada noche y lo despliega sin intervención manual." },
+                { id: "Ingeniero de Datos", group: "must-have", definition: "Diseña, construye y mantiene la infraestructura de datos (pipelines, bases de datos, data warehouses) que permite la recopilación, almacenamiento y acceso a grandes volúmenes de datos.", example: "Un Ingeniero de Datos implementa un sistema que procesa en tiempo real los clics de los usuarios en un sitio web y los almacena en un data lake para su posterior análisis." },
+                { id: "Director de IA", group: "must-have", definition: "Lidera la estrategia y la visión de la inteligencia artificial en toda la organización, alineando las iniciativas de IA con los objetivos de negocio y gestionando los equipos.", example: "El Director de IA presenta al comité directivo un plan para invertir en IA generativa con el fin de automatizar el soporte al cliente y mejorar la eficiencia." },
+                { id: "Científico de Datos", group: "must-have", definition: "Utiliza métodos estadísticos y de machine learning para analizar datos complejos, descubrir insights y construir modelos predictivos que resuelvan problemas de negocio.", example: "Un Científico de Datos analiza datos de ventas para construir un modelo que predice la demanda de productos para las próximas semanas, optimizando el inventario." },
+                { id: "Ingeniero de Prompts", group: "must-have", definition: "Se especializa en diseñar, refinar y optimizar las instrucciones (prompts) dadas a los modelos de IA generativa para obtener los resultados deseados de alta calidad.", example: "Un Ingeniero de Prompts crea una plantilla de prompt detallada para que un modelo de lenguaje genere descripciones de productos que sean persuasivas y sigan el tono de la marca." },
+                { id: "Traductor de D&A e IA", group: "must-have", definition: "Actúa como un puente entre los equipos técnicos (datos, IA) y las áreas de negocio, traduciendo las necesidades del negocio en problemas técnicos y los resultados técnicos en valor de negocio.", example: "Un traductor de IA explica al equipo de marketing cómo un modelo de segmentación de clientes puede ayudarles a personalizar sus campañas, sin entrar en detalles técnicos complejos." },
+                { id: "Ético de IA", group: "must-have", definition: "Guía el desarrollo y uso responsable de la IA, asegurando que los sistemas sean justos, transparentes, seguros y alineados con los valores humanos y sociales.", example: "Un Ético de IA establece un marco de evaluación para un sistema de contratación automatizado, con el fin de detectar y corregir cualquier sesgo de género o racial." },
 
-            const categoryMap = {
-                'must-have': { name: 'Rol Imprescindible', color: 'text-amber-400', listId: 'must-have-roles' },
-                'ai': { name: 'Rol de IA', color: 'text-cyan-400', listId: 'ai-roles' },
-                'emerging': { name: 'Rol Emergente', color: 'text-violet-400', listId: 'emerging-roles' }
-            };
+                // Roles Emergentes (Celeste)
+                { id: "Validador de Modelos", group: "emerging", definition: "Evalúa de forma independiente la calidad, el rendimiento y la robustez de los modelos de IA, a menudo en contextos regulados como el financiero.", example: "Un Validador de Modelos en un banco realiza pruebas de estrés a un modelo de trading algorítmico para asegurar que no tomará decisiones catastróficas en condiciones de mercado volátiles." },
+                { id: "Ingeniero de Conocimiento", group: "emerging", definition: "Estructura y organiza el conocimiento de un dominio específico en un formato que una máquina pueda entender y utilizar, creando ontologías y bases de conocimiento.", example: "Un Ingeniero de Conocimiento trabaja con expertos médicos para construir una base de conocimiento que un sistema de IA utilizará para diagnosticar enfermedades raras." },
+                { id: "Ingeniero de Decisiones", group: "emerging", definition: "Aplica principios de la ciencia de la decisión, la economía del comportamiento y la IA para diseñar sistemas que ayuden a los humanos a tomar mejores decisiones.", example: "Un Ingeniero de Decisiones diseña un dashboard para gerentes de logística que no solo muestra datos, sino que también recomienda rutas óptimas y resalta los riesgos potenciales de cada opción." }
+            ],
+            links: []
+        };
 
-            const rolesContainer = document.getElementById('roles-container');
-            const aiCore = document.getElementById('ai-core');
-            const modal = document.getElementById('role-modal');
-            const closeModalBtn = document.getElementById('close-modal');
-            
-            // --- RENDERIZADO DE ELEMENTOS ---
-            function renderRoles() {
-                // Limpiar contenedor antes de renderizar
-                rolesContainer.innerHTML = '';
+        // Crear un nodo central visible
+        const centralNodeId = "Roles IA";
+        rolesData.nodes.push({ id: centralNodeId, group: "central", isCentral: true });
 
-                // Radio del círculo ajustado para evitar solapamiento
-                const radius = window.innerWidth < 768 ? 240 : 300; 
-                const angleStep = (2 * Math.PI) / roles.length;
-                const containerRect = rolesContainer.getBoundingClientRect();
-                const centerX = containerRect.width / 2;
-                const centerY = containerRect.height / 2;
-
-                roles.forEach((role, i) => {
-                    const angle = i * angleStep - (Math.PI / 2); // Empezar desde la parte superior
-                    const nodeWidth = 128; // Ancho del nodo (w-32)
-                    const nodeHeight = 64; // Altura estimada del nodo
-                    const x = centerX + radius * Math.cos(angle) - (nodeWidth / 2);
-                    const y = centerY + radius * Math.sin(angle) - (nodeHeight / 2);
-
-                    // Crear nodo del rol
-                    const node = document.createElement('div');
-                    node.className = 'role-node absolute p-3 w-32 text-center rounded-lg shadow-md glass-effect flex items-center justify-center';
-                    node.style.left = `${x}px`;
-                    node.style.top = `${y}px`;
-                    node.style.height = `${nodeHeight}px`;
-                    node.dataset.role = role.name;
-                    
-                    const categoryClass = {
-                        'must-have': 'must-have-ai-role',
-                        'ai': 'ai-role',
-                        'emerging': 'emerging-ai-role'
-                    }[role.category];
-                    node.classList.add(categoryClass);
-
-                    node.innerHTML = `<span class="font-semibold text-sm text-slate-200">${role.name}</span>`;
-                    rolesContainer.appendChild(node);
-                    
-                    // Crear línea de conexión
-                    const line = document.createElement('div');
-                    const nodeCenterX = x + (nodeWidth / 2);
-                    const nodeCenterY = y + (nodeHeight / 2);
-                    
-                    const distance = Math.sqrt(Math.pow(nodeCenterX - centerX, 2) + Math.pow(nodeCenterY - centerY, 2));
-                    const lineAngle = Math.atan2(nodeCenterY - centerY, nodeCenterX - centerX) * (180 / Math.PI);
-
-                    line.className = 'role-line';
-                    line.style.width = `${distance}px`;
-                    line.style.height = '2px';
-                    line.style.left = `${centerX}px`;
-                    line.style.top = `${centerY}px`;
-                    line.style.transformOrigin = 'left center';
-                    line.style.transform = `rotate(${lineAngle}deg)`;
-                    rolesContainer.insertBefore(line, node);
-                });
-
-                // Asignar eventos a los nodos recién creados
-                document.querySelectorAll('[data-role]').forEach(el => {
-                    el.addEventListener('click', (e) => {
-                        openModal(e.currentTarget.dataset.role);
-                    });
+        // Conectar todos los roles al nodo central
+        rolesData.nodes.forEach(node => {
+            if (node.id !== centralNodeId) {
+                rolesData.links.push({
+                    source: node.id,
+                    target: centralNodeId,
+                    strength: node.group === 'must-have' ? 0.7 : 0.15 
                 });
             }
-
-            // Renderizar las listas de categorías (solo una vez)
-            roles.forEach(role => {
-                const listContainer = document.getElementById(categoryMap[role.category].listId).querySelector('ul');
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `<span class="font-medium hover:text-white transition-colors cursor-pointer" data-role-list-item="${role.name}">${role.name}</span>`;
-                listContainer.appendChild(listItem);
-            });
-
-            // --- MANEJO DE EVENTOS ---
-            const openModal = (roleName) => {
-                const role = roles.find(r => r.name === roleName);
-                if (!role) return;
-
-                document.getElementById('modal-title').textContent = role.name;
-                const categoryInfo = categoryMap[role.category];
-                const categoryEl = document.getElementById('modal-category');
-                categoryEl.textContent = categoryInfo.name;
-                categoryEl.className = `mb-6 text-sm font-medium uppercase tracking-wider ${categoryInfo.color}`;
-                document.getElementById('modal-description').innerHTML = role.description;
-                
-                modal.classList.remove('hidden');
-                modal.classList.add('visible');
-                document.body.style.overflow = 'hidden';
-            };
-
-            const closeModal = () => {
-                modal.classList.remove('visible');
-                modal.classList.add('hidden');
-                document.body.style.overflow = '';
-            };
-            
-            // Asignar eventos a los items de la lista
-            document.querySelectorAll('[data-role-list-item]').forEach(el => {
-                el.addEventListener('click', (e) => {
-                    openModal(e.currentTarget.dataset.roleListItem);
-                });
-            });
-
-            closeModalBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) closeModal();
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeModal();
-            });
-
-            // Renderizar al cargar y al cambiar tamaño de ventana
-            renderRoles();
-            window.addEventListener('resize', renderRoles);
         });
+
+
+        // --- 2. CONFIGURACIÓN DE LA VISUALIZACIÓN D3 ---
+        const container = document.getElementById('cluster-container');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        const svg = d3.select("#cluster-container").append("svg")
+            .attr("viewBox", [0, 0, width, height]);
+
+        const g = svg.append("g");
+
+        // Paleta de colores actualizada para mejor distinción
+        const color = d3.scaleOrdinal()
+            .domain(["standard", "must-have", "emerging", "central"])
+            .range(["#28a745", "#fd7e14", "#17a2b8", "#343a40"]); // Verde, Naranja, Celeste, Gris Oscuro (Central)
+
+        // --- 3. SIMULACIÓN DE FUERZAS ---
+        const simulation = d3.forceSimulation(rolesData.nodes)
+            .force("link", d3.forceLink(rolesData.links).id(d => d.id).strength(d => d.strength))
+            .force("charge", d3.forceManyBody().strength(-300)) // Aumentar repulsión
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collide", d3.forceCollide().radius(d => d.isCentral ? 60 : 50)); // Evita solapamiento
+
+        // --- 4. DIBUJAR ELEMENTOS ---
+        const link = g.append("g")
+            .attr("class", "links")
+            .selectAll("line")
+            .data(rolesData.links)
+            .enter().append("line")
+            .attr("class", "link");
+
+        const node = g.append("g")
+            .attr("class", "nodes")
+            .selectAll(".node")
+            .data(rolesData.nodes)
+            .enter().append("g")
+            .attr("class", d => d.isCentral ? "node central-node" : "node");
+
+        node.append("circle")
+            .attr("r", d => d.isCentral ? 35 : 15) // Hacer el nodo central más grande
+            .attr("fill", d => color(d.group));
+
+        node.append("text")
+            .text(d => d.id)
+            .style("font-size", d => d.isCentral ? "14px" : "11px")
+            .style("font-weight", d => d.isCentral ? "bold" : "500")
+            .style("fill", d => d.isCentral ? "#fff" : "#343a40")
+            .attr("dy", d => d.isCentral ? 5 : 26);
+            
+
+        // --- 5. INTERACTIVIDAD ---
+
+        // Arrastrar nodos (excepto el central)
+        const drag = d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended);
+
+        node.filter(d => !d.isCentral).call(drag);
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Zoom
+        const zoom = d3.zoom()
+            .scaleExtent([0.3, 5])
+            .on("zoom", (event) => {
+                g.attr("transform", event.transform);
+            });
+
+        svg.call(zoom);
+
+        // Modal al hacer clic (excepto en el nodo central)
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDefinition = document.getElementById('modal-definition');
+        const modalExample = document.getElementById('modal-example');
+        const closeButton = document.querySelector('.close-button');
+
+        node.filter(d => !d.isCentral).on("click", (event, d) => {
+            modalTitle.textContent = d.id;
+            modalDefinition.textContent = d.definition;
+            modalExample.textContent = d.example;
+            modal.classList.add('show');
+        });
+
+        function closeModal() {
+            modal.classList.remove('show');
+        }
+
+        closeButton.onclick = closeModal;
+        modal.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        };
+
+        // --- 6. ACTUALIZACIÓN DE LA SIMULACIÓN (TICK) ---
+        simulation.on("tick", () => {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node
+                .attr("transform", d => `translate(${d.x},${d.y})`);
+        });
+
     </script>
+
 </body>
 </html>
