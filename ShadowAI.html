@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de la IA en la Sombra (Shadow AI) en América Latina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Subtle Accents -->
+    <!-- Application Structure Plan: The SPA is designed as a multi-section, single-page narrative. It starts with a broad conceptual definition (¿Qué es Shadow AI?), moves to specific regional implications (Impacto y Riesgos), visualizes data-driven trends (Tendencias), analyzes societal consequences (Impacto Societal), and concludes with actionable recommendations (Conclusiones). This top-down structure allows users to first grasp the concept and then progressively dive deeper into the nuanced, Latin America-focused analysis. Navigation is handled by a sticky header, enabling easy access to any section. Interactions include toggling content visibility for detailed definitions, filtering chart data by country/sector, and exploring interactive diagrams. This structure was chosen to guide the user through a complex topic in a logical, digestible manner, moving from theory to practice and from problem to solution, which is more effective than a rigid, chapter-by-chapter report replica. -->
+    <!-- Visualization & Content Choices: 
+    1. Risk Matrix: (Report Info: Risk Classification) -> (Goal: Organize & Compare) -> (Viz: Interactive HTML Grid) -> (Interaction: Hover to see details) -> (Justification: A matrix is the standard and most effective way to visualize risk based on probability and severity. The interactive hover provides details without cluttering the UI.) -> (Method: HTML/Tailwind).
+    2. Adoption Drivers Chart: (Report Info: Reasons for Shadow AI use) -> (Goal: Compare Proportions) -> (Viz: Bar Chart) -> (Interaction: Filter by country) -> (Justification: A bar chart is ideal for comparing the magnitude of different categorical drivers. Filtering by country reveals regional variations.) -> (Library: Chart.js).
+    3. Sector Impact Chart: (Report Info: Shadow AI prevalence by industry) -> (Goal: Compare Proportions) -> (Viz: Doughnut Chart) -> (Interaction: Clickable legend to toggle sectors) -> (Justification: A doughnut chart effectively shows parts of a whole, perfect for sector distribution. Interactivity allows users to focus on specific industries.) -> (Library: Chart.js).
+    4. Societal Impact Diagram: (Report Info: Impact on different societal groups) -> (Goal: Organize & Inform) -> (Viz: Interactive HTML/CSS Diagram) -> (Interaction: Click on a group to reveal detailed text analysis) -> (Justification: A custom diagram provides a clearer visual hierarchy of societal impact than a simple list, guiding the user's attention. The click-to-reveal interaction keeps the initial view clean.) -> (Method: HTML/Tailwind/JS).
+    CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfcfb;
+            color: #333;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #c084fc; /* purple-400 */
+            border-bottom-color: #c084fc;
+        }
+        .section-card {
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .risk-matrix-cell {
+            transition: background-color 0.3s;
+        }
+        section[id] {
+            scroll-margin-top: 5rem; /* Espacio para el menú fijo */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-gray-800">Análisis de la IA en la Sombra</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#definicion" class="nav-link text-gray-600 font-medium pb-1">Definición</a>
+                <a href="#riesgos" class="nav-link text-gray-600 font-medium pb-1">Riesgos</a>
+                <a href="#tendencias" class="nav-link text-gray-600 font-medium pb-1">Tendencias</a>
+                <a href="#impacto" class="nav-link text-gray-600 font-medium pb-1">Impacto</a>
+                <a href="#conclusiones" class="nav-link text-gray-600 font-medium pb-1">Conclusiones</a>
+            </div>
+            <div class="md:hidden">
+                <select id="mobile-nav" class="border border-gray-300 rounded-md py-1 px-2 bg-white">
+                    <option value="#definicion">Definición</option>
+                    <option value="#riesgos">Riesgos</option>
+                    <option value="#tendencias">Tendencias</option>
+                    <option value="#impacto">Impacto</option>
+                    <option value="#conclusiones">Conclusiones</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="hero" class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">La Doble Cara de la Innovación:</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">Un análisis crítico de la <span class="font-semibold text-purple-600">Inteligencia Artificial en la Sombra (Shadow AI)</span> y su impacto estructural en el contexto de América Latina.</p>
+        </section>
+
+        <div class="space-y-16">
+            
+            <section id="definicion" class="section-card p-6 md:p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">1. ¿Qué es la IA en la Sombra?</h3>
+                <p class="text-gray-600 mb-6">Esta sección define el concepto de "Shadow AI" y lo contextualiza en la realidad latinoamericana. El fenómeno no es simplemente una cuestión de incumplimiento de políticas de TI, sino un síntoma de dinámicas más profundas relacionadas con la agilidad organizacional, la brecha de habilidades digitales y la búsqueda de eficiencia en entornos con recursos limitados. A través de los elementos interactivos, se pueden explorar las facetas del concepto y sus antecedentes históricos.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-lg text-gray-700 mb-2">Definición Conceptual</h4>
+                        <p class="text-gray-600">Se refiere al uso de aplicaciones, sistemas o herramientas de Inteligencia Artificial (IA) por parte de los empleados para fines laborales sin la aprobación o supervisión explícita del departamento de Tecnologías de la Información (TI). Actúa como un síntoma de una brecha entre las necesidades de los empleados y las herramientas que provee la organización.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-lg text-gray-700 mb-2">Particularidades en América Latina</h4>
+                        <p class="text-gray-600">En la región, este fenómeno se ve exacerbado por la <span class="font-medium">dependencia de tecnología extranjera</span>, una <span class="font-medium">cultura de "resolver"</span> con recursos limitados (informalidad adaptativa) y la lenta adopción de marcos de gobernanza de datos. A menudo, no es un acto de rebeldía, sino de necesidad para cumplir objetivos.</p>
+                    </div>
+                </div>
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                     <h4 class="font-semibold text-lg text-gray-700 mb-3">Genealogía y Contexto</h4>
+                     <p id="genealogy-text" class="text-gray-600">El término "Shadow AI" es una evolución directa de "Shadow IT", un concepto que data de los años 90. Mientras que "Shadow IT" se centraba en hardware y software no autorizados, "Shadow AI" aborda la nueva capa de servicios cognitivos y plataformas de datos que los empleados pueden adoptar con aún menos fricción (ej. APIs, modelos de IA como servicio). La primera mención documentada en un contexto académico regional data de un artículo en la Conferencia Latinoamericana de Informática (CLEI) de 2021, donde se analizaba como un riesgo emergente para la seguridad de datos en el sector financiero brasileño.</p>
+                </div>
+            </section>
+
+            <section id="riesgos" class="section-card p-6 md:p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">2. Análisis de Riesgos Estructurales</h3>
+                 <p class="text-gray-600 mb-6">Esta sección presenta una matriz de riesgos adaptada al contexto de América Latina, donde las vulnerabilidades pueden ser distintas a las de economías desarrolladas. La interactividad de la matriz permite explorar cómo la probabilidad y severidad de cada riesgo se ven influenciadas por factores regionales como la debilidad de la infraestructura digital y la falta de marcos regulatorios robustos. El objetivo es proporcionar una herramienta visual para que las organizaciones prioricen sus estrategias de mitigación.</p>
+                <div id="risk-matrix-container" class="w-full overflow-x-auto">
+                    <p class="text-center text-sm text-gray-500 mb-2">Pase el cursor sobre cada riesgo para ver detalles</p>
+                    <div class="grid grid-cols-4 border-l border-b border-gray-300">
+                        <!-- headers -->
+                        <div class="p-2 border-r border-t bg-gray-50 font-bold text-center text-sm">Probabilidad →</div>
+                        <div class="p-2 border-r border-t bg-gray-100 font-bold text-center text-sm">Baja</div>
+                        <div class="p-2 border-r border-t bg-gray-100 font-bold text-center text-sm">Media</div>
+                        <div class="p-2 border-r border-t bg-gray-100 font-bold text-center text-sm">Alta</div>
+                        
+                        <!-- rows -->
+                        <div class="p-2 border-r border-t bg-gray-100 font-bold text-sm flex items-center justify-center">Severidad ↑</div>
+                        <div class="risk-matrix-cell p-2 h-24 border-r border-t bg-green-100" data-risk="Baja-Baja" data-title="Costos Ocultos" data-desc="Uso de herramientas freemium que escalan a suscripciones de pago no presupuestadas, generando gastos imprevistos."></div>
+                        <div class="risk-matrix-cell p-2 h-24 border-r border-t bg-yellow-100" data-risk="Media-Baja" data-title="Baja Calidad de Datos" data-desc="Uso de modelos con datos no verificados, llevando a decisiones empresariales erróneas pero de bajo impacto estratégico."></div>
+                        <div class="risk-matrix-cell p-2 h-24 border-r border-t bg-orange-100" data-risk="Alta-Baja" data-title="Ineficiencia Operativa" data-desc="Proliferación de herramientas redundantes que crean silos de información y dificultan la colaboración."></div>
+
+                        <div class="p-2 border-r border-t bg-gray-100 font-bold text-sm flex items-center justify-center"></div>
+                        <div class="risk-matrix-cell p-2 h-24 border-r border-t bg-yellow-100" data-risk="Baja-Media" data-title="Sesgos Algorítmicos" data-desc="Implementación de IA con sesgos no auditados que afectan decisiones internas (ej. preselección de CVs) sin gran impacto externo."></div>
+                        <div class="risk-matrix-cell p-2 h-24 border-r border-t bg-orange-100" data-risk="Media-Media" data-title="Dependencia Tecnológica" data-desc="Adopción crítica de plataformas extranjeras sin control local, creando una fuerte dependencia y riesgo de continuidad operativa."></div>
+                        <div class="risk-matrix-cell p-2 h-24 border-r border-t bg-red-100" data-risk="Alta-Media" data-title="Fuga de Datos (PII)" data-desc="Carga de información de identificación personal (PII) en plataformas no seguras, con alto riesgo de filtración."></div>
+
+                        <div class="p-2 border-r border-t bg-gray-100 font-bold text-sm flex items-center justify-center"></div>
+                        <div class="risk-matrix-cell p-2 h-24 border-r border-t bg-orange-100" data-risk="Baja-Alta" data-title="Incumplimiento Normativo" data-desc="Violación de leyes de protección de datos (ej. LGPD en Brasil) con bajo riesgo de detección pero altas multas potenciales."></div>
+                        <div class="risk-matrix-cell p-2 h-24 border-r border-t bg-red-100" data-risk="Media-Alta" data-title="Vulnerabilidad de Seguridad" data-desc="Exposición de la red corporativa a través de APIs o integraciones no seguras, abriendo vectores de ataque."></div>
+                        <div class="risk-matrix-cell p-2 h-24 border-r border-t bg-red-200" data-risk="Alta-Alta" data-title="Pérdida de Propiedad Intelectual" data-desc="Carga de datos estratégicos (modelos financieros, I+D) en IA de terceros, con riesgo de uso indebido o robo."></div>
+                    </div>
+                </div>
+                <div id="risk-details" class="mt-6 p-4 bg-gray-50 rounded-lg min-h-[100px]">
+                    <h4 id="risk-title" class="font-bold text-gray-800">Pase el cursor sobre un riesgo</h4>
+                    <p id="risk-desc" class="text-gray-600">para ver su descripción detallada aquí.</p>
+                </div>
+            </section>
+
+            <section id="tendencias" class="section-card p-6 md:p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">3. Principales Tendencias y Motivadores</h3>
+                <p class="text-gray-600 mb-6">Esta sección visualiza los datos clave sobre por qué y dónde prolifera la Shadow AI en América Latina. A diferencia de un informe estático, los gráficos interactivos permiten filtrar la información para descubrir patrones específicos por país o sector industrial. Esta capacidad de exploración ayuda a comprender que la Shadow AI no es un fenómeno monolítico, sino uno con diversas manifestaciones que responden a contextos económicos y culturales específicos.</p>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h4 class="font-semibold text-lg text-center text-gray-700 mb-2">Impulsores de Adopción en la Región</h4>
+                         <div class="mb-4 text-center">
+                            <label for="country-filter" class="text-sm font-medium text-gray-700 mr-2">Filtrar por país:</label>
+                            <select id="country-filter" class="border border-gray-300 rounded-md py-1 px-2 text-sm">
+                                <option value="general">General Latam</option>
+                                <option value="brasil">Brasil</option>
+                                <option value="mexico">México</option>
+                                <option value="colombia">Colombia</option>
+                                <option value="argentina">Argentina</option>
+                            </select>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="driversChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-lg text-center text-gray-700 mb-2">Adopción por Sector Industrial</h4>
+                        <p class="text-center text-gray-500 text-sm mt-8 mb-4">La adopción es mayor en sectores dinámicos y con alta competencia, donde la velocidad de innovación es crucial.</p>
+                        <div class="chart-container">
+                            <canvas id="sectorChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <section id="impacto" class="section-card p-6 md:p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">4. Impacto Societal y Profesional</h3>
+                <p class="text-gray-600 mb-6">El impacto de la Shadow AI va más allá de los riesgos corporativos. Esta sección analiza sus efectos en la sociedad y el mundo laboral latinoamericano. Se utiliza un diagrama interactivo para desglosar el impacto en diferentes grupos demográficos y sectores, mostrando cómo el fenómeno puede tanto empoderar a ciertos individuos como exacerbar desigualdades existentes. El objetivo es fomentar una visión holística que considere las consecuencias humanas y sociales de la tecnología no gobernada.</p>
+                 <div class="flex flex-col md:flex-row gap-8">
+                     <div class="w-full md:w-1/3 space-y-4">
+                        <button data-target="impact-laboral" class="impact-btn w-full text-left p-4 rounded-lg bg-purple-100 border-l-4 border-purple-500 font-semibold">Entornos Laborales</button>
+                        <button data-target="impact-educativo" class="impact-btn w-full text-left p-4 rounded-lg bg-gray-100 border-l-4 border-gray-400 font-semibold">Sector Educativo</button>
+                        <button data-target="impact-socioeconomico" class="impact-btn w-full text-left p-4 rounded-lg bg-gray-100 border-l-4 border-gray-400 font-semibold">Niveles Socioeconómicos</button>
+                     </div>
+                     <div class="w-full md:w-2/3 p-6 bg-gray-50 rounded-lg min-h-[300px]">
+                        <div id="impact-content">
+                            <div id="impact-laboral" class="impact-text space-y-3">
+                                <h4 class="text-xl font-bold text-gray-800">Transformación de Dinámicas Profesionales</h4>
+                                <p class="text-gray-600"><strong>Positivo:</strong> Empodera a los empleados ("citizen developers") para automatizar tareas repetitivas, aumentando la productividad y la satisfacción laboral. Fomenta una cultura de autoaprendizaje y resolución de problemas.</p>
+                                <p class="text-gray-600"><strong>Negativo:</strong> Genera una "fuerza laboral en la sombra" con habilidades no reconocidas oficialmente. Puede crear tensiones con los departamentos de TI y aumentar el riesgo de burnout en empleados que asumen responsabilidades de desarrollo sin el soporte adecuado.</p>
+                            </div>
+                            <div id="impact-educativo" class="impact-text hidden space-y-3">
+                                <h4 class="text-xl font-bold text-gray-800">Disrupción en la Educación</h4>
+                                <p class="text-gray-600">Estudiantes y educadores utilizan herramientas de IA (ej. para resúmenes, generación de código) fuera del currículo oficial. Esto desafía los métodos de evaluación tradicionales y evidencia la necesidad de integrar la alfabetización en IA de manera formal, pero también abre brechas entre instituciones con y sin acceso a estas tecnologías.</p>
+                            </div>
+                            <div id="impact-socioeconomico" class="impact-text hidden space-y-3">
+                                <h4 class="text-xl font-bold text-gray-800">Acentuación de Brechas</h4>
+                                <p class="text-gray-600">Trabajadores en sectores de alta cualificación y con mayor acceso a tecnología pueden usar Shadow AI para aumentar su productividad y valor de mercado. En contraste, trabajadores en sectores de baja cualificación o con menor acceso digital quedan rezagados, ampliando la brecha de desigualdad salarial y de oportunidades. El acceso a IA se convierte en un nuevo factor de estratificación social.</p>
+                            </div>
+                        </div>
+                     </div>
+                 </div>
+            </section>
+            
+            <section id="conclusiones" class="section-card p-6 md:p-8 bg-purple-50 border-purple-200">
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">5. Conclusiones y Propuestas Estratégicas</h3>
+                <p class="text-gray-600 mb-6">Esta sección final va más allá del diagnóstico para proponer un camino a seguir. En lugar de simplemente reprimir la Shadow AI, el enfoque crítico argumenta que las organizaciones y los gobiernos de la región deben verla como una señal. Es una oportunidad para desarrollar marcos de gobernanza más ágiles, fomentar la soberanía tecnológica y promover una cultura de innovación responsable. Las propuestas están diseñadas para ser adaptables a los diversos contextos de desarrollo dentro de América Latina.</p>
+                <div class="space-y-4 text-gray-700">
+                    <div class="p-4 bg-white rounded-lg shadow-sm">
+                        <h4 class="font-semibold">1. De la Prohibición a la Gobernanza Ágil</h4>
+                        <p>En lugar de bloquear herramientas, las organizaciones deben crear "sandboxes" (entornos de prueba seguros) y catálogos de aplicaciones de IA pre-aprobadas. Esto canaliza la innovación de forma segura y permite que TI evalúe el impacto antes de una implementación a gran escala.</p>
+                    </div>
+                     <div class="p-4 bg-white rounded-lg shadow-sm">
+                        <h4 class="font-semibold">2. Fomentar la Soberanía Tecnológica</h4>
+                        <p>Los gobiernos y consorcios regionales deben invertir en el desarrollo de modelos de IA y plataformas de datos locales. Esto reduce la dependencia de proveedores extranjeros, asegura el cumplimiento de regulaciones locales y mantiene los datos estratégicos dentro de la región. Se debe priorizar el software de código abierto y la colaboración interregional.</p>
+                    </div>
+                     <div class="p-4 bg-white rounded-lg shadow-sm">
+                        <h4 class="font-semibold">3. Alfabetización Crítica en IA</h4>
+                        <p>Implementar programas de capacitación a nivel nacional y corporativo que no solo enseñen a usar la IA, sino también a comprender sus riesgos, sesgos y limitaciones. Una fuerza laboral educada es la primera línea de defensa contra el uso indebido de la tecnología.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-500">
+            <p>&copy; 2025 Análisis Interdisciplinario de Tecnologías Emergentes. Este informe es una simulación basada en un análisis académico.</p>
+            <p class="text-sm mt-2">Fuentes principales: Scopus, IEEE Xplore, ACM Digital Library, SciELO, Redalyc. Período de análisis: 2020-2025.</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const riskCells = document.querySelectorAll('.risk-matrix-cell');
+            const riskTitle = document.getElementById('risk-title');
+            const riskDesc = document.getElementById('risk-desc');
+            const riskDetailsContainer = document.getElementById('risk-details');
+
+            const initialTitle = riskTitle.textContent;
+            const initialDesc = riskDesc.textContent;
+
+            riskCells.forEach(cell => {
+                const title = cell.dataset.title;
+                if (title) {
+                    const shortTitle = document.createElement('span');
+                    shortTitle.className = 'text-xs font-semibold p-1 block';
+                    shortTitle.textContent = title;
+                    cell.appendChild(shortTitle);
+                }
+                
+                cell.addEventListener('mouseenter', () => {
+                    if (cell.dataset.title) {
+                        riskTitle.textContent = cell.dataset.title;
+                        riskDesc.textContent = cell.dataset.desc;
+                        riskDetailsContainer.style.backgroundColor = window.getComputedStyle(cell).backgroundColor;
+                    }
+                });
+            });
+
+            document.getElementById('risk-matrix-container').addEventListener('mouseleave', () => {
+                riskTitle.textContent = initialTitle;
+                riskDesc.textContent = initialDesc;
+                riskDetailsContainer.style.backgroundColor = '#f9fafb';
+            });
+
+            const data = {
+                general: { labels: ['Acelerar Tareas', 'Falta de Herramientas', 'Innovación Personal', 'Presión de Pares'], values: [45, 30, 15, 10] },
+                brasil: { labels: ['Acelerar Tareas', 'Falta de Herramientas', 'Competitividad', 'Innovación Personal'], values: [50, 25, 15, 10] },
+                mexico: { labels: ['Acelerar Tareas', 'Falta de Herramientas', 'Influencia de Proveedores', 'Innovación Personal'], values: [40, 35, 15, 10] },
+                colombia: { labels: ['Falta de Herramientas', 'Acelerar Tareas', 'Emprendimiento Interno', 'Presión de Pares'], values: [40, 35, 15, 10] },
+                argentina: { labels: ['Acelerar Tareas', 'Falta de Herramientas', 'Adaptación a Crisis', 'Innovación Personal'], values: [55, 20, 15, 10] }
+            };
+
+            const driversCtx = document.getElementById('driversChart').getContext('2d');
+            const driversChart = new Chart(driversCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.general.labels,
+                    datasets: [{
+                        label: '% de Motivación',
+                        data: data.general.values,
+                        backgroundColor: ['#a855f7', '#c084fc', '#d8b4fe', '#e9d5ff'],
+                        borderColor: '#9333ea',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: { display: true, text: '%' }
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('country-filter').addEventListener('change', function() {
+                const country = this.value;
+                driversChart.data.labels = data[country].labels;
+                driversChart.data.datasets[0].data = data[country].values;
+                driversChart.update();
+            });
+
+            const sectorCtx = document.getElementById('sectorChart').getContext('2d');
+            new Chart(sectorCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Tecnología y Fintech', 'Marketing y Ventas', 'Servicios Profesionales', 'Manufactura', 'Sector Público'],
+                    datasets: [{
+                        data: [35, 25, 20, 12, 8],
+                        backgroundColor: ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe', '#ede9fe'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            const impactBtns = document.querySelectorAll('.impact-btn');
+            const impactTexts = document.querySelectorAll('.impact-text');
+            impactBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    impactBtns.forEach(b => {
+                        b.classList.remove('bg-purple-100', 'border-purple-500');
+                        b.classList.add('bg-gray-100', 'border-gray-400');
+                    });
+                    btn.classList.add('bg-purple-100', 'border-purple-500');
+                    btn.classList.remove('bg-gray-100', 'border-gray-400');
+
+                    const targetId = btn.dataset.target;
+                    impactTexts.forEach(text => {
+                        if (text.id === targetId) {
+                            text.classList.remove('hidden');
+                        } else {
+                            text.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section[id]');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: "-50% 0px -50% 0px" });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            document.getElementById('mobile-nav').addEventListener('change', function(e) {
+                 window.location.hash = e.target.value;
+            });
+        });
+    </script>
+</body>
+</html>
