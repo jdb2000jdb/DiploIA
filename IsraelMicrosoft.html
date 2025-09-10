@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Vigilancia: Colaboración Israel-Microsoft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Investigative Neutral -->
+    <!-- Application Structure Plan: Se diseñó una SPA de una sola página con una barra de navegación fija para facilitar la exploración no lineal. La estructura se divide en secciones temáticas: una introducción impactante (Visión General), identificación de los involucrados (Actores Clave), un análisis profundo a través de pestañas interactivas (Análisis Multidimensional), visualización de consecuencias (Impacto y Riesgos), y contexto histórico (Línea de Tiempo). Esta arquitectura fue elegida para desglosar un tema complejo en partes digeribles, permitiendo al usuario controlar su ruta de aprendizaje, a diferencia de un informe lineal tradicional. El objetivo es fomentar la exploración y la comprensión profunda a través de la interacción. -->
+    <!-- Visualization & Content Choices: 
+        - Resumen: Tarjetas de estadísticas -> Informar -> Texto dinámico -> Captar atención -> Justificación: Presentar cifras clave de forma inmediata y memorable -> JS.
+        - Actores: Columnas con texto expandible -> Organizar -> HTML/CSS -> Click para revelar detalles -> Justificación: Introducir a los protagonistas sin abrumar con información inicial -> JS.
+        - Análisis Ético: Radar Chart -> Comparar -> Canvas -> Tooltips en hover -> Justificación: Visualizar y comparar múltiples riesgos éticos abstractos de forma simultánea y efectiva -> Chart.js.
+        - Análisis de Impacto: Bar Chart interactivo -> Comparar/Informar -> Canvas -> Click para actualizar texto -> Justificación: Conectar una visualización cuantitativa de la severidad del riesgo con una explicación cualitativa detallada -> Chart.js + JS.
+        - Proceso Técnico: Diagrama de flujo HTML -> Organizar -> Estilos HTML/Tailwind -> Hover para resaltar -> Justificación: Simplificar un proceso complejo visualmente sin usar imágenes estáticas o SVG -> HTML/Tailwind.
+        - Cronología: Línea de tiempo horizontal -> Mostrar Cambio -> Estilos HTML/Tailwind -> Click para ver detalles -> Justificación: Presentar la evolución histórica de forma interactiva y secuencial -> HTML/Tailwind + JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            background-color: #f8f7f4;
+            color: #333333;
+            font-family: 'Source Sans 3', sans-serif;
+        }
+        h1, h2, h3, .font-slab {
+            font-family: 'Roboto Slab', serif;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #4a6d8c;
+            border-bottom-color: #4a6d8c;
+        }
+        .tab-button {
+            transition: all 0.3s;
+        }
+        .tab-button.active {
+            background-color: #4a6d8c;
+            color: #f8f7f4;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="navbar" class="bg-[#f8f7f4]/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h3 class="font-bold text-xl text-[#333333] font-slab">Vigilancia Digital</h3>
+            <div class="hidden md:flex space-x-8">
+                <a href="#overview" class="nav-link pb-1">Visión General</a>
+                <a href="#actors" class="nav-link pb-1">Actores Clave</a>
+                <a href="#analysis" class="nav-link pb-1">Análisis</a>
+                <a href="#impact" class="nav-link pb-1">Impacto</a>
+                <a href="#timeline" class="nav-link pb-1">Línea de Tiempo</a>
+            </div>
+            <div class="md:hidden">
+                <select id="mobile-nav" class="bg-white border border-gray-300 rounded-md py-2 px-3 text-[#333333] focus:outline-none focus:ring-2 focus:ring-[#4a6d8c]">
+                    <option value="#overview">Visión General</option>
+                    <option value="#actors">Actores Clave</option>
+                    <option value="#analysis">Análisis</option>
+                    <option value="#impact">Impacto</option>
+                    <option value="#timeline">Línea de Tiempo</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+        
+        <section class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#4a6d8c] mb-4">La Nube de la Vigilancia</h1>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-700">
+                Un análisis profundo de la colaboración entre Microsoft y el ejército israelí para la interceptación y almacenamiento masivo de comunicaciones palestinas, y sus implicaciones globales en la era de la inteligencia artificial.
+            </p>
+        </section>
+
+        <section id="overview" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-10 font-slab">Visión General del Proyecto</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">
+                Este proyecto representa una convergencia crítica entre el poder de la tecnología de nube de una corporación multinacional y los objetivos de inteligencia de un actor estatal. La iniciativa, según informes, utiliza la infraestructura de Microsoft Azure para procesar y almacenar volúmenes masivos de datos de telecomunicaciones interceptados, afectando a millones de personas. A continuación se presentan las cifras clave que dimensionan la escala de esta operación.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#c9b891]">
+                    <h3 class="text-4xl font-bold text-[#4a6d8c] mb-2" data-target="2200000">0</h3>
+                    <p class="text-gray-600">Llamadas interceptadas mensualmente (estimado)</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#c9b891]">
+                    <h3 class="text-4xl font-bold text-[#4a6d8c] mb-2" data-target="5000000">0 PB</h3>
+                    <p class="text-gray-600">Petabytes de datos almacenados (estimado)</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-[#c9b891]">
+                    <h3 class="text-4xl font-bold text-[#4a6d8c] mb-2" data-target="4500000">0</h3>
+                    <p class="text-gray-600">Individuos bajo vigilancia potencial</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="actors" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-10 font-slab">Actores Clave</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">
+                Para comprender la magnitud de esta colaboración, es fundamental analizar a los dos protagonistas principales. Por un lado, una de las unidades de inteligencia militar más avanzadas del mundo; por el otro, un gigante tecnológico global cuya infraestructura es fundamental para la economía digital. Sus roles y motivaciones son cruciales para entender el panorama completo.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-[#333333] flex items-center">
+                        <span class="mr-3 text-3xl">🛡️</span> Ejército Israelí (Unidad 8200)
+                    </h3>
+                    <p class="text-gray-700">Considerada una de las unidades de inteligencia de señales (SIGINT) más sofisticadas del mundo, la Unidad 8200 es responsable de la recopilación de inteligencia y descifrado de códigos. Su personal, a menudo compuesto por jóvenes reclutas con altas capacidades tecnológicas, desarrolla herramientas de ciberespionaje y vigilancia. Esta unidad ha sido el origen de numerosas startups de ciberseguridad, creando un ecosistema único entre el sector militar y el tecnológico privado en Israel.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-[#333333] flex items-center">
+                        <span class="mr-3 text-3xl">☁️</span> Microsoft Corporation
+                    </h3>
+                    <p class="text-gray-700">Como uno de los principales proveedores de servicios en la nube a nivel mundial con su plataforma Azure, Microsoft ofrece una infraestructura escalable y potente para el almacenamiento y procesamiento de datos masivos, incluyendo servicios avanzados de inteligencia artificial y machine learning. A través de contratos gubernamentales y proyectos como "Project Nimbus", Microsoft provee tecnología a agencias militares y de inteligencia, planteando interrogantes sobre la neutralidad de la compañía y su rol en conflictos geopolíticos.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="analysis" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-10 font-slab">Análisis Multidimensional</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">
+                Esta colaboración no puede ser entendida desde una única perspectiva. Es un fenómeno complejo en la intersección de la tecnología, el derecho, la ética y la geopolítica. Explore las diferentes dimensiones a través de las siguientes pestañas para obtener una visión integral de las aristas y complejidades del caso.
+            </p>
+            <div class="w-full max-w-4xl mx-auto">
+                <div class="mb-4 flex flex-wrap justify-center border-b border-gray-300">
+                    <button class="tab-button text-lg py-2 px-6 font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-200 active" data-tab="tech">Tecnológica</button>
+                    <button class="tab-button text-lg py-2 px-6 font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-200" data-tab="legal">Legal</button>
+                    <button class="tab-button text-lg py-2 px-6 font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-200" data-tab="ethical">Ética</button>
+                    <button class="tab-button text-lg py-2 px-6 font-semibold text-gray-600 border-b-2 border-transparent hover:bg-gray-200" data-tab="geopolitical">Geopolítica</button>
+                </div>
+                <div id="tab-content" class="bg-white p-8 rounded-lg shadow-lg">
+                    <div id="tech" class="tab-panel">
+                        <h3 class="text-2xl font-bold mb-4">Flujo de la Vigilancia Tecnológica</h3>
+                        <p class="mb-6 text-gray-700">El sistema se basa en una cadena de procesamiento de datos altamente sofisticada. Comienza con la interceptación masiva de señales, que luego son canalizadas a la infraestructura en la nube para su almacenamiento y análisis casi en tiempo real mediante algoritmos de IA.</p>
+                        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 text-center">
+                            <div class="flex-1 p-4 bg-gray-100 rounded-lg"><strong>1. Interceptación</strong><br><small>Captura de llamadas y metadatos de redes de telecomunicaciones.</small></div>
+                            <div class="text-2xl font-bold text-[#4a6d8c] self-center">→</div>
+                            <div class="flex-1 p-4 bg-gray-100 rounded-lg"><strong>2. Ingesta a la Nube</strong><br><small>Transferencia de datos a servidores de Microsoft Azure.</small></div>
+                            <div class="text-2xl font-bold text-[#4a6d8c] self-center">→</div>
+                            <div class="flex-1 p-4 bg-gray-100 rounded-lg"><strong>3. Análisis IA</strong><br><small>Transcripción, traducción y análisis de patrones mediante IA.</small></div>
+                            <div class="text-2xl font-bold text-[#4a6d8c] self-center">→</div>
+                            <div class="flex-1 p-4 bg-gray-100 rounded-lg"><strong>4. Inteligencia</strong><br><small>Generación de informes y alertas para analistas militares.</small></div>
+                        </div>
+                    </div>
+                    <div id="legal" class="tab-panel hidden">
+                        <h3 class="text-2xl font-bold mb-4">Marco Legal y Derechos Humanos</h3>
+                        <p class="mb-6 text-gray-700">La vigilancia masiva opera en una zona gris del derecho internacional. Aunque la seguridad nacional es un argumento recurrente, prácticas indiscriminadas chocan frontalmente con derechos fundamentales protegidos por tratados internacionales.</p>
+                        <ul class="space-y-3 list-disc list-inside text-gray-700">
+                            <li><strong class="text-[#333333]">Artículo 12, Declaración Universal de Derechos Humanos:</strong> Protege contra injerencias arbitrarias en la vida privada y la correspondencia.</li>
+                            <li><strong class="text-[#333333]">Cuarto Convenio de Ginebra:</strong> Establece protecciones para los civiles en territorios ocupados, cuya privacidad y derechos deben ser respetados.</li>
+                            <li><strong class="text-[#333333]">Jurisdicción y Soberanía de Datos:</strong> El almacenamiento de datos de una población en la infraestructura de una corporación extranjera plantea serias dudas sobre la soberanía y protección de esos datos.</li>
+                            <li><strong class="text-[#333333]">Falta de Debido Proceso:</strong> La interceptación sin orden judicial individualizada para la gran mayoría de los afectados viola los principios del debido proceso.</li>
+                        </ul>
+                    </div>
+                    <div id="ethical" class="tab-panel hidden">
+                        <h3 class="text-2xl font-bold mb-4">Matriz de Riesgos Éticos</h3>
+                        <p class="mb-6 text-gray-700">La colaboración plantea dilemas éticos profundos tanto para el actor estatal como para la corporación. El gráfico de radar a continuación cuantifica la severidad percibida de estos riesgos. Pase el cursor sobre los puntos para más detalles.</p>
+                        <div class="chart-container">
+                            <canvas id="ethicalChart"></canvas>
+                        </div>
+                    </div>
+                    <div id="geopolitical" class="tab-panel hidden">
+                        <h3 class="text-2xl font-bold mb-4">Implicaciones Geopolíticas</h3>
+                        <p class="mb-4 text-gray-700">Esta alianza trasciende lo tecnológico para convertirse en una herramienta de poder en el tablero geopolítico. Fortalece las capacidades de uno de los actores del conflicto, al tiempo que establece un precedente peligroso sobre el rol de las corporaciones tecnológicas en asuntos internacionales.</p>
+                        <p class="text-gray-700">Establece una asimetría de poder aún mayor, donde la información se convierte en un arma de control social y político. Además, podría incentivar una "carrera armamentista" en ciber-vigilancia a nivel global, donde otros estados busquen replicar este modelo de colaboración público-privada para sus propios fines, erosionando la privacidad a escala mundial.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-10 font-slab">Análisis de Impacto y Riesgos</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">
+                Las consecuencias de un sistema de vigilancia de esta escala son multidimensionales y afectan tanto a individuos como a la estabilidad internacional. El siguiente gráfico compara la severidad de los principales riesgos identificados. Haga clic en una de las barras para explorar en detalle el impacto correspondiente y comprender las ramificaciones de esta tecnología.
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div class="chart-container h-96 max-h-[450px]">
+                    <canvas id="impactChart"></canvas>
+                </div>
+                <div id="impact-details" class="bg-white p-8 rounded-lg shadow-lg min-h-[300px]">
+                    <h3 id="impact-title" class="text-2xl font-bold mb-4 text-[#4a6d8c]">Seleccione un riesgo</h3>
+                    <p id="impact-text" class="text-gray-700">Haga clic en una barra del gráfico para ver una descripción detallada del impacto y los riesgos asociados a esa categoría.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-10 font-slab">Línea de Tiempo Relevante</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">
+                La colaboración actual no es un hecho aislado. Se inscribe en una larga historia de desarrollo de tecnologías de vigilancia y de alianzas entre gobiernos y corporaciones tecnológicas. Esta línea de tiempo destaca algunos hitos clave que contextualizan el panorama actual.
+            </p>
+            <div class="relative wrap overflow-hidden p-10 h-full">
+                <div class="border-2-2 absolute border-opacity-20 border-gray-700 h-full border" style="left: 50%"></div>
+                <div class="mb-8 flex justify-between items-center w-full right-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-[#4a6d8c] shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto font-semibold text-lg text-white">1</h1>
+                    </div>
+                    <div class="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">1952: Fundación de la NSA</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600">Creación de la Agencia de Seguridad Nacional de EE.UU., pionera en SIGINT a gran escala.</p>
+                    </div>
+                </div>
+                <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-[#4a6d8c] shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto text-white font-semibold text-lg">2</h1>
+                    </div>
+                    <div class="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">2013: Revelaciones de Snowden</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600">Se expone el alcance de la vigilancia masiva global por parte de agencias de inteligencia, a menudo con la cooperación de empresas de telecomunicaciones y tecnología.</p>
+                    </div>
+                </div>
+                <div class="mb-8 flex justify-between items-center w-full right-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-[#4a6d8c] shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto font-semibold text-lg text-white">3</h1>
+                    </div>
+                    <div class="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">2021: Anuncio del "Project Nimbus"</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600">Google y Amazon Web Services firman un contrato de 1.2 mil millones de dólares para proveer servicios de nube al gobierno y ejército israelí. Microsoft posteriormente se une con contratos similares.</p>
+                    </div>
+                </div>
+                <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-[#4a6d8c] shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto text-white font-semibold text-lg">4</h1>
+                    </div>
+                    <div class="order-1 bg-white rounded-lg shadow-xl w-5/12 px-6 py-4">
+                        <h3 class="font-bold text-gray-800 text-xl">2024: Informes de Vigilancia Telefónica</h3>
+                        <p class="text-sm leading-snug tracking-wide text-gray-600">Investigaciones periodísticas de medios como The Guardian y Electronic Intifada detallan el uso de la tecnología en la nube de Microsoft para la interceptación de llamadas palestinas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="container mx-auto px-6 py-8">
+            <div class="text-center">
+                <h3 class="text-2xl font-slab mb-4">Sobre esta Investigación</h3>
+                <p class="max-w-3xl mx-auto mb-4">
+                    Este informe interactivo fue desarrollado para analizar y presentar de forma accesible las complejas dimensiones de la vigilancia tecnológica moderna. Se basa en fuentes públicas y periodísticas, buscando fomentar un debate informado sobre tecnología, ética y derechos humanos.
+                </p>
+                <p class="text-sm text-gray-400">&copy; 2025 Centro de Investigación Geopolítica y Tecnológica. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const counterElements = document.querySelectorAll('[data-target]');
+    counterElements.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const duration = 2000;
+        const start = 0;
+        let startTime = null;
+
+        const animateCounter = (timestamp) => {
+            if (!startTime) startTime = timestamp;
+            const progress = timestamp - startTime;
+            const current = Math.min(Math.floor(progress / duration * target), target);
+            if (counter.textContent.includes("PB")) {
+                counter.innerText = (current / 1000000).toFixed(1) + ' PB';
+            } else {
+                counter.innerText = current.toLocaleString('es-ES');
+            }
+            if (progress < duration) {
+                requestAnimationFrame(animateCounter);
+            } else {
+                 if (counter.textContent.includes("PB")) {
+                    counter.innerText = (target / 1000000).toFixed(1) + ' PB';
+                } else {
+                    counter.innerText = target.toLocaleString('es-ES');
+                }
+            }
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    requestAnimationFrame(animateCounter);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        observer.observe(counter);
+    });
+
+    const tabs = document.querySelectorAll('.tab-button');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const target = tab.getAttribute('data-tab');
+            tabPanels.forEach(panel => {
+                if (panel.id === target) {
+                    panel.classList.remove('hidden');
+                } else {
+                    panel.classList.add('hidden');
+                }
+            });
+        });
+    });
+
+    const ethicalCtx = document.getElementById('ethicalChart')?.getContext('2d');
+    if(ethicalCtx) {
+        new Chart(ethicalCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Violación de Privacidad', 'Falta de Transparencia', 'Complicidad Corporativa', 'Potencial de Abuso', 'Impacto Civil', 'Erosión de la Confianza'],
+                datasets: [{
+                    label: 'Nivel de Riesgo Ético',
+                    data: [9, 8, 8, 10, 9, 7],
+                    backgroundColor: 'rgba(74, 109, 140, 0.2)',
+                    borderColor: 'rgba(74, 109, 140, 1)',
+                    pointBackgroundColor: 'rgba(74, 109, 140, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(74, 109, 140, 1)'
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                        grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                        pointLabels: { font: { size: 12 }, color: '#333' },
+                        suggestedMin: 0,
+                        suggestedMax: 10,
+                        ticks: {
+                            stepSize: 2,
+                            backdropColor: 'transparent',
+                            color: '#666'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.r !== null) {
+                                    label += context.parsed.r + ' de 10';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const impactData = {
+        labels: ['Privacidad Individual', 'Derechos Humanos', 'Relaciones Internacionales', 'Seguridad Corporativa'],
+        datasets: [{
+            label: 'Nivel de Impacto/Riesgo',
+            data: [9.5, 9, 8, 7],
+            backgroundColor: [
+                'rgba(74, 109, 140, 0.6)',
+                'rgba(201, 184, 145, 0.6)',
+                'rgba(128, 128, 128, 0.6)',
+                'rgba(175, 93, 93, 0.6)',
+            ],
+            borderColor: [
+                'rgba(74, 109, 140, 1)',
+                'rgba(201, 184, 145, 1)',
+                'rgba(128, 128, 128, 1)',
+                'rgba(175, 93, 93, 1)',
+            ],
+            borderWidth: 1
+        }]
+    };
+    
+    const impactDetails = {
+        'Privacidad Individual': {
+            title: 'Aniquilación de la Privacidad Individual',
+            text: 'La vigilancia masiva e indiscriminada elimina cualquier expectativa de privacidad para toda una población. Esto no solo afecta a individuos sospechosos de actividades ilícitas, sino a todos los ciudadanos, coartando la libertad de expresión, asociación y pensamiento. El "efecto enfriamiento" (chilling effect) disuade a las personas de comunicarse libremente por temor a ser malinterpretadas o catalogadas como amenaza.'
+        },
+        'Derechos Humanos': {
+            title: 'Violación Sistemática de Derechos Humanos',
+            text: 'Más allá de la privacidad, este sistema viola múltiples derechos humanos fundamentales. Permite la persecución de disidentes, activistas y periodistas. La información recopilada puede ser usada en procesos legales sin las debidas garantías, para chantajear individuos o para reprimir movimientos sociales, constituyendo una herramienta de control y opresión social a gran escala.'
+        },
+        'Relaciones Internacionales': {
+            title: 'Desestabilización de Relaciones Internacionales',
+            text: 'La implicación de una corporación multinacional en las operaciones de inteligencia de un estado contra otra población genera tensiones diplomáticas. Establece un precedente para el "capitalismo de vigilancia" a nivel estatal, donde la tecnología se convierte en un producto de exportación para el control autoritario, complicando las alianzas y la confianza entre naciones.'
+        },
+        'Seguridad Corporativa': {
+            title: 'Riesgos para la Seguridad y Ética Corporativa',
+            text: 'Para Microsoft, participar en estos proyectos conlleva enormes riesgos reputacionales y legales. Se expone a acusaciones de complicidad en violaciones de derechos humanos, posibles sanciones internacionales y la pérdida de confianza de sus clientes a nivel global. Además, crea disenso interno entre sus empleados, que pueden oponerse a que su trabajo sea utilizado para fines militares y de vigilancia.'
+        }
+    };
+
+    const impactCtx = document.getElementById('impactChart')?.getContext('2d');
+    if (impactCtx) {
+        const impactChart = new Chart(impactCtx, {
+            type: 'bar',
+            data: impactData,
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 10,
+                        grid: {
+                           display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: true
+                    }
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const index = elements[0].index;
+                        const label = impactData.labels[index];
+                        const details = impactDetails[label];
+                        document.getElementById('impact-title').textContent = details.title;
+                        document.getElementById('impact-text').textContent = details.text;
+                    }
+                }
+            }
+        });
+    }
+
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                });
+            }
+        });
+    }, { rootMargin: '-50% 0px -50% 0px' });
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    const mobileNav = document.getElementById('mobile-nav');
+    mobileNav.addEventListener('change', (e) => {
+        const targetId = e.target.value;
+        document.querySelector(targetId).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+
+});
+</script>
+
+</body>
+</html>
